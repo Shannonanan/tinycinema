@@ -6,6 +6,8 @@ import android.view.ViewGroup;
 
 import javax.inject.Inject;
 
+import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
+import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresImpl;
 import co.za.tinycinema.features.common.ImageLoader;
 
 public class ViewMvcFactory {
@@ -14,9 +16,8 @@ public class ViewMvcFactory {
     private ImageLoader mImageLoader;
 
     @Inject
-    public ViewMvcFactory(LayoutInflater layoutInflater, ImageLoader imageLoader) {
+    public ViewMvcFactory(LayoutInflater layoutInflater) {
         mLayoutInflater = layoutInflater;
-        mImageLoader = imageLoader;
     }
 
     /**
@@ -31,17 +32,15 @@ public class ViewMvcFactory {
 
         ViewMvc viewMvc;
 
-//        if (mvcViewClass == GetAllInfoContract.class) {
-//            viewMvc = new GetAllInfoViewImpl(mLayoutInflater, container);
-//        }
-
-//        else {
-//            throw new IllegalArgumentException("unsupported MVC view class " + mvcViewClass);
-//        }
+        if (mvcViewClass == MoviesInTheatresContract.class) {
+            viewMvc = new MoviesInTheatresImpl(mLayoutInflater, container);
+        }
+        else {
+            throw new IllegalArgumentException("unsupported MVC view class " + mvcViewClass);
+        }
 
         //noinspection unchecked
-      //  return (T) viewMvc;
-        return null;
+        return (T) viewMvc;
     }
 
 }

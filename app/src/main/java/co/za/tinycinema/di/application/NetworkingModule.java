@@ -2,6 +2,9 @@ package co.za.tinycinema.di.application;
 
 
 import javax.inject.Singleton;
+
+import co.za.tinycinema.Constants;
+import co.za.tinycinema.data.remote.Service;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
@@ -16,15 +19,15 @@ public class NetworkingModule
     @Provides
     Retrofit getRetrofit() {
         return new Retrofit.Builder()
-               // .baseUrl(Constants.BASE_URL)
+                .baseUrl(Constants.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
     }
 
-//    @Singleton
-//    @Provides
-//    NasaEpicApi getStackoverflowApi(Retrofit retrofit) {
-//        return retrofit.create(NasaEpicApi.class);
-//    }
+    @Singleton
+    @Provides
+    Service getMoviesApi(Retrofit retrofit) {
+        return retrofit.create(Service.class);
+    }
 
 }

@@ -38,9 +38,11 @@ public class RemoteDataSource implements DataSource {
                 public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
                     if (response.body() != null) {
                         if (response.isSuccessful()) {
-                            MoviesInTheatresModel moviesInTheatresModel = new MoviesInTheatresModel();
 
-                            results.addAll(moviesInTheatresModel.getResults());
+                            for (Result result:response.body().getResults()) {
+                                results.add(result);
+                            }
+
                         }
 
                         callback.onDataLoaded(results);
@@ -50,7 +52,7 @@ public class RemoteDataSource implements DataSource {
 
                 @Override
                 public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-
+                    callback.onDataNotAvailable();
                 }
             });
     }

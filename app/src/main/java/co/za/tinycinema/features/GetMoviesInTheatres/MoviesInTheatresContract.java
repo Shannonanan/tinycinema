@@ -10,8 +10,8 @@ import co.za.tinycinema.features.common.mvcViews.ObservableViewMvc;
  */
 public interface MoviesInTheatresContract extends ObservableViewMvc<MoviesInTheatresContract.Listener> {
 
-    public interface Listener{
-
+     interface Listener{
+            void OnMoviePosterClicked(Result movieResult);
     }
 
     void renderInView(List<Result> movieInfo);

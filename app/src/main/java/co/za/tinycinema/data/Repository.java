@@ -65,12 +65,12 @@ public class Repository implements DataSource {
     private boolean mCacheIsDirty = false;
 
     public Repository(RemoteDataSource mRemoteDataSource,
-                      LocalDataSource mLocalDataSource, ImageLoader imageLoader,
+                      LocalDataSource mLocalDataSource,
                       Context context
     ) {
         this.mRemoteDataSource = mRemoteDataSource;
         this.mLocalDataSource = mLocalDataSource;
-        this.imageLoader = imageLoader;
+     //   this.imageLoader = imageLoader;
         this.mContext = context;
     }
 
@@ -213,7 +213,7 @@ public class Repository implements DataSource {
     public static Repository getInstance(RemoteDataSource remoteDataSource,
                                          LocalDataSource localDataSource, ImageLoader imageLoader, Context context) {
         if (INSTANCE == null) {
-            INSTANCE = new Repository(remoteDataSource, localDataSource, imageLoader, context);
+            INSTANCE = new Repository(remoteDataSource, localDataSource, context);
         }
         return INSTANCE;
     }

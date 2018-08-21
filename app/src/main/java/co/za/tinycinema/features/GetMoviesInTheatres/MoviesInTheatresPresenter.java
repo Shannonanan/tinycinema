@@ -32,7 +32,7 @@ public class MoviesInTheatresPresenter {
 
 
     public void start() {
-        loadInfo(false);
+        loadInfo(true);
     }
 
     private void loadInfo(final boolean showLoadingUI) {

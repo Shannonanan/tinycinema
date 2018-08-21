@@ -7,21 +7,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.bumptech.glide.Glide;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
-public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatresAdapter.GetMoviesViewHolder>{
+public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatresAdapter.GetMoviesViewHolder> {
 
     List<Result> getMoviesCollection;
     private Context mContext;
+    private MoviesInTheatresImpl.OnMoviePosterClicked moviePosterClicked;
 
-    public MoviesInTheatresAdapter(Context context) {
+    public MoviesInTheatresAdapter(Context context, MoviesInTheatresImpl.OnMoviePosterClicked moviePosterClicked) {
+        this.moviePosterClicked = moviePosterClicked;
         this.getMoviesCollection = Collections.emptyList();
         mContext = context;
     }
@@ -42,22 +47,34 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     @Override
     public void onBindViewHolder(@NonNull GetMoviesViewHolder holder, int position) {
-        Result movieResult = this.getMoviesCollection.get(position);
+        final Result movieResult = this.getMoviesCollection.get(position);
 
         String movieCode = movieResult.getPosterPath();
         String url = mContext.getString(R.string.image_base_url) + movieCode;
         Glide.with(mContext)
                 .load(url)
                 .into(holder.imageView);
+
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (moviePosterClicked != null) {
+                    moviePosterClicked.onMoviePosterClicked(movieResult);
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
-        return (this.getMoviesCollection != null) ? this.getMoviesCollection.size() : 0 ;
+        return (this.getMoviesCollection != null) ? this.getMoviesCollection.size() : 0;
     }
 
-    static class GetMoviesViewHolder extends RecyclerView.ViewHolder{
-            @BindView(R.id.cell_movie)ImageView imageView;
+    static class GetMoviesViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.cell_movie)
+        ImageView imageView;
+
         public GetMoviesViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

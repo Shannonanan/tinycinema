@@ -4,13 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".features.ShowDetails.ShowDetailsActivity">
 
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/recyclerView"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:scrollbars="vertical"/>
-
-   <include layout="@layout/view_progress_lottie" />
 </android.support.constraint.ConstraintLayout>

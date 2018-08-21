@@ -4,7 +4,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
+
+import co.za.tinycinema.common.UseCaseHandler;
+import co.za.tinycinema.data.Repository;
+import co.za.tinycinema.data.local.LocalDataSource;
+import co.za.tinycinema.data.remote.RemoteDataSource;
+import co.za.tinycinema.data.remote.Service;
+import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
 import co.za.tinycinema.features.common.ImageLoader;
+import co.za.tinycinema.utils.AppExecutors;
 import dagger.Module;
 import dagger.Provides;
 
@@ -13,20 +22,10 @@ public class PresentationModule {
 
 
     private final FragmentActivity mActivity;
-  //  private LoadImageInterface imageInterface;
 
-    public PresentationModule(FragmentActivity fragmentActivity)
-                             // LoadImageInterface loadImageInterface)
-    {
+    public PresentationModule(FragmentActivity fragmentActivity) {
         mActivity = fragmentActivity;
-      //  imageInterface = loadImageInterface;
     }
-
-
-//    @Provides
-//    LoadImageInterface imageInterface(){
-//        return imageInterface;
-//    }
 
     @Provides
     LayoutInflater getLayoutInflater() {
@@ -44,42 +43,36 @@ public class PresentationModule {
     }
 
 
-//    @Provides
-//    UseCaseHandler getUseCaseHandler() {
-//        return  UseCaseHandler.getInstance();
-//    }
-//
-//    @Provides
-//    GetAllInfoPresenter getAllInfoPresenter(GetAllInfo mGetAllInfo,
-//                                            UseCaseHandler mUseCaseHandler) {
-//        return new GetAllInfoPresenter(mGetAllInfo, mUseCaseHandler);
-//    }
-//
-//
-//    @Provides
-//    EpicLocalDataSource localDataSource(EarthDao mEarthDao, AppExecutors mAppExecutors) {
-//        return new EpicLocalDataSource(mEarthDao, mAppExecutors);
-//    }
-//
-//    @Provides
-//    EpicRemoteDataSource remoteDataSource(NasaEpicApi nasaEpicApi) {
-//        return new EpicRemoteDataSource(nasaEpicApi);
-//    }
-//
-//
-//    @Provides
-//    EpicRepository epicRepository(EpicRemoteDataSource mRemoteDataSource, EpicLocalDataSource mLocalDataSource, ImageLoader imageLoader) {
-//        return new EpicRepository(mRemoteDataSource,mLocalDataSource, imageLoader);
-//    }
-//
-//    @Provides
-//    GetAllInfo getAllInfoUseCase(EpicRepository epicRepository, ImageLoader imageLoader) {
-//        return new GetAllInfo(epicRepository, imageLoader);
-//    }
+    @Provides
+    UseCaseHandler getUseCaseHandler() {
+        return UseCaseHandler.getInstance();
+    }
 
-//    @Provides
-//    ImageLoader getImageLoader(Activity activity) {
-//        return new ImageLoader(activity);
-//    }
+    @Provides
+    RemoteDataSource remoteDataSource(Service service){
+        return new RemoteDataSource(service);
+    }
+
+    @Provides
+    LocalDataSource localDataSource(){
+        return new LocalDataSource();
+    }
+
+    @Provides
+    Repository repository(RemoteDataSource mRemoteDataSource, LocalDataSource mLocalDataSource, Context context){
+        return new Repository(mRemoteDataSource, mLocalDataSource, context);
+    }
+
+    @Provides
+    GetMoviesInTheatres getMoviesInTheatres(Repository repository){
+        return new GetMoviesInTheatres(repository);
+    }
+
+    @Provides
+    MoviesInTheatresPresenter getMoviesPresenter(GetMoviesInTheatres mGetMovies,
+                                                 UseCaseHandler mUseCaseHandler) {
+        return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler);
+    }
+
 
 }

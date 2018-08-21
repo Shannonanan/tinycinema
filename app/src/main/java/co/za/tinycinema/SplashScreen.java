@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import com.airbnb.lottie.LottieAnimationView;
 
+import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity;
+
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -18,9 +20,7 @@ public class SplashScreen extends AppCompatActivity {
 
 
         animationView = findViewById(R.id.animation_view);
-        animationView.setAnimation("loader.json");
-        animationView.setScaleX(3);
-        animationView.setScaleY(3);
+        animationView.setAnimation("movie_loading.json");
         animationView.loop(true);
         animationView.playAnimation();
 
@@ -28,7 +28,7 @@ public class SplashScreen extends AppCompatActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent inent = new Intent(SplashScreen.this, MainActivity.class);
+                    Intent inent = new Intent(SplashScreen.this, MoviesInTheatresActivity.class);
                     startActivity(inent);
                     animationView.cancelAnimation();
                     finish();
