@@ -30,29 +30,35 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
 
     private MoviesInTheatresAdapter moviesInTheatresAdapter;
 
-    //setup a listener for your posts in the recyclerview
-    public interface OnMoviePosterClicked {
-        void onMoviePosterClicked(Result result);
-    }
 
     public MoviesInTheatresImpl(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         setRootView(view);
         ButterKnife.bind(this, view);
         setupAdapter();
+        setupRecyclerView();
     }
 
     private void setupAdapter() {
-        recyclerView.setHasFixedSize(true);
-        moviesInTheatresAdapter = new MoviesInTheatresAdapter(getContext(), new OnMoviePosterClicked() {
+        moviesInTheatresAdapter = new MoviesInTheatresAdapter(getContext());
+
+        MoviesInTheatresAdapter.OnMoviePosterClicked onMoviePosterClicked = new MoviesInTheatresAdapter.OnMoviePosterClicked() {
             @Override
             public void onMoviePosterClicked(Result result) {
                 for (Listener listener : getListeners()) {
                     listener.OnMoviePosterClicked(result);
                 }
             }
-        });
-        recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, 1));
+        };
+
+        moviesInTheatresAdapter.setOnItemClickListener(onMoviePosterClicked);
+    }
+
+    private void setupRecyclerView() {
+        recyclerView.setHasFixedSize(true);
+
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, 1);
+        recyclerView.setLayoutManager(staggeredGridLayoutManager);
         recyclerView.setAdapter(moviesInTheatresAdapter);
     }
 

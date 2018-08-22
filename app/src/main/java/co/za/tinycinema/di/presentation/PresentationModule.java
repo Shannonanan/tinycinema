@@ -12,6 +12,7 @@ import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.ShowDetails.ShowDetailsPresenter;
 import co.za.tinycinema.features.common.ImageLoader;
 import co.za.tinycinema.utils.AppExecutors;
 import dagger.Module;
@@ -72,6 +73,11 @@ public class PresentationModule {
     MoviesInTheatresPresenter getMoviesPresenter(GetMoviesInTheatres mGetMovies,
                                                  UseCaseHandler mUseCaseHandler) {
         return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler);
+    }
+
+    @Provides
+    ShowDetailsPresenter showDetailsPresenter(){
+        return new ShowDetailsPresenter();
     }
 
 

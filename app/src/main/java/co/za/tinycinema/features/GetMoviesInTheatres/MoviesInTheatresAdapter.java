@@ -23,10 +23,14 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     List<Result> getMoviesCollection;
     private Context mContext;
-    private MoviesInTheatresImpl.OnMoviePosterClicked moviePosterClicked;
+    private MoviesInTheatresAdapter.OnMoviePosterClicked onItemClickListener;
 
-    public MoviesInTheatresAdapter(Context context, MoviesInTheatresImpl.OnMoviePosterClicked moviePosterClicked) {
-        this.moviePosterClicked = moviePosterClicked;
+    //setup a listener for your posts in the recyclerview
+    public interface OnMoviePosterClicked {
+        void onMoviePosterClicked(Result result);
+    }
+
+    public MoviesInTheatresAdapter(Context context) {
         this.getMoviesCollection = Collections.emptyList();
         mContext = context;
     }
@@ -59,8 +63,8 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (moviePosterClicked != null) {
-                    moviePosterClicked.onMoviePosterClicked(movieResult);
+                if (onItemClickListener != null) {
+                    onItemClickListener.onMoviePosterClicked(movieResult);
                 }
             }
         });
@@ -91,5 +95,9 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
         if (infoCollection == null) {
             throw new IllegalArgumentException("The list cannot be null");
         }
+    }
+
+    public void setOnItemClickListener (MoviesInTheatresAdapter.OnMoviePosterClicked onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

@@ -32,7 +32,7 @@ public class RemoteDataSource implements DataSource {
     public void getAllMoviesInTheatre(String date,final LoadInfoCallback callback) {
        final List<Result> results = new ArrayList<>();
 
-            mCall = service.getMoviesInTheatres("2018-09-15", "2018-10-22", "");
+            mCall = service.getMoviesInTheatres("");
             mCall.enqueue(new Callback<MoviesInTheatresModel>() {
                 @Override
                 public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {

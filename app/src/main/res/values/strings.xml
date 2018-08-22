@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Tiny Cinema</string>
-    <string name="image_base_url">http://image.tmdb.org/t/p/w185/</string>
+    <string name="image_base_url">http://image.tmdb.org/t/p/w185</string>
+
+    <string name="movie_title">The Avengers</string>
+    <string name="movie_rating">User Rating:</string>
+    <string name="movie_release_date">Release Date:</string>
 </resources>
