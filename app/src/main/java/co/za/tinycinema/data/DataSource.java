@@ -46,7 +46,7 @@ public interface DataSource {
 //    /**
 //     * Get an {@link Observable} which will emit a List of {@link EarthInfoObjEnhanced}.
 //     */
-    void getAllMoviesInTheatre(String date, final LoadInfoCallback callback);
+    void getAllMoviesInTheatre(final LoadInfoCallback callback);
     void getMostPopularMovies(final LoadInfoCallback callback);
     void getHighestRatedMovies(final LoadInfoCallback callback);
 

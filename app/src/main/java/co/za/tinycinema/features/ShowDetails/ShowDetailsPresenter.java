@@ -17,4 +17,6 @@ public class ShowDetailsPresenter  {
     {
         showDetailsContract.setupViews(result);
     }
+
+
 }

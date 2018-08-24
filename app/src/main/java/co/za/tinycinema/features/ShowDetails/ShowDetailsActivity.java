@@ -7,6 +7,7 @@ import android.os.Bundle;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import co.za.tinycinema.R;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
@@ -17,6 +18,7 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
 
     @Inject ShowDetailsPresenter showDetailsPresenter;
     @Inject ViewMvcFactory viewMvcFactory;
+
 
     ShowDetailsContract mViewMvc;
     Result result;

@@ -16,7 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".SplashScreen">
+        <activity
+            android:name=".SplashScreen"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -24,7 +27,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.GetMoviesInTheatres.MoviesInTheatresActivity" />
-        <activity android:name=".features.ShowDetails.ShowDetailsActivity"></activity>
+        <activity android:name=".features.ShowDetails.ShowDetailsActivity" />
+        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity"></activity>
     </application>
 
 </manifest>

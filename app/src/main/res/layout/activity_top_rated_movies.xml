@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/activity_mainn"
-   >
+    >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -15,6 +15,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-   <include layout="@layout/view_progress_lottie" />
+    <include layout="@layout/view_progress_lottie" />
 
 </android.support.constraint.ConstraintLayout>

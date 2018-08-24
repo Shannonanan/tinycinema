@@ -13,4 +13,7 @@ public interface Service {
 
     @GET("/3/discover/movie?sort_by=popularity.des")
     Call<MoviesInTheatresModel>  getMoviesInTheatres(@Query("api_key") String api_key);
+
+    @GET("/3/discover/movie?sort_by=vote_average.desc")
+    Call<MoviesInTheatresModel>  getTopVotedMoviesInTheatres(@Query("api_key") String api_key);
 }

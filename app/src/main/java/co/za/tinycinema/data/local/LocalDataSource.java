@@ -9,7 +9,7 @@ public class LocalDataSource implements DataSource
 
 
     @Override
-    public void getAllMoviesInTheatre(String date, LoadInfoCallback callback) {
+    public void getAllMoviesInTheatre(LoadInfoCallback callback) {
 
     }
 

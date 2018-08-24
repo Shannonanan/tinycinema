@@ -1,4 +1,4 @@
-package co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase;
+package co.za.tinycinema.features.GetTopRatedMovies.domain.usecase;
 
 import java.util.List;
 
@@ -7,17 +7,17 @@ import co.za.tinycinema.data.DataSource;
 import co.za.tinycinema.data.Repository;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
-public class GetMoviesInTheatres extends UseCase<GetMoviesInTheatres.RequestValues, GetMoviesInTheatres.ResponseValue> {
+public class GetTopRatedMovies extends UseCase<GetTopRatedMovies.RequestValues, GetTopRatedMovies.ResponseValue> {
 
     private final Repository repository;
 
-    public GetMoviesInTheatres(Repository repository) {
+    public GetTopRatedMovies(Repository repository) {
         this.repository = repository;
     }
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        this.repository.getAllMoviesInTheatre(new DataSource.LoadInfoCallback() {
+        this.repository.getHighestRatedMovies(new DataSource.LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> results) {
                 getUseCaseCallback().onSuccess(new ResponseValue(results));
@@ -28,14 +28,11 @@ public class GetMoviesInTheatres extends UseCase<GetMoviesInTheatres.RequestValu
                 getUseCaseCallback().onError();
             }
         });
-
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-
         public RequestValues() {
-
         }
 
     }

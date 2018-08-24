@@ -41,15 +41,7 @@ public class MoviesInTheatresPresenter {
             mContractView.setLoadingIndicator(true);
         }
 
-        Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
-
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MMM-dd");
-        String formattedDate = df.format(c);
-
-
-
-        mUseCaseHandler.execute(getMoviesInTheatresUseCase, new GetMoviesInTheatres.RequestValues(formattedDate),
+        mUseCaseHandler.execute(getMoviesInTheatresUseCase, new GetMoviesInTheatres.RequestValues(),
                 new UseCase.UseCaseCallback<GetMoviesInTheatres.ResponseValue>() {
                     @Override
                     public void onSuccess(GetMoviesInTheatres.ResponseValue response) {
@@ -77,5 +69,6 @@ public class MoviesInTheatresPresenter {
     private void processInfo(List<Result> moviesResult) {
         mContractView.renderInView(moviesResult);
     }
+
 
 }

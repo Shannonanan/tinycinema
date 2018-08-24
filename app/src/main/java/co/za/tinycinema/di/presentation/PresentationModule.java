@@ -12,6 +12,8 @@ import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesPresenter;
+import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsPresenter;
 import co.za.tinycinema.features.common.ImageLoader;
 import co.za.tinycinema.utils.AppExecutors;
@@ -22,9 +24,9 @@ import dagger.Provides;
 public class PresentationModule {
 
 
-    private final FragmentActivity mActivity;
+    private final Activity mActivity;
 
-    public PresentationModule(FragmentActivity fragmentActivity) {
+    public PresentationModule(Activity fragmentActivity) {
         mActivity = fragmentActivity;
     }
 
@@ -78,6 +80,16 @@ public class PresentationModule {
     @Provides
     ShowDetailsPresenter showDetailsPresenter(){
         return new ShowDetailsPresenter();
+    }
+
+    @Provides
+    GetTopRatedMovies getTopRatedMovies(Repository repository){
+        return  new GetTopRatedMovies(repository);
+    }
+
+    @Provides
+    TopRatedMoviesPresenter topRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler){
+        return new TopRatedMoviesPresenter(getTopRatedMoviesUsecase, useCaseHandler);
     }
 
 

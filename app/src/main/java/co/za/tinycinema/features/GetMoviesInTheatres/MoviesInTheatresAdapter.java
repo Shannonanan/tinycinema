@@ -76,8 +76,7 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
     }
 
     static class GetMoviesViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.cell_movie)
-        ImageView imageView;
+        @BindView(R.id.cell_movie) ImageView imageView;
 
         public GetMoviesViewHolder(View itemView) {
             super(itemView);

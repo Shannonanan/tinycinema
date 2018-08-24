@@ -77,14 +77,14 @@ public class Repository implements DataSource {
 
     //check for internet, if none call to local to see if any saved data in the local repository, if none alert user
     @Override
-    public void getAllMoviesInTheatre(final String date, final LoadInfoCallback callback) {
+    public void getAllMoviesInTheatre(final LoadInfoCallback callback) {
         //check internet
         //if exists call remote
         if(isThereInternetConnection()){
-        getRemoteMoviesInTheatres(date, callback);}
+        getRemoteMoviesInTheatres(callback);}
         else {
             // Query the local storage if available.
-            mLocalDataSource.getAllMoviesInTheatre(date, new LoadInfoCallback() {
+            mLocalDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
                 @Override
                 public void onDataLoaded(List<Result> mMovieResultPosters) {
                     // refreshCache(tasks);
@@ -93,11 +93,10 @@ public class Repository implements DataSource {
 
                 @Override
                 public void onDataNotAvailable() {
-                    getRemoteMoviesInTheatres(date, callback);
+                    getRemoteMoviesInTheatres(callback);
                 }
             });
         }
-//test ci
         //if empty alert user
 
         // Respond immediately with cache if available and not dirty
@@ -122,13 +121,25 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public void getHighestRatedMovies(LoadInfoCallback callback) {
+    public void getHighestRatedMovies(final LoadInfoCallback callback) {
+        mRemoteDataSource.getHighestRatedMovies(new LoadInfoCallback() {
+            @Override
+            public void onDataLoaded(List<Result> results) {
+                if(results !=null){
+                    callback.onDataLoaded(results);
+                }
+            }
 
+            @Override
+            public void onDataNotAvailable() {
+                callback.onDataNotAvailable();
+            }
+        });
     }
 
 
-    private void getRemoteMoviesInTheatres(String date, @NonNull final LoadInfoCallback callback) {
-        mRemoteDataSource.getAllMoviesInTheatre(date, new LoadInfoCallback() {
+    private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback) {
+        mRemoteDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> movieResults) {
                 refreshCache(movieResults);

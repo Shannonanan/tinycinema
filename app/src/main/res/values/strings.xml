@@ -5,4 +5,6 @@
     <string name="movie_title">The Avengers</string>
     <string name="movie_rating">User Rating:</string>
     <string name="movie_release_date">Release Date:</string>
+    <string name="top_rated">top rated movies</string>
+    <string name="most_pop">most popular movies</string>
 </resources>

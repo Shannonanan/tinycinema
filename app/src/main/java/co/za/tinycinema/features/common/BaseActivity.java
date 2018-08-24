@@ -1,12 +1,9 @@
 package co.za.tinycinema.features.common;
 
+import android.app.Activity;
 import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-
 import co.za.tinycinema.MyApplication;
-import co.za.tinycinema.R;
 import co.za.tinycinema.di.application.ApplicationComponent;
 import co.za.tinycinema.di.presentation.PresentationComponent;
 import co.za.tinycinema.di.presentation.PresentationModule;
@@ -31,9 +28,4 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.display, menu);
-//        return true;
-//    }
 }
