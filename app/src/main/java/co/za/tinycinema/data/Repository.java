@@ -116,11 +116,6 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public void getMostPopularMovies(LoadInfoCallback callback) {
-
-    }
-
-    @Override
     public void getHighestRatedMovies(final LoadInfoCallback callback) {
         mRemoteDataSource.getHighestRatedMovies(new LoadInfoCallback() {
             @Override

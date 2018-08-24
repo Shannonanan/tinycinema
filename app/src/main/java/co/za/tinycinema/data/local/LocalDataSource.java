@@ -13,10 +13,6 @@ public class LocalDataSource implements DataSource
 
     }
 
-    @Override
-    public void getMostPopularMovies(LoadInfoCallback callback) {
-
-    }
 
     @Override
     public void getHighestRatedMovies(LoadInfoCallback callback) {

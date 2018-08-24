@@ -55,10 +55,6 @@ public class RemoteDataSource implements DataSource {
             });
     }
 
-    @Override
-    public void getMostPopularMovies(LoadInfoCallback callback) {
-
-    }
 
     @Override
     public void getHighestRatedMovies(final LoadInfoCallback callback) {

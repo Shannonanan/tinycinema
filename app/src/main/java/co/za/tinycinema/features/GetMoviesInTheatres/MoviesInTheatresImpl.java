@@ -32,7 +32,7 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     RecyclerView recyclerView;
     @BindView(R.id.rl_progress_lottie)
     RelativeLayout rl_progress;
-    @BindView(R.id.animation_view)
+    @BindView(R.id.animation_view_load)
     LottieAnimationView pb_progress;
     private boolean isActive;
 

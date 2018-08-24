@@ -26,6 +26,11 @@ public class TopRatedMoviesPresenter {
     }
 
     public void loadTopRatedMovies(final boolean showLoadingUI){
+
+        if (showLoadingUI) {
+            topRatedContract.showLoading();
+            topRatedContract.setLoadingIndicator(true);
+        }
         this.useCaseHandler.execute(getTopRatedMoviesUsecase, getTopRatedMoviesUsecase.getRequestValues(),
                 new UseCase.UseCaseCallback<GetTopRatedMovies.ResponseValue>() {
             @Override

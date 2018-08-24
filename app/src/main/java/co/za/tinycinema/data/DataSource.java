@@ -36,18 +36,8 @@ public interface DataSource {
         void onDataNotAvailable();
     }
 
-    interface GetInfoCallback {
 
-     //   void onInfoLoaded(EarthInfoObjEnhanced info);
-
-        void onDataNotAvailable();
-    }
-
-//    /**
-//     * Get an {@link Observable} which will emit a List of {@link EarthInfoObjEnhanced}.
-//     */
     void getAllMoviesInTheatre(final LoadInfoCallback callback);
-    void getMostPopularMovies(final LoadInfoCallback callback);
     void getHighestRatedMovies(final LoadInfoCallback callback);
 
     void deleteAllInfo();
