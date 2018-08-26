@@ -2,10 +2,12 @@ package co.za.tinycinema.features.GetMoviesInTheatres;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +30,7 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
     //setup a listener for your posts in the recyclerview
     public interface OnMoviePosterClicked {
         void onMoviePosterClicked(Result result);
+        void onSaveButtonClicked(Result result);
     }
 
     public MoviesInTheatresAdapter(Context context) {
@@ -68,6 +71,15 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
                 }
             }
         });
+
+        holder.btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onSaveButtonClicked(movieResult);
+                }
+            }
+        });
     }
 
     @Override
@@ -77,6 +89,8 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     static class GetMoviesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cell_movie) ImageView imageView;
+        @BindView(R.id.btn_save) Button btn_save;
+        @BindView(R.id.btn_delete) Button delete;
 
         public GetMoviesViewHolder(View itemView) {
             super(itemView);

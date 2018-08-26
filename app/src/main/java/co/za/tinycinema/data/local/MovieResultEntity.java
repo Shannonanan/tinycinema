@@ -1,82 +1,43 @@
+package co.za.tinycinema.data.local;
 
-package co.za.tinycinema.features.GetMoviesInTheatres.domain.model;
 
-import java.io.Serializable;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+
 import java.util.List;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-public class Result implements Serializable {
+import static co.za.tinycinema.data.local.MovieResultEntity.TABLE_NAME;
 
+@Entity(tableName = TABLE_NAME)
+public class MovieResultEntity {
 
-    @SerializedName("vote_count")
-    @Expose
-    private Integer voteCount;
-    @SerializedName("id")
-    @Expose
+    public static final String TABLE_NAME = "movies";
+
+    @PrimaryKey(autoGenerate = true)
     private Integer id;
-    @SerializedName("video")
-    @Expose
+    private Integer voteCount;
     private Boolean video;
-    @SerializedName("vote_average")
-    @Expose
     private Double voteAverage;
-    @SerializedName("title")
-    @Expose
     private String title;
-    @SerializedName("popularity")
-    @Expose
     private Double popularity;
-    @SerializedName("poster_path")
-    @Expose
     private String posterPath;
-    @SerializedName("original_language")
-    @Expose
     private String originalLanguage;
-    @SerializedName("original_title")
-    @Expose
     private String originalTitle;
-    @SerializedName("genre_ids")
-    @Expose
-    private List<Integer> genreIds = null;
-    @SerializedName("backdrop_path")
-    @Expose
+    //  private List<Integer> genreIds = null;
     private String backdropPath;
-    @SerializedName("adult")
-    @Expose
     private Boolean adult;
-    @SerializedName("overview")
-    @Expose
     private String overview;
-    @SerializedName("release_date")
-    @Expose
     private String releaseDate;
+    private boolean toprated;
 
-    public Result(){
-
+    public boolean isToprated() {
+        return toprated;
     }
 
-
-
-    public Result(Integer voteCount, Integer id,
-                  Boolean video, Double voteAverage, String title,
-                  Double popularity, String posterPath, String originalLanguage,
-                  String originalTitle, String backdropPath,
-                  Boolean adult, String overview, String releaseDate) {
-        this.voteCount = voteCount;
-        this.id = id;
-        this.video = video;
-        this.voteAverage = voteAverage;
-        this.title = title;
-        this.popularity = popularity;
-        this.posterPath = posterPath;
-        this.originalLanguage = originalLanguage;
-        this.originalTitle = originalTitle;
-        this.backdropPath = backdropPath;
-        this.adult = adult;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
+    public void setToprated(boolean toprated) {
+        this.toprated = toprated;
     }
+
 
     public Integer getVoteCount() {
         return voteCount;
@@ -150,13 +111,13 @@ public class Result implements Serializable {
         this.originalTitle = originalTitle;
     }
 
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
-    }
+//        public List<Integer> getGenreIds() {
+//            return genreIds;
+//        }
+//
+//        public void setGenreIds(List<Integer> genreIds) {
+//            this.genreIds = genreIds;
+//        }
 
     public String getBackdropPath() {
         return backdropPath;
@@ -191,3 +152,4 @@ public class Result implements Serializable {
     }
 
 }
+

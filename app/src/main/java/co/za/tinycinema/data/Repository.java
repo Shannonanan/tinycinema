@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import co.za.tinycinema.data.local.LocalDataSource;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.ImageLoader;
@@ -70,9 +71,11 @@ public class Repository implements DataSource {
     ) {
         this.mRemoteDataSource = mRemoteDataSource;
         this.mLocalDataSource = mLocalDataSource;
-     //   this.imageLoader = imageLoader;
+        //   this.imageLoader = imageLoader;
         this.mContext = context;
     }
+
+    //TODO make  a delete function and check why it crashes when going to detail when offline
 
 
     //check for internet, if none call to local to see if any saved data in the local repository, if none alert user
@@ -80,9 +83,9 @@ public class Repository implements DataSource {
     public void getAllMoviesInTheatre(final LoadInfoCallback callback) {
         //check internet
         //if exists call remote
-        if(isThereInternetConnection()){
-        getRemoteMoviesInTheatres(callback);}
-        else {
+        if (isThereInternetConnection()) {
+            getRemoteMoviesInTheatres(callback);
+        } else {
             // Query the local storage if available.
             mLocalDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
                 @Override
@@ -92,44 +95,59 @@ public class Repository implements DataSource {
                 }
 
                 @Override
-                public void onDataNotAvailable() {
-                    getRemoteMoviesInTheatres(callback);
+                public void onDataNotAvailable(String noDataAvailable) {
+                   callback.onDataNotAvailable(noDataAvailable);
                 }
             });
         }
         //if empty alert user
 
         // Respond immediately with cache if available and not dirty
-        if (mResults != null && !mCacheIsDirty) {
-            callback.onDataLoaded(new ArrayList<>(mResults.values()));
-            return;
-        }
-
-        if (mCacheIsDirty) {
-         //    If the cache is dirty we need to fetch new data from the network.
-
-        }
-        else {
-
-
-        }
+//        if (mResults != null && !mCacheIsDirty) {
+//            callback.onDataLoaded(new ArrayList<>(mResults.values()));
+//            return;
+//        }
+//
+//        if (mCacheIsDirty) {
+//            //    If the cache is dirty we need to fetch new data from the network.
+//
+//        } else {
+//
+//
+//        }
     }
 
     @Override
     public void getHighestRatedMovies(final LoadInfoCallback callback) {
+        if (isThereInternetConnection()) {
         mRemoteDataSource.getHighestRatedMovies(new LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> results) {
-                if(results !=null){
+                if (results != null) {
                     callback.onDataLoaded(results);
                 }
             }
 
             @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
+            public void onDataNotAvailable(String noDataAvailable) {
+                callback.onDataNotAvailable(noDataAvailable);
             }
         });
+        } else {
+            // Query the local storage if available.
+            mLocalDataSource.getHighestRatedMovies(new LoadInfoCallback() {
+                @Override
+                public void onDataLoaded(List<Result> mMovieResultPosters) {
+                    // refreshCache(tasks);
+                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters));
+                }
+
+                @Override
+                public void onDataNotAvailable(String noDataAvailable) {
+                    callback.onDataNotAvailable(noDataAvailable);
+                }
+            });
+        }
     }
 
 
@@ -138,13 +156,13 @@ public class Repository implements DataSource {
             @Override
             public void onDataLoaded(List<Result> movieResults) {
                 refreshCache(movieResults);
-            //    refreshLocalDataSource(info);
+                //    refreshLocalDataSource(info);
                 callback.onDataLoaded(new ArrayList<>(movieResults));
             }
 
             @Override
-            public void onDataNotAvailable() {
-                callback.onDataNotAvailable();
+            public void onDataNotAvailable(String noDataAvailable) {
+                callback.onDataNotAvailable(noDataAvailable);
             }
         });
     }
@@ -193,12 +211,29 @@ public class Repository implements DataSource {
     }
 
     @Override
-    public void saveTask(Result marbles) {
-       // checkNotNull(marbles);
-        mRemoteDataSource.saveTask(marbles);
-        mLocalDataSource.saveTask(marbles);
+    public void saveMovie(MovieResultEntity result, final SaveInfoCallback callback) {
 
-        // Do in memory cache update to keep the app UI up to date
+        mLocalDataSource.saveMovie(result, new SaveInfoCallback() {
+            @Override
+            public void savedStatusSuccess(String status) {
+                callback.savedStatusSuccess(status);
+            }
+
+            @Override
+            public void savedStatusFailed(String error) {
+                callback.savedStatusFailed(error);
+            }
+        });
+    }
+
+
+//    @Override
+//    public void saveTask(Result marbles) {
+//       // checkNotNull(marbles);
+//        mRemoteDataSource.saveTask(marbles);
+//        mLocalDataSource.saveTask(marbles);
+
+    // Do in memory cache update to keep the app UI up to date
 //        if (mCachedEarthInfo == null) {
 //            mCachedEarthInfo = new LinkedHashMap<>();
 //        }
@@ -207,11 +242,12 @@ public class Repository implements DataSource {
 //                marbles.getCaption(),marbles.getImage(),
 //                marbles.getVersion(), marbles.getDate());
 //        mCachedEarthInfo.put(marbles.getIdentifier(), schema);
-    }
+    //  }
 
     /**
      * Returns the single instance of this class, creating it if necessary.
-     *used for testing
+     * used for testing
+     *
      * @param remoteDataSource the backend data source
      * @param localDataSource  the device storage data source
      * @return the {@link Repository} instance

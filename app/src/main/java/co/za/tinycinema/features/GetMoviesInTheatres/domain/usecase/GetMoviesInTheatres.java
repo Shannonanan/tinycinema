@@ -24,8 +24,8 @@ public class GetMoviesInTheatres extends UseCase<GetMoviesInTheatres.RequestValu
             }
 
             @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
+            public void onDataNotAvailable(String dataNotAvailable) {
+                getUseCaseCallback().onError(dataNotAvailable);
             }
         });
 

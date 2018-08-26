@@ -10,12 +10,17 @@ import co.za.tinycinema.features.common.mvcViews.ObservableViewMvc;
  */
 public interface MoviesInTheatresContract extends ObservableViewMvc<MoviesInTheatresContract.Listener> {
 
-     interface Listener{
-            void OnMoviePosterClicked(Result movieResult);
+    interface Listener {
+        void OnMoviePosterClicked(Result movieResult);
+        void OnSaveButtonClicked(Result result);
+        void renderStatusOfSave(String status);
     }
 
     void renderInView(List<Result> movieInfo);
+
     void setLoadingIndicator(boolean active);
-    void showLoadingTasksError();
+    void renderStatusOfSave(String status);
+    void showLoadingTasksError(String error);
+
     boolean isActive();
 }

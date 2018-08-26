@@ -58,6 +58,13 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
                     listener.OnMoviePosterClicked(result);
                 }
             }
+
+            @Override
+            public void onSaveButtonClicked(Result result) {
+                for (Listener listener : getListeners()) {
+                    listener.OnSaveButtonClicked(result);
+                }
+            }
         };
 
         moviesInTheatresAdapter.setOnItemClickListener(onMoviePosterClicked);
@@ -80,13 +87,21 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     }
 
     @Override
+    public void renderStatusOfSave(String status) {
+        for (Listener listener: getListeners()) {
+            listener.renderStatusOfSave(status);
+
+        }
+    }
+
+    @Override
     public void setLoadingIndicator(boolean active) {
         isActive = active;
 
     }
 
     @Override
-    public void showLoadingTasksError() {
+    public void showLoadingTasksError(String error) {
 
     }
 

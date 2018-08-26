@@ -84,7 +84,7 @@ public class UseCaseHandler {
         }
 
         @Override
-        public void onError() {
+        public void onError(String error) {
             mUseCaseHandler.notifyError(mCallback);
         }
     }

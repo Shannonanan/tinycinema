@@ -7,7 +7,9 @@ import java.util.List;
 
 import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.common.UseCaseHandler;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 
 public class TopRatedMoviesPresenter {
@@ -15,10 +17,12 @@ public class TopRatedMoviesPresenter {
     private GetTopRatedMovies getTopRatedMoviesUsecase;
     private final UseCaseHandler useCaseHandler;
     private TopRatedContract topRatedContract;
+    private SaveMovieToLocal saveMovieToLocal;
 
-    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler) {
+    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler,SaveMovieToLocal saveMovieToLocal) {
         this.getTopRatedMoviesUsecase = getTopRatedMoviesUsecase;
         this.useCaseHandler = useCaseHandler;
+        this.saveMovieToLocal = saveMovieToLocal;
     }
 
     public void setView(@NonNull TopRatedContract topRatedContract){
@@ -46,7 +50,7 @@ public class TopRatedMoviesPresenter {
             }
 
             @Override
-            public void onError() {
+            public void onError(String error) {
 
             }
         });
@@ -55,5 +59,51 @@ public class TopRatedMoviesPresenter {
 
     private void processInfo(List<Result> moviesResult) {
         topRatedContract.renderInView(moviesResult);
+    }
+
+    public void saveInfoToLocal(Result result) {
+        topRatedContract.showLoading();
+        topRatedContract.setLoadingIndicator(true);
+
+        useCaseHandler.execute(saveMovieToLocal, new SaveMovieToLocal.RequestValues(transform(result)),
+                new UseCase.UseCaseCallback<SaveMovieToLocal.ResponseValues>() {
+                    @Override
+                    public void onSuccess(SaveMovieToLocal.ResponseValues response) {
+                        topRatedContract.setLoadingIndicator(false);
+                        topRatedContract.hideLoading();
+
+                        processResponseOfSave(response.saveInfoResult());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+
+    }
+
+    private void processResponseOfSave(String s) {
+        topRatedContract.renderStatusOfSave(s);
+    }
+
+
+    public MovieResultEntity transform(Result result){
+        MovieResultEntity movieResultEntity = null;
+        if(result != null){
+            movieResultEntity = new MovieResultEntity();
+            movieResultEntity.setId(result.getId());
+            movieResultEntity.setAdult(result.getAdult());
+            movieResultEntity.setBackdropPath(result.getBackdropPath());
+            movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
+            movieResultEntity.setOriginalTitle(result.getOriginalTitle());
+            movieResultEntity.setOverview(result.getOverview());
+            movieResultEntity.setPopularity(result.getPopularity());
+            movieResultEntity.setPosterPath(result.getPosterPath());
+            movieResultEntity.setReleaseDate(result.getReleaseDate());
+            movieResultEntity.setTitle(result.getTitle());
+            movieResultEntity.setToprated(true);
+        }
+        return movieResultEntity;
     }
 }

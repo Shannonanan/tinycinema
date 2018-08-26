@@ -7,4 +7,8 @@
     <string name="movie_release_date">Release Date:</string>
     <string name="top_rated">top rated movies</string>
     <string name="most_pop">most popular movies</string>
+
+    <string name="save_failed">sorry something went wrong</string>
+    <string name="save">save</string>
+    <string name="delete">delete</string>
 </resources>

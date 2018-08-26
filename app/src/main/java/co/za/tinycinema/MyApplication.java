@@ -18,7 +18,7 @@ public class MyApplication extends Application {
         super.onCreate();
         mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this))
-              //  .roomModule(new RoomModule(this))
+                .roomModule(new RoomModule(this))
                 .build();
     }
 

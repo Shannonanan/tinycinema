@@ -17,6 +17,8 @@
 package co.za.tinycinema.data;
 
 import java.util.List;
+
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
 /**
@@ -33,7 +35,13 @@ public interface DataSource {
 
         void onDataLoaded(List<Result> results);
 
-        void onDataNotAvailable();
+        void onDataNotAvailable(String noDataAvailable);
+    }
+
+     interface SaveInfoCallback{
+        void savedStatusSuccess(String status);
+
+        void savedStatusFailed(String error);
     }
 
 
@@ -41,7 +49,7 @@ public interface DataSource {
     void getHighestRatedMovies(final LoadInfoCallback callback);
 
     void deleteAllInfo();
-    void saveTask(Result marbles);
+    void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
     void refreshTasks();
 
 }

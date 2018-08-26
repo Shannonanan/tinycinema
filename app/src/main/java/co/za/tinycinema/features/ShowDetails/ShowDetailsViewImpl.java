@@ -44,9 +44,10 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
 
         mPlot.setText(result.getOverview());
         mTitle.setText(result.getTitle());
+        if(result.getVoteAverage() != null){
         Double voteAv = result.getVoteAverage();
         String dbl = Double.toString(voteAv);
-        mRating.setText(dbl);
+        mRating.setText(dbl);}
         mReleaseDate.setText(result.getReleaseDate());
     }
 

@@ -3,6 +3,8 @@ package co.za.tinycinema.di.application;
 import android.app.Application;
 
 import javax.inject.Singleton;
+
+import co.za.tinycinema.utils.AppExecutors;
 import dagger.Module;
 import dagger.Provides;
 
@@ -16,11 +18,11 @@ public class ApplicationModule {
         mApplication = application;
     }
 
-//    @Singleton
-//    @Provides
-//    AppExecutors getAppExecutors(){
-//        return new AppExecutors();
-//    }
+    @Singleton
+    @Provides
+    AppExecutors getAppExecutors(){
+        return new AppExecutors();
+    }
 
 
 

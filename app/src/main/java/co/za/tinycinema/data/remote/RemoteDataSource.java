@@ -7,6 +7,7 @@ import java.util.List;
 
 import co.za.tinycinema.R;
 import co.za.tinycinema.data.DataSource;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.MoviesInTheatresModel;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import retrofit2.Call;
@@ -50,7 +51,7 @@ public class RemoteDataSource implements DataSource {
 
                 @Override
                 public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-                    callback.onDataNotAvailable();
+                    callback.onDataNotAvailable("no data available");
                 }
             });
     }
@@ -76,7 +77,7 @@ public class RemoteDataSource implements DataSource {
 
             @Override
             public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-                    callback.onDataNotAvailable();
+                    callback.onDataNotAvailable("no data available");
             }
         });
     }
@@ -87,9 +88,10 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void saveTask(Result marbles) {
+    public void saveMovie(MovieResultEntity result, SaveInfoCallback callback) {
 
     }
+
 
     @Override
     public void refreshTasks() {

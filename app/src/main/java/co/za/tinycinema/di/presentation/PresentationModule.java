@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.Repository;
 import co.za.tinycinema.data.local.LocalDataSource;
+import co.za.tinycinema.data.local.MoviesDao;
 import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesPresenter;
 import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsPresenter;
@@ -56,10 +58,10 @@ public class PresentationModule {
         return new RemoteDataSource(service);
     }
 
-    @Provides
-    LocalDataSource localDataSource(){
-        return new LocalDataSource();
-    }
+//    @Provides
+//    LocalDataSource localDataSource(MoviesDao moviesDao, AppExecutors appExecutors){
+//        return new LocalDataSource(moviesDao, appExecutors);
+//    }
 
     @Provides
     Repository repository(RemoteDataSource mRemoteDataSource, LocalDataSource mLocalDataSource, Context context){
@@ -72,9 +74,14 @@ public class PresentationModule {
     }
 
     @Provides
+    SaveMovieToLocal saveMovieToLocal(Repository repository){
+        return new SaveMovieToLocal(repository);
+    }
+
+    @Provides
     MoviesInTheatresPresenter getMoviesPresenter(GetMoviesInTheatres mGetMovies,
-                                                 UseCaseHandler mUseCaseHandler) {
-        return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler);
+                                                 UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal) {
+        return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler, saveMovieToLocal);
     }
 
     @Provides
@@ -88,8 +95,8 @@ public class PresentationModule {
     }
 
     @Provides
-    TopRatedMoviesPresenter topRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler){
-        return new TopRatedMoviesPresenter(getTopRatedMoviesUsecase, useCaseHandler);
+    TopRatedMoviesPresenter topRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler, SaveMovieToLocal saveMovieToLocal){
+        return new TopRatedMoviesPresenter(getTopRatedMoviesUsecase, useCaseHandler, saveMovieToLocal);
     }
 
 

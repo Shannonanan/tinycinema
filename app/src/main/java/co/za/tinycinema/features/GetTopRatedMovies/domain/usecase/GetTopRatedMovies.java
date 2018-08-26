@@ -24,8 +24,8 @@ public class GetTopRatedMovies extends UseCase<GetTopRatedMovies.RequestValues, 
             }
 
             @Override
-            public void onDataNotAvailable() {
-                getUseCaseCallback().onError();
+            public void onDataNotAvailable(String error) {
+                getUseCaseCallback().onError(error);
             }
         });
     }

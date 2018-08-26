@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -28,6 +29,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
 
     public interface OnMovieClickedListener {
         void onMovieClicked(Result result);
+        void onSaveButtonClicked(Result result);
     }
 
     public TopRatedAdapter(Context mContext) {
@@ -65,6 +67,15 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
                  onMovieClickedListener.onMovieClicked(result);}
              }
          });
+
+        holder.btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onMovieClickedListener != null) {
+                    onMovieClickedListener.onSaveButtonClicked(result);
+                }
+            }
+        });
     }
 
     @Override
@@ -74,6 +85,8 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
 
     public class TopRatedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cell_movie) ImageView imageView;
+        @BindView(R.id.btn_save) Button btn_save;
+        @BindView(R.id.btn_delete) Button delete;
 
         public TopRatedViewHolder(View itemView) {
             super(itemView);

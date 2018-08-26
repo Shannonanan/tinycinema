@@ -9,11 +9,14 @@ public interface TopRatedContract extends ObservableViewMvc<TopRatedContract.Lis
 
     interface Listener{
         void OnMoviePosterClicked(Result movieResult);
+        void OnSaveMovieClciked(Result result);
+        void renderStatusOfSave(String status);
     }
 
 
     void renderInView(List<Result> movieInfo);
     void setLoadingIndicator(boolean active);
+    void renderStatusOfSave(String status);
     void showLoadingTasksError();
     boolean isActive();
 }

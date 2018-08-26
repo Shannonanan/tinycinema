@@ -55,6 +55,21 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
     }
 
     @Override
+    public void OnSaveButtonClicked(Result result) {
+        moviesInTheatresPresenter.saveInfoToLocal(result);
+    }
+
+    @Override
+    public void renderStatusOfSave(String status) {
+        if(status.equals("successful")){
+            Toast.makeText(this,"Saved" + status,Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
