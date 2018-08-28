@@ -24,12 +24,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
 
     private List<Result> listOfTopeRated;
     Context mContext;
+    boolean offlineStatus = false;
 
     private TopRatedAdapter.OnMovieClickedListener onMovieClickedListener;
 
     public interface OnMovieClickedListener {
         void onMovieClicked(Result result);
         void onSaveButtonClicked(Result result);
+        void onDeleteButtonClicked(boolean type, Result result);
     }
 
     public TopRatedAdapter(Context mContext) {
@@ -54,12 +56,26 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
     @Override
     public void onBindViewHolder(@NonNull TopRatedViewHolder holder, int position) {
         final Result result = this.listOfTopeRated.get(position);
+        if(offlineStatus){
+            holder.btn_save.setVisibility(View.GONE);
+            holder.delete.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.btn_save.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.GONE);
+        }
 
         String movieCode = result.getPosterPath();
+        if(movieCode == null || movieCode.isEmpty()){
+            Glide.with(mContext)
+                    .load(R.drawable.photo_camera)
+                    .into(holder.imageView);
+        }else{
         String url = mContext.getString(R.string.image_base_url) + movieCode;
         Glide.with(mContext)
                 .load(url)
-                .into(holder.imageView);
+                .into(holder.imageView);}
+
          holder.itemView.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {
@@ -73,6 +89,15 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
             public void onClick(View v) {
                 if (onMovieClickedListener != null) {
                     onMovieClickedListener.onSaveButtonClicked(result);
+                }
+            }
+        });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onMovieClickedListener != null) {
+                    onMovieClickedListener.onDeleteButtonClicked(true, result);
                 }
             }
         });
@@ -94,10 +119,11 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
         }
     }
 
-    public void setInfoCollection(Collection<Result> INFO) {
+    public void setInfoCollection(Collection<Result> INFO, boolean networkStatus) {
         this.validateCollection(INFO);
         this.listOfTopeRated = (List<Result>) INFO;
         this.notifyDataSetChanged();
+        offlineStatus = networkStatus;
     }
 
     private void validateCollection(Collection<Result> infoCollection) {

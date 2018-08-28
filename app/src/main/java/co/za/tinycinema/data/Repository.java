@@ -89,9 +89,9 @@ public class Repository implements DataSource {
             // Query the local storage if available.
             mLocalDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
                 @Override
-                public void onDataLoaded(List<Result> mMovieResultPosters) {
+                public void onDataLoaded(List<Result> mMovieResultPosters, boolean offlne) {
                     // refreshCache(tasks);
-                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters));
+                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), true);
                 }
 
                 @Override
@@ -122,9 +122,9 @@ public class Repository implements DataSource {
         if (isThereInternetConnection()) {
         mRemoteDataSource.getHighestRatedMovies(new LoadInfoCallback() {
             @Override
-            public void onDataLoaded(List<Result> results) {
+            public void onDataLoaded(List<Result> results, boolean offline) {
                 if (results != null) {
-                    callback.onDataLoaded(results);
+                    callback.onDataLoaded(results, offline);
                 }
             }
 
@@ -137,9 +137,9 @@ public class Repository implements DataSource {
             // Query the local storage if available.
             mLocalDataSource.getHighestRatedMovies(new LoadInfoCallback() {
                 @Override
-                public void onDataLoaded(List<Result> mMovieResultPosters) {
+                public void onDataLoaded(List<Result> mMovieResultPosters, boolean offline) {
                     // refreshCache(tasks);
-                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters));
+                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), offline);
                 }
 
                 @Override
@@ -154,10 +154,10 @@ public class Repository implements DataSource {
     private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback) {
         mRemoteDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
             @Override
-            public void onDataLoaded(List<Result> movieResults) {
+            public void onDataLoaded(List<Result> movieResults, boolean offline) {
                 refreshCache(movieResults);
                 //    refreshLocalDataSource(info);
-                callback.onDataLoaded(new ArrayList<>(movieResults));
+                callback.onDataLoaded(new ArrayList<>(movieResults), offline);
             }
 
             @Override
@@ -200,9 +200,20 @@ public class Repository implements DataSource {
 
 
     @Override
-    public void deleteAllInfo() {
-        mRemoteDataSource.deleteAllInfo();
-        mLocalDataSource.deleteAllInfo();
+    public void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback) {
+     //   mRemoteDataSource.deleteAllInfo();
+        mLocalDataSource.deleteMovie(type,entity, new DeleteInfoCallback() {
+            @Override
+            public void deleteStatusSuccess(List<Result> latestResults, String status) {
+                callback.deleteStatusSuccess(latestResults, status);
+            }
+
+            @Override
+            public void deleteStatusFailed(String status) {
+
+            }
+        });
+
 
 //        if (mCachedEarthInfo == null) {
 //            mCachedEarthInfo = new LinkedHashMap<>();

@@ -1,12 +1,19 @@
 package co.za.tinycinema.features.GetMoviesInTheatres;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
+import android.support.annotation.NonNull;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -32,6 +39,9 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         getPresentationComponent().inject(this);
         mViewMvc = viewMvcFactory.newInstance(MoviesInTheatresContract.class, null);
         setContentView(mViewMvc.getRootView());
+        if(!isThereInternetConnection()){
+            Toast.makeText(this, getString(R.string.offline),Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -42,6 +52,9 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         mViewMvc.registerListener(this);
         moviesInTheatresPresenter.start();
     }
+
+
+
 
     @Override
     protected void onStop() {
@@ -54,19 +67,27 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         startActivity(ShowDetailsActivity.getCallingIntent(this, movieResult));
     }
 
-    @Override
-    public void OnSaveButtonClicked(Result result) {
-        moviesInTheatresPresenter.saveInfoToLocal(result);
-    }
+
 
     @Override
     public void renderStatusOfSave(String status) {
         if(status.equals("successful")){
-            Toast.makeText(this,"Saved" + status,Toast.LENGTH_LONG).show();
+
+            Toast.makeText(this,getString(R.string.saved_successfully),Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onDeleteButtonClicked(boolean type, Result result) {
+        moviesInTheatresPresenter.deleteMovieFromLocal(type, result);
+    }
+
+    @Override
+    public void OnSaveButtonClicked(Result result) {
+        moviesInTheatresPresenter.saveInfoToLocal(result);
     }
 
     @Override
@@ -90,6 +111,22 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         }
 
         return true;
+    }
+
+    /**
+     * Checks if the device has any active internet connection.
+     *
+     * @return true device with internet connection, otherwise false.
+     */
+    private boolean isThereInternetConnection() {
+        boolean isConnected;
+
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        isConnected = (networkInfo != null && networkInfo.isConnectedOrConnecting());
+
+        return isConnected;
     }
 
 

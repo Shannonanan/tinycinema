@@ -52,6 +52,18 @@ public class Result implements Serializable {
     @Expose
     private String releaseDate;
 
+    private Boolean offline;
+
+    public Boolean getOffline() {
+        return offline;
+    }
+
+    public void setOffline(Boolean offline) {
+        this.offline = offline;
+    }
+
+
+
     public Result(){
 
     }
@@ -62,7 +74,7 @@ public class Result implements Serializable {
                   Boolean video, Double voteAverage, String title,
                   Double popularity, String posterPath, String originalLanguage,
                   String originalTitle, String backdropPath,
-                  Boolean adult, String overview, String releaseDate) {
+                  Boolean adult, String overview, String releaseDate, Boolean offline) {
         this.voteCount = voteCount;
         this.id = id;
         this.video = video;
@@ -76,6 +88,7 @@ public class Result implements Serializable {
         this.adult = adult;
         this.overview = overview;
         this.releaseDate = releaseDate;
+        this.offline = offline;
     }
 
     public Integer getVoteCount() {

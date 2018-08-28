@@ -55,11 +55,16 @@ public class TopRatedMoviesActivity extends BaseActivity implements TopRatedCont
     @Override
     public void renderStatusOfSave(String status) {
         if(status.equals("successful")){
-            Toast.makeText(this,"Saved" + status,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,getString(R.string.saved_successfully),Toast.LENGTH_LONG).show();
         }
         else{
             Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void OnDeleteMovieClicked(boolean type,Result result) {
+        topRatedMoviesPresenter.deleteMovieFromLocal(type, result);
     }
 }
 

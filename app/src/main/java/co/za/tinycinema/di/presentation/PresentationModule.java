@@ -12,6 +12,7 @@ import co.za.tinycinema.data.local.MoviesDao;
 import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesPresenter;
@@ -80,8 +81,9 @@ public class PresentationModule {
 
     @Provides
     MoviesInTheatresPresenter getMoviesPresenter(GetMoviesInTheatres mGetMovies,
-                                                 UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal) {
-        return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler, saveMovieToLocal);
+                                                 UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal,
+                                                 DeleteMoviesInLocal deleteMoviesInLocal) {
+        return new MoviesInTheatresPresenter(mGetMovies, mUseCaseHandler, saveMovieToLocal, deleteMoviesInLocal);
     }
 
     @Provides
@@ -95,8 +97,16 @@ public class PresentationModule {
     }
 
     @Provides
-    TopRatedMoviesPresenter topRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler, SaveMovieToLocal saveMovieToLocal){
-        return new TopRatedMoviesPresenter(getTopRatedMoviesUsecase, useCaseHandler, saveMovieToLocal);
+    TopRatedMoviesPresenter topRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase,
+                                                    UseCaseHandler useCaseHandler,
+                                                    SaveMovieToLocal saveMovieToLocal,
+                                                    DeleteMoviesInLocal deleteMoviesInLocal){
+        return new TopRatedMoviesPresenter(getTopRatedMoviesUsecase, useCaseHandler, saveMovieToLocal,deleteMoviesInLocal);
+    }
+
+    @Provides
+    DeleteMoviesInLocal deleteMoviesInLocal(Repository repository){
+        return new DeleteMoviesInLocal(repository);
     }
 
 

@@ -25,7 +25,7 @@ public class LocalDataSource implements DataSource {
             public void run() {
               List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMovies(false);
               List<Result> transformedFromLocal = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
-                callback.onDataLoaded(transformedFromLocal);
+                callback.onDataLoaded(transformedFromLocal, true);
             }
         };
         mExecutors.diskIO().execute(runnable);
@@ -39,7 +39,7 @@ public class LocalDataSource implements DataSource {
                 transfromedFromLocal.add(new Result(entity.getVoteCount(), entity.getId(), entity.getVideo(), entity.getVoteAverage(),
                         entity.getTitle(), entity.getPopularity(), entity.getPosterPath(),entity.getOriginalLanguage(),
                         entity.getOriginalTitle(), entity.getBackdropPath(), entity.getAdult(),
-                        entity.getOverview(), entity.getReleaseDate()));
+                        entity.getOverview(), entity.getReleaseDate(), true));
             }
         }
 
@@ -55,16 +55,27 @@ public class LocalDataSource implements DataSource {
             public void run() {
                 List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMovies(true);
                 List<Result> transformedFromLocal = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
-                callback.onDataLoaded(transformedFromLocal);
+                callback.onDataLoaded(transformedFromLocal, true);
             }
         };
         mExecutors.diskIO().execute(runnable);
     }
 
     @Override
-    public void deleteAllInfo() {
+    public void deleteMovie(final boolean type, final MovieResultEntity entity, final DeleteInfoCallback callback) {
+        Runnable deleteRunnable = new Runnable() {
+            @Override
+            public void run() {
+                moviesDao.deleteMovie(entity);
+                List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMovies(type);
+                List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
+                callback.deleteStatusSuccess(latestResults,"success");
+            }
+        };
 
+        mExecutors.diskIO().execute(deleteRunnable);
     }
+
 
     @Override
     public void saveMovie(final MovieResultEntity result, final SaveInfoCallback callback) {

@@ -37,14 +37,11 @@ public class RemoteDataSource implements DataSource {
                 public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
                     if (response.body() != null) {
                         if (response.isSuccessful()) {
-
-                            for (Result result:response.body().getResults()) {
-                                results.add(result);
-                            }
+                       results.addAll(response.body().getResults());
 
                         }
 
-                        callback.onDataLoaded(results);
+                        callback.onDataLoaded(results, false);
                     }
 
                 }
@@ -70,7 +67,7 @@ public class RemoteDataSource implements DataSource {
                     if(response.isSuccessful()){
 
                         results.addAll(response.body().getResults());
-                        callback.onDataLoaded(results);
+                        callback.onDataLoaded(results, false);
                     }
                 }
             }
@@ -83,9 +80,10 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
-    public void deleteAllInfo() {
+    public void deleteMovie(boolean type,MovieResultEntity entity, DeleteInfoCallback callback) {
 
     }
+
 
     @Override
     public void saveMovie(MovieResultEntity result, SaveInfoCallback callback) {

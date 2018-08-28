@@ -14,13 +14,15 @@ public interface MoviesInTheatresContract extends ObservableViewMvc<MoviesInThea
         void OnMoviePosterClicked(Result movieResult);
         void OnSaveButtonClicked(Result result);
         void renderStatusOfSave(String status);
+        void onDeleteButtonClicked(boolean type, Result result);
     }
 
-    void renderInView(List<Result> movieInfo);
+    void renderInView(List<Result> movieInfo, boolean networkStatus);
 
     void setLoadingIndicator(boolean active);
     void renderStatusOfSave(String status);
     void showLoadingTasksError(String error);
-
+    void showNothingView();
+    void hideNothingView();
     boolean isActive();
 }

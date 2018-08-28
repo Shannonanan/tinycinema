@@ -23,5 +23,5 @@ public interface MoviesDao {
     List<MovieResultEntity> getAllMovies(boolean type);
 
     @Delete
-    void deleteTask(MovieResultEntity entry);
+    void deleteMovie(MovieResultEntity entry);
 }

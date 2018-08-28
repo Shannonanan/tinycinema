@@ -26,11 +26,13 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
     List<Result> getMoviesCollection;
     private Context mContext;
     private MoviesInTheatresAdapter.OnMoviePosterClicked onItemClickListener;
+    boolean offlineStatus = false;
 
     //setup a listener for your posts in the recyclerview
     public interface OnMoviePosterClicked {
         void onMoviePosterClicked(Result result);
         void onSaveButtonClicked(Result result);
+        void onDeleteButtonClicked(boolean type, Result result);
     }
 
     public MoviesInTheatresAdapter(Context context) {
@@ -55,12 +57,27 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
     @Override
     public void onBindViewHolder(@NonNull GetMoviesViewHolder holder, int position) {
         final Result movieResult = this.getMoviesCollection.get(position);
+        if(offlineStatus){
+            holder.btn_save.setVisibility(View.GONE);
+            holder.delete.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.btn_save.setVisibility(View.VISIBLE);
+            holder.delete.setVisibility(View.GONE);
+        }
+
 
         String movieCode = movieResult.getPosterPath();
+        if(movieCode == null || movieCode.isEmpty()){
+                Glide.with(mContext)
+                        .load(R.drawable.photo_camera)
+                        .into(holder.imageView);
+        }
+        else{
         String url = mContext.getString(R.string.image_base_url) + movieCode;
         Glide.with(mContext)
                 .load(url)
-                .into(holder.imageView);
+                .into(holder.imageView);}
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +94,15 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
             public void onClick(View v) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onSaveButtonClicked(movieResult);
+                }
+            }
+        });
+
+        holder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onDeleteButtonClicked(false, movieResult);
                 }
             }
         });
@@ -98,10 +124,11 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
         }
     }
 
-    public void setInfoCollection(Collection<Result> INFO) {
+    public void setInfoCollection(Collection<Result> INFO, boolean newtorkStatus) {
         this.validateCollection(INFO);
         this.getMoviesCollection = (List<Result>) INFO;
         this.notifyDataSetChanged();
+        offlineStatus = newtorkStatus;
     }
 
     private void validateCollection(Collection<Result> infoCollection) {

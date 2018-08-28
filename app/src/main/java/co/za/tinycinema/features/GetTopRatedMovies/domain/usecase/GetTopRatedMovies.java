@@ -19,8 +19,8 @@ public class GetTopRatedMovies extends UseCase<GetTopRatedMovies.RequestValues, 
     protected void executeUseCase(RequestValues requestValues) {
         this.repository.getHighestRatedMovies(new DataSource.LoadInfoCallback() {
             @Override
-            public void onDataLoaded(List<Result> results) {
-                getUseCaseCallback().onSuccess(new ResponseValue(results));
+            public void onDataLoaded(List<Result> results, boolean offline) {
+                getUseCaseCallback().onSuccess(new ResponseValue(results, offline));
             }
 
             @Override
@@ -40,13 +40,19 @@ public class GetTopRatedMovies extends UseCase<GetTopRatedMovies.RequestValues, 
     //this is for your usecase callback
     public static final class ResponseValue implements UseCase.ResponseValue {
         private List<Result> mResults;
+        boolean offline;
 
-        public ResponseValue(List<Result> mResults) {
+        public ResponseValue(List<Result> mResults, boolean offline) {
             this.mResults = mResults;
+            this.offline = offline;
         }
 
         public List<Result> getInfo() {
             return mResults;
+        }
+
+        public boolean networkStatus(){
+            return offline;
         }
     }
 }

@@ -9,6 +9,7 @@ import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 
@@ -18,11 +19,14 @@ public class TopRatedMoviesPresenter {
     private final UseCaseHandler useCaseHandler;
     private TopRatedContract topRatedContract;
     private SaveMovieToLocal saveMovieToLocal;
+    private DeleteMoviesInLocal deleteMoviesInLocalUsecase;
 
-    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler,SaveMovieToLocal saveMovieToLocal) {
+    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler,
+                                   SaveMovieToLocal saveMovieToLocal,DeleteMoviesInLocal deleteMoviesInLocalUsecase) {
         this.getTopRatedMoviesUsecase = getTopRatedMoviesUsecase;
         this.useCaseHandler = useCaseHandler;
         this.saveMovieToLocal = saveMovieToLocal;
+        this.deleteMoviesInLocalUsecase = deleteMoviesInLocalUsecase;
     }
 
     public void setView(@NonNull TopRatedContract topRatedContract){
@@ -46,7 +50,7 @@ public class TopRatedMoviesPresenter {
 
                 List<Result> moviesResult = new ArrayList<>();
                 moviesResult.addAll(response.getInfo());
-                processInfo(moviesResult);
+                processInfo(moviesResult, response.networkStatus());
             }
 
             @Override
@@ -57,8 +61,8 @@ public class TopRatedMoviesPresenter {
 
     }
 
-    private void processInfo(List<Result> moviesResult) {
-        topRatedContract.renderInView(moviesResult);
+    private void processInfo(List<Result> moviesResult, boolean networkStatus) {
+        topRatedContract.renderInView(moviesResult, networkStatus);
     }
 
     public void saveInfoToLocal(Result result) {
@@ -81,6 +85,27 @@ public class TopRatedMoviesPresenter {
                     }
                 });
 
+    }
+
+    public void deleteMovieFromLocal(boolean type, Result result){
+        topRatedContract.showLoading();
+        topRatedContract.setLoadingIndicator(true);
+
+        useCaseHandler.execute(deleteMoviesInLocalUsecase, new DeleteMoviesInLocal.RequestValues(type,transform(result)),
+                new UseCase.UseCaseCallback<DeleteMoviesInLocal.ResponseValues>() {
+                    @Override
+                    public void onSuccess(DeleteMoviesInLocal.ResponseValues response) {
+                        topRatedContract.setLoadingIndicator(false);
+                        topRatedContract.hideLoading();
+
+                        processInfo(response.forListRefresh(), true);
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
     }
 
     private void processResponseOfSave(String s) {

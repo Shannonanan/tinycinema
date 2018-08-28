@@ -35,6 +35,8 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     @BindView(R.id.animation_view_load)
     LottieAnimationView pb_progress;
     private boolean isActive;
+    @BindView(R.id.nothing_layout)
+    RelativeLayout nothing_view;
 
     private MoviesInTheatresAdapter moviesInTheatresAdapter;
 
@@ -45,7 +47,6 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
         ButterKnife.bind(this, view);
         setupAdapter();
         setupRecyclerView();
-
     }
 
     private void setupAdapter() {
@@ -65,6 +66,14 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
                     listener.OnSaveButtonClicked(result);
                 }
             }
+
+            @Override
+            public void onDeleteButtonClicked(boolean type, Result result) {
+                for (Listener list : getListeners()) {
+                    list.onDeleteButtonClicked(type, result);
+
+                }
+            }
         };
 
         moviesInTheatresAdapter.setOnItemClickListener(onMoviePosterClicked);
@@ -80,15 +89,19 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
 
 
     @Override
-    public void renderInView(List<Result> movieInfo) {
+    public void renderInView(List<Result> movieInfo, boolean networkStatus) {
         if (movieInfo != null) {
-            this.moviesInTheatresAdapter.setInfoCollection(movieInfo);
+            this.moviesInTheatresAdapter.setInfoCollection(movieInfo, networkStatus);
         }
+        if (movieInfo.size() == 0) {
+            showNothingView();
+        }
+        else {hideNothingView();}
     }
 
     @Override
     public void renderStatusOfSave(String status) {
-        for (Listener listener: getListeners()) {
+        for (Listener listener : getListeners()) {
             listener.renderStatusOfSave(status);
 
         }
@@ -104,6 +117,18 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     public void showLoadingTasksError(String error) {
 
     }
+
+    @Override
+    public void showNothingView() {
+        nothing_view.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNothingView() {
+        if(nothing_view != null)
+        this.nothing_view.setVisibility(View.GONE);
+    }
+
 
     @Override
     public boolean isActive() {
@@ -132,7 +157,6 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     public Context activityContext() {
         return this.getContext();
     }
-
 
 
 }

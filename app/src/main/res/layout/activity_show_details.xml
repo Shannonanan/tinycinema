@@ -163,9 +163,8 @@
                 android:id="@+id/tv_rating"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-
+                android:text="@string/movie_rating"
                 android:gravity="bottom|center|start"
-                android:text="TextView"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/guide6"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -192,6 +191,7 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="center|start"
+                android:text="@string/movie_release_date"
                 tools:text="@string/movie_release_date"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toTopOf="@+id/guide7"

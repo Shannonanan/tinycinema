@@ -20,12 +20,10 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.mvcViews.BaseViewMvc;
 
 public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listener> implements TopRatedContract {
-    @BindView(R.id.recyclerView)
-    RecyclerView recyclerView;
-    @BindView(R.id.rl_progress_lottie)
-    RelativeLayout rl_progress;
-    @BindView(R.id.animation_view_load)
-    LottieAnimationView pb_progress;
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.rl_progress_lottie) RelativeLayout rl_progress;
+    @BindView(R.id.animation_view_load) LottieAnimationView pb_progress;
+    @BindView(R.id.nothing_layout) RelativeLayout nothing_view;
     private boolean isActive;
 
     private TopRatedAdapter topRatedAdapter;
@@ -63,6 +61,13 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
                     listener.OnSaveMovieClciked(result);
                 }
             }
+
+            @Override
+            public void onDeleteButtonClicked(boolean type, Result result) {
+                for (Listener listener : getListeners()) {
+                    listener.OnDeleteMovieClicked(type, result);
+                }
+            }
         };
 
         topRatedAdapter.setOnItemClickListener(onMovieClickedListener);
@@ -70,10 +75,14 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
 
 
     @Override
-    public void renderInView(List<Result> movieInfo) {
+    public void renderInView(List<Result> movieInfo, boolean networkStatus) {
         if (movieInfo != null) {
-            this.topRatedAdapter.setInfoCollection(movieInfo);
+            this.topRatedAdapter.setInfoCollection(movieInfo, networkStatus);
         }
+        if (movieInfo.size() == 0) {
+            showNothingView();
+        }
+        else {hideNothingView();}
     }
 
     @Override
@@ -85,7 +94,6 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
     public void renderStatusOfSave(String status) {
         for (Listener listener: getListeners()) {
             listener.renderStatusOfSave(status);
-
         }
     }
 
@@ -97,6 +105,18 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
     @Override
     public boolean isActive() {
         return false;
+    }
+
+    @Override
+    public void showNothingView() {
+        this.nothing_view.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideNothingView() {
+        if(nothing_view != null){
+            this.nothing_view.setVisibility(View.GONE);
+        }
     }
 
     @Override

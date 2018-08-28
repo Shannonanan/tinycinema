@@ -13,6 +13,7 @@ import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 
@@ -22,11 +23,15 @@ public class MoviesInTheatresPresenter {
     private final UseCaseHandler mUseCaseHandler;
     private MoviesInTheatresContract mContractView;
     private SaveMovieToLocal saveMovieToLocalUsecase;
+    private DeleteMoviesInLocal deleteMoviesInLocalUsecase;
 
-    public MoviesInTheatresPresenter(GetMoviesInTheatres getMoviesInTheatresUseCase, UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal) {
+    public MoviesInTheatresPresenter(GetMoviesInTheatres getMoviesInTheatresUseCase,
+                                     UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal,
+                                     DeleteMoviesInLocal deleteMoviesInLocalUsecase) {
         this.getMoviesInTheatresUseCase = getMoviesInTheatresUseCase;
         this.mUseCaseHandler = mUseCaseHandler;
         this.saveMovieToLocalUsecase = saveMovieToLocal;
+        this.deleteMoviesInLocalUsecase = deleteMoviesInLocalUsecase;
     }
 
 
@@ -57,7 +62,7 @@ public class MoviesInTheatresPresenter {
 
                         List<Result> moviesResult = new ArrayList<>();
                         moviesResult.addAll(response.getInfo());
-                        processInfo(moviesResult);
+                        processInfo(moviesResult, response.getNetWorkStatus());
                     }
 
                     @Override
@@ -70,8 +75,33 @@ public class MoviesInTheatresPresenter {
                 });
     }
 
-    private void processInfo(List<Result> moviesResult) {
-        mContractView.renderInView(moviesResult);
+    private void processInfo(List<Result> moviesResult, boolean networkStatus) {
+        mContractView.renderInView(moviesResult, networkStatus);
+    }
+
+    public void deleteMovieFromLocal(boolean type, Result result){
+        mContractView.showLoading();
+        mContractView.setLoadingIndicator(true);
+
+        mUseCaseHandler.execute(deleteMoviesInLocalUsecase, new DeleteMoviesInLocal.RequestValues( type,transform(result)),
+                new UseCase.UseCaseCallback<DeleteMoviesInLocal.ResponseValues>() {
+                    @Override
+                    public void onSuccess(DeleteMoviesInLocal.ResponseValues response) {
+                        mContractView.setLoadingIndicator(false);
+                        mContractView.hideLoading();
+
+                        processResponseOfDelete(response.forCallback(), response.forListRefresh());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+    }
+
+    private void processResponseOfDelete(String s, List<Result> refreshList) {
+        mContractView.renderInView(refreshList, true);
     }
 
     public void saveInfoToLocal(Result result) {

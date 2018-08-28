@@ -33,7 +33,7 @@ public interface DataSource {
 
     interface LoadInfoCallback {
 
-        void onDataLoaded(List<Result> results);
+        void onDataLoaded(List<Result> results, boolean offline);
 
         void onDataNotAvailable(String noDataAvailable);
     }
@@ -44,11 +44,16 @@ public interface DataSource {
         void savedStatusFailed(String error);
     }
 
+    interface DeleteInfoCallback{
+        void deleteStatusSuccess(List<Result> latestResults,String status);
+        void deleteStatusFailed(String status);
+    }
+
 
     void getAllMoviesInTheatre(final LoadInfoCallback callback);
     void getHighestRatedMovies(final LoadInfoCallback callback);
 
-    void deleteAllInfo();
+    void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
     void refreshTasks();
 
