@@ -1,5 +1,7 @@
 package co.za.tinycinema.features.GetTopRatedMovies.domain.usecase;
 
+import android.content.Context;
+
 import java.util.List;
 
 import co.za.tinycinema.common.UseCase;
@@ -10,14 +12,16 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 public class GetTopRatedMovies extends UseCase<GetTopRatedMovies.RequestValues, GetTopRatedMovies.ResponseValue> {
 
     private final Repository repository;
+    private Context context;
 
-    public GetTopRatedMovies(Repository repository) {
+    public GetTopRatedMovies(Repository repository, Context context) {
         this.repository = repository;
+        this.context = context;
     }
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        this.repository.getHighestRatedMovies(new DataSource.LoadInfoCallback() {
+        this.repository.getHighestRatedMovies(context, new DataSource.LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> results, boolean offline) {
                 getUseCaseCallback().onSuccess(new ResponseValue(results, offline));

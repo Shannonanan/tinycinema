@@ -1,5 +1,6 @@
 package co.za.tinycinema.data.remote;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class RemoteDataSource implements DataSource {
 
 
     @Override
-    public void getAllMoviesInTheatre(final LoadInfoCallback callback) {
+    public void getAllMoviesInTheatre(final Context context, final LoadInfoCallback callback) {
        final List<Result> results = new ArrayList<>();
 
             mCall = service.getMoviesInTheatres("");
@@ -48,14 +49,14 @@ public class RemoteDataSource implements DataSource {
 
                 @Override
                 public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-                    callback.onDataNotAvailable("no data available");
+                    callback.onDataNotAvailable(context.getString(R.string.no_data_available));
                 }
             });
     }
 
 
     @Override
-    public void getHighestRatedMovies(final LoadInfoCallback callback) {
+    public void getHighestRatedMovies(final Context context, final LoadInfoCallback callback) {
 
         final List<Result> results = new ArrayList<>();
 
@@ -74,7 +75,7 @@ public class RemoteDataSource implements DataSource {
 
             @Override
             public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-                    callback.onDataNotAvailable("no data available");
+                    callback.onDataNotAvailable(context.getString(R.string.no_data_available));
             }
         });
     }
@@ -95,9 +96,4 @@ public class RemoteDataSource implements DataSource {
 
     }
 
-
-    @Override
-    public void refreshTasks() {
-
-    }
 }

@@ -1,9 +1,12 @@
 package co.za.tinycinema.data.local;
 
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import co.za.tinycinema.R;
 import co.za.tinycinema.data.DataSource;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.utils.AppExecutors;
@@ -11,6 +14,7 @@ import co.za.tinycinema.utils.AppExecutors;
 public class LocalDataSource implements DataSource {
     MoviesDao moviesDao;
     private final AppExecutors mExecutors;
+    Context context;
 
     public LocalDataSource(MoviesDao moviesDao, AppExecutors mExecutors) {
         this.moviesDao = moviesDao;
@@ -19,7 +23,7 @@ public class LocalDataSource implements DataSource {
 
 
     @Override
-    public void getAllMoviesInTheatre(final LoadInfoCallback callback) {
+    public void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -61,7 +65,7 @@ public class LocalDataSource implements DataSource {
 
 
     @Override
-    public void getHighestRatedMovies(final LoadInfoCallback callback) {
+    public void getHighestRatedMovies(Context context, final LoadInfoCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -109,15 +113,12 @@ public class LocalDataSource implements DataSource {
             @Override
             public void run() {
              long getResponse = moviesDao.insertMovie(result);
-            callback.savedStatusSuccess("successful");
+            callback.savedStatusSuccess("success");
             }
         };
         mExecutors.diskIO().execute(saveRunnable);
     }
 
 
-    @Override
-    public void refreshTasks() {
 
-    }
 }

@@ -16,6 +16,8 @@
 
 package co.za.tinycinema.data;
 
+import android.content.Context;
+
 import java.util.List;
 
 import co.za.tinycinema.data.local.MovieResultEntity;
@@ -50,11 +52,10 @@ public interface DataSource {
     }
 
 
-    void getAllMoviesInTheatre(final LoadInfoCallback callback);
-    void getHighestRatedMovies(final LoadInfoCallback callback);
+    void getAllMoviesInTheatre(Context context,  final LoadInfoCallback callback);
+    void getHighestRatedMovies(Context context, final LoadInfoCallback callback);
     void getMoviesFromLibrary(final LoadInfoCallback callback);
     void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
-    void refreshTasks();
 
 }

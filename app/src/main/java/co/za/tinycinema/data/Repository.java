@@ -51,19 +51,8 @@ public class Repository implements DataSource {
 
     private final LocalDataSource mLocalDataSource;
 
-    Context mContext;
-    ImageLoader imageLoader;
+    private Context mContext;
 
-    /**
-     * This variable has package local visibility so it can be accessed from tests.
-     */
-    public Map<String, Result> mResults;
-
-    /**
-     * Marks the cache as invalid, to force an update the next time data is requested. This variable
-     * has package local visibility so it can be accessed from tests.
-     */
-    private boolean mCacheIsDirty = false;
 
     public Repository(RemoteDataSource mRemoteDataSource,
                       LocalDataSource mLocalDataSource,
@@ -71,7 +60,6 @@ public class Repository implements DataSource {
     ) {
         this.mRemoteDataSource = mRemoteDataSource;
         this.mLocalDataSource = mLocalDataSource;
-        //   this.imageLoader = imageLoader;
         this.mContext = context;
     }
 
@@ -80,14 +68,14 @@ public class Repository implements DataSource {
 
     //check for internet, if none call to local to see if any saved data in the local repository, if none alert user
     @Override
-    public void getAllMoviesInTheatre(final LoadInfoCallback callback) {
+    public void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback) {
         //check internet
         //if exists call remote
         if (isThereInternetConnection()) {
-            getRemoteMoviesInTheatres(callback);
+            getRemoteMoviesInTheatres(callback, mContext);
         } else {
             // Query the local storage if available.
-            mLocalDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
+            mLocalDataSource.getAllMoviesInTheatre(context, new LoadInfoCallback() {
                 @Override
                 public void onDataLoaded(List<Result> mMovieResultPosters, boolean offlne) {
                     // refreshCache(tasks);
@@ -96,46 +84,32 @@ public class Repository implements DataSource {
 
                 @Override
                 public void onDataNotAvailable(String noDataAvailable) {
-                   callback.onDataNotAvailable(noDataAvailable);
+                    callback.onDataNotAvailable(noDataAvailable);
                 }
             });
         }
-        //if empty alert user
 
-        // Respond immediately with cache if available and not dirty
-//        if (mResults != null && !mCacheIsDirty) {
-//            callback.onDataLoaded(new ArrayList<>(mResults.values()));
-//            return;
-//        }
-//
-//        if (mCacheIsDirty) {
-//            //    If the cache is dirty we need to fetch new data from the network.
-//
-//        } else {
-//
-//
-//        }
     }
 
     @Override
-    public void getHighestRatedMovies(final LoadInfoCallback callback) {
+    public void getHighestRatedMovies(Context context, final LoadInfoCallback callback) {
         if (isThereInternetConnection()) {
-        mRemoteDataSource.getHighestRatedMovies(new LoadInfoCallback() {
-            @Override
-            public void onDataLoaded(List<Result> results, boolean offline) {
-                if (results != null) {
-                    callback.onDataLoaded(results, offline);
+            mRemoteDataSource.getHighestRatedMovies(context, new LoadInfoCallback() {
+                @Override
+                public void onDataLoaded(List<Result> results, boolean offline) {
+                    if (results != null) {
+                        callback.onDataLoaded(results, offline);
+                    }
                 }
-            }
 
-            @Override
-            public void onDataNotAvailable(String noDataAvailable) {
-                callback.onDataNotAvailable(noDataAvailable);
-            }
-        });
+                @Override
+                public void onDataNotAvailable(String noDataAvailable) {
+                    callback.onDataNotAvailable(noDataAvailable);
+                }
+            });
         } else {
             // Query the local storage if available.
-            mLocalDataSource.getHighestRatedMovies(new LoadInfoCallback() {
+            mLocalDataSource.getHighestRatedMovies(context, new LoadInfoCallback() {
                 @Override
                 public void onDataLoaded(List<Result> mMovieResultPosters, boolean offline) {
                     // refreshCache(tasks);
@@ -167,11 +141,10 @@ public class Repository implements DataSource {
     }
 
 
-    private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback) {
-        mRemoteDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
+    private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback, Context context) {
+        mRemoteDataSource.getAllMoviesInTheatre(context, new LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> movieResults, boolean offline) {
-                refreshCache(movieResults);
                 //    refreshLocalDataSource(info);
                 callback.onDataLoaded(new ArrayList<>(movieResults), offline);
             }
@@ -183,42 +156,11 @@ public class Repository implements DataSource {
         });
     }
 
-    private void refreshCache(List<Result> listInfo) {
-        //TODO: fix cache
-        if (mResults == null) {
-            mResults = new LinkedHashMap<>();
-        }
-        mResults.clear();
-        mCacheIsDirty = false;
-    }
-
-//    private void refreshLocalDataSource(List<EarthInfoPojos> marbles) {
-//        mLocalDataSource.deleteAllInfo();
-//        List<EarthInfoObjEnhanced> marbless =  new ArrayList<>(convertSchemaToEntity(marbles));
-//        for (EarthInfoObjEnhanced info : marbless) {
-//            mLocalDataSource.saveTask(info);
-//        }
-//    }
-
-//    private List<EarthInfoObjEnhanced> convertSchemaToEntity(List<EarthInfoPojos> earthInfoSchema) {
-//        List<EarthInfoObjEnhanced> info = new ArrayList<>(earthInfoSchema.size());
-//        for (EarthInfoPojos schema : earthInfoSchema) {
-//            info.add(new EarthInfoObjEnhanced(schema.getIdentifier(),schema.getCaption(),schema.getImage(),
-//                    schema.getVersion(), schema.getDate()));
-//        }
-//        return info;
-//    }
-
-    @Override
-    public void refreshTasks() {
-        mCacheIsDirty = true;
-    }
-
 
     @Override
     public void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback) {
-     //   mRemoteDataSource.deleteAllInfo();
-        mLocalDataSource.deleteMovie(type,entity, new DeleteInfoCallback() {
+        //   mRemoteDataSource.deleteAllInfo();
+        mLocalDataSource.deleteMovie(type, entity, new DeleteInfoCallback() {
             @Override
             public void deleteStatusSuccess(List<Result> latestResults, String status) {
                 callback.deleteStatusSuccess(latestResults, status);
@@ -229,14 +171,10 @@ public class Repository implements DataSource {
 
             }
         });
-//        if (mCachedEarthInfo == null) {
-//            mCachedEarthInfo = new LinkedHashMap<>();
-//        }
-//        mCachedEarthInfo.clear();
+
     }
 
-    public void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback)
-    {
+    public void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback) {
         mLocalDataSource.deleteMovieFromLibrary(entity, new DeleteInfoCallback() {
             @Override
             public void deleteStatusSuccess(List<Result> latestResults, String status) {
@@ -266,23 +204,6 @@ public class Repository implements DataSource {
         });
     }
 
-
-//    @Override
-//    public void saveTask(Result marbles) {
-//       // checkNotNull(marbles);
-//        mRemoteDataSource.saveTask(marbles);
-//        mLocalDataSource.saveTask(marbles);
-
-    // Do in memory cache update to keep the app UI up to date
-//        if (mCachedEarthInfo == null) {
-//            mCachedEarthInfo = new LinkedHashMap<>();
-//        }
-
-//        EarthInfoPojos schema = new EarthInfoPojos(marbles.getIdentifier(),
-//                marbles.getCaption(),marbles.getImage(),
-//                marbles.getVersion(), marbles.getDate());
-//        mCachedEarthInfo.put(marbles.getIdentifier(), schema);
-    //  }
 
     /**
      * Returns the single instance of this class, creating it if necessary.

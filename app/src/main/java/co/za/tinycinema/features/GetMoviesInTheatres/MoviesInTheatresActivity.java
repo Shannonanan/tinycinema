@@ -73,7 +73,7 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
 
     @Override
     public void renderStatusOfSave(String status) {
-        if(status.equals("successful")){
+        if(status.equals(this.getString(R.string.success))){
 
             Toast.makeText(this,getString(R.string.saved_successfully),Toast.LENGTH_LONG).show();
         }

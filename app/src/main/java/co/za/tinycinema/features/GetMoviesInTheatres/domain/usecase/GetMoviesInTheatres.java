@@ -1,5 +1,7 @@
 package co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase;
 
+import android.content.Context;
+
 import java.util.List;
 
 import co.za.tinycinema.common.UseCase;
@@ -10,14 +12,16 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 public class GetMoviesInTheatres extends UseCase<GetMoviesInTheatres.RequestValues, GetMoviesInTheatres.ResponseValue> {
 
     private final Repository repository;
+    private Context context;
 
-    public GetMoviesInTheatres(Repository repository) {
+    public GetMoviesInTheatres(Repository repository, Context context) {
         this.repository = repository;
+        this.context = context;
     }
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        this.repository.getAllMoviesInTheatre(new DataSource.LoadInfoCallback() {
+        this.repository.getAllMoviesInTheatre(context, new DataSource.LoadInfoCallback() {
             @Override
             public void onDataLoaded(List<Result> results, boolean offline) {
                 getUseCaseCallback().onSuccess(new ResponseValue(results, offline));

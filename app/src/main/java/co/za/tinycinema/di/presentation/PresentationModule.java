@@ -69,8 +69,8 @@ public class PresentationModule {
     }
 
     @Provides
-    GetMoviesInTheatres getMoviesInTheatres(Repository repository){
-        return new GetMoviesInTheatres(repository);
+    GetMoviesInTheatres getMoviesInTheatres(Repository repository, Context context){
+        return new GetMoviesInTheatres(repository, context);
     }
 
     @Provides
@@ -96,8 +96,8 @@ public class PresentationModule {
     }
 
     @Provides
-    GetTopRatedMovies getTopRatedMovies(Repository repository){
-        return  new GetTopRatedMovies(repository);
+    GetTopRatedMovies getTopRatedMovies(Repository repository, Context context){
+        return  new GetTopRatedMovies(repository, context);
     }
 
     @Provides

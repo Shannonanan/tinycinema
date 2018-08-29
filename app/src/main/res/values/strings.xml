@@ -15,4 +15,6 @@
     <string name="nothing">no data available</string>
     <string name="offline">you are offline</string>
     <string name="library">my library</string>
+    <string name="no_data_available">no data available</string>
+    <string name="success">success</string>
 </resources>
