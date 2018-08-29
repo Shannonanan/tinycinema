@@ -2,24 +2,23 @@ package co.za.tinycinema.di.presentation;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 
 import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.Repository;
 import co.za.tinycinema.data.local.LocalDataSource;
-import co.za.tinycinema.data.local.MoviesDao;
 import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresPresenter;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
+import co.za.tinycinema.features.Library.LibraryPresenter;
+import co.za.tinycinema.features.Library.domain.usecase.DeleteMoviesFromLibrary;
+import co.za.tinycinema.features.Library.domain.usecase.GetMoviesFromLibrary;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesPresenter;
 import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsPresenter;
-import co.za.tinycinema.features.common.ImageLoader;
-import co.za.tinycinema.utils.AppExecutors;
 import dagger.Module;
 import dagger.Provides;
 
@@ -87,6 +86,11 @@ public class PresentationModule {
     }
 
     @Provides
+    GetMoviesFromLibrary getMoviesFromLibrary(Repository repository){
+        return new GetMoviesFromLibrary(repository);
+    }
+
+    @Provides
     ShowDetailsPresenter showDetailsPresenter(){
         return new ShowDetailsPresenter();
     }
@@ -107,6 +111,18 @@ public class PresentationModule {
     @Provides
     DeleteMoviesInLocal deleteMoviesInLocal(Repository repository){
         return new DeleteMoviesInLocal(repository);
+    }
+
+    @Provides
+    DeleteMoviesFromLibrary deleteMoviesFromLibrary(Repository repository){
+        return new DeleteMoviesFromLibrary(repository);
+    }
+
+    @Provides
+    LibraryPresenter libraryPresenter(UseCaseHandler mUseCaseHandler,
+                                      GetMoviesFromLibrary getMoviesFromLibraryUsecase,
+                                      DeleteMoviesFromLibrary deleteMoviesFromLibrary){
+        return new LibraryPresenter(mUseCaseHandler,getMoviesFromLibraryUsecase,deleteMoviesFromLibrary);
     }
 
 

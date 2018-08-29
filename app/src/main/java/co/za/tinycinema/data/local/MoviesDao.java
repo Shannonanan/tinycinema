@@ -24,4 +24,10 @@ public interface MoviesDao {
 
     @Delete
     void deleteMovie(MovieResultEntity entry);
+
+    @Query("SELECT * from movies")
+    List<MovieResultEntity> getAllMoviesFromLibrary();
+
+
+
 }

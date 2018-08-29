@@ -52,7 +52,7 @@ public interface DataSource {
 
     void getAllMoviesInTheatre(final LoadInfoCallback callback);
     void getHighestRatedMovies(final LoadInfoCallback callback);
-
+    void getMoviesFromLibrary(final LoadInfoCallback callback);
     void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
     void refreshTasks();

@@ -29,6 +29,7 @@
         <activity android:name=".features.GetMoviesInTheatres.MoviesInTheatresActivity" />
         <activity android:name=".features.ShowDetails.ShowDetailsActivity" />
         <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity"></activity>
+        <activity android:name=".features.Library.LibraryActivity" />
     </application>
 
 </manifest>

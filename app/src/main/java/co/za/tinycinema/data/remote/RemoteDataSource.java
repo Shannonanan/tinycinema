@@ -80,6 +80,11 @@ public class RemoteDataSource implements DataSource {
     }
 
     @Override
+    public void getMoviesFromLibrary(LoadInfoCallback callback) {
+
+    }
+
+    @Override
     public void deleteMovie(boolean type,MovieResultEntity entity, DeleteInfoCallback callback) {
 
     }

@@ -3,10 +3,7 @@ package co.za.tinycinema.features.GetMoviesInTheatres;
 
 import android.support.annotation.NonNull;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import co.za.tinycinema.common.UseCase;
@@ -25,6 +22,7 @@ public class MoviesInTheatresPresenter {
     private SaveMovieToLocal saveMovieToLocalUsecase;
     private DeleteMoviesInLocal deleteMoviesInLocalUsecase;
 
+
     public MoviesInTheatresPresenter(GetMoviesInTheatres getMoviesInTheatresUseCase,
                                      UseCaseHandler mUseCaseHandler, SaveMovieToLocal saveMovieToLocal,
                                      DeleteMoviesInLocal deleteMoviesInLocalUsecase) {
@@ -32,6 +30,7 @@ public class MoviesInTheatresPresenter {
         this.mUseCaseHandler = mUseCaseHandler;
         this.saveMovieToLocalUsecase = saveMovieToLocal;
         this.deleteMoviesInLocalUsecase = deleteMoviesInLocalUsecase;
+
     }
 
 
@@ -79,11 +78,17 @@ public class MoviesInTheatresPresenter {
         mContractView.renderInView(moviesResult, networkStatus);
     }
 
-    public void deleteMovieFromLocal(boolean type, Result result){
+    /**
+     * deletes entities when coming from topmovies or highest rated movies when offline
+     *
+     * @param result
+     * @param type
+     */
+    public void deleteMovieFromLocal(boolean type, Result result) {
         mContractView.showLoading();
         mContractView.setLoadingIndicator(true);
 
-        mUseCaseHandler.execute(deleteMoviesInLocalUsecase, new DeleteMoviesInLocal.RequestValues( type,transform(result)),
+        mUseCaseHandler.execute(deleteMoviesInLocalUsecase, new DeleteMoviesInLocal.RequestValues(type, transform(result)),
                 new UseCase.UseCaseCallback<DeleteMoviesInLocal.ResponseValues>() {
                     @Override
                     public void onSuccess(DeleteMoviesInLocal.ResponseValues response) {
@@ -131,9 +136,9 @@ public class MoviesInTheatresPresenter {
     }
 
 
-    public MovieResultEntity transform(Result result){
+    public MovieResultEntity transform(Result result) {
         MovieResultEntity movieResultEntity = null;
-        if(result != null){
+        if (result != null) {
             movieResultEntity = new MovieResultEntity();
             movieResultEntity.setId(result.getId());
             movieResultEntity.setAdult(result.getAdult());
@@ -145,6 +150,7 @@ public class MoviesInTheatresPresenter {
             movieResultEntity.setPosterPath(result.getPosterPath());
             movieResultEntity.setReleaseDate(result.getReleaseDate());
             movieResultEntity.setTitle(result.getTitle());
+            movieResultEntity.setVoteAverage(result.getVoteAverage());
             movieResultEntity.setToprated(false);
         }
         return movieResultEntity;

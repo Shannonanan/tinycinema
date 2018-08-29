@@ -12,6 +12,7 @@
     <string name="save">save</string>
     <string name="delete">delete</string>
     <string name="saved_successfully">Saved successfully</string>
-    <string name="nothing">no data available, check your internet connection</string>
+    <string name="nothing">no data available</string>
     <string name="offline">you are offline</string>
+    <string name="library">my library</string>
 </resources>

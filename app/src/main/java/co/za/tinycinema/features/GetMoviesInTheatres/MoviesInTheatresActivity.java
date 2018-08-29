@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import co.za.tinycinema.R;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
+import co.za.tinycinema.features.Library.LibraryActivity;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
@@ -42,15 +43,16 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         if(!isThereInternetConnection()){
             Toast.makeText(this, getString(R.string.offline),Toast.LENGTH_LONG).show();
         }
-
+        this.moviesInTheatresPresenter.setView(mViewMvc);
+        moviesInTheatresPresenter.start();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        this.moviesInTheatresPresenter.setView(mViewMvc);
+      //  this.moviesInTheatresPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
-        moviesInTheatresPresenter.start();
+       // moviesInTheatresPresenter.start();
     }
 
 
@@ -106,6 +108,10 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
                 break;
             case R.id.toggle_most_pop:
                 moviesInTheatresPresenter.start();
+                break;
+            case R.id.library:
+                Intent goToLibrary = new Intent(this, LibraryActivity.class);
+                startActivity(goToLibrary);
             default:
                 break;
         }

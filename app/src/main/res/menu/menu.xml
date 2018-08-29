@@ -11,4 +11,9 @@
         android:title="@string/most_pop"
         app:showAsAction="collapseActionView"
         />
+    <item
+        android:id="@+id/library"
+        android:title="@string/library"
+        app:showAsAction="collapseActionView"
+        />
 </menu>

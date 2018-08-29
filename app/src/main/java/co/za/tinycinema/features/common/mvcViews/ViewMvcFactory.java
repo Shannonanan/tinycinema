@@ -10,6 +10,8 @@ import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresImpl;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedContract;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesViewImpl;
+import co.za.tinycinema.features.Library.LibraryContract;
+import co.za.tinycinema.features.Library.LibraryViewImpl;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsContract;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsViewImpl;
 import co.za.tinycinema.features.common.ImageLoader;
@@ -44,6 +46,9 @@ public class ViewMvcFactory {
         }
         else if(mvcViewClass == TopRatedContract.class){
             viewMvc = new TopRatedMoviesViewImpl(mLayoutInflater, container);
+        }
+        else if(mvcViewClass == LibraryContract.class){
+            viewMvc = new LibraryViewImpl(mLayoutInflater, container);
         }
         else {
             throw new IllegalArgumentException("unsupported MVC view class " + mvcViewClass);

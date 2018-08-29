@@ -127,6 +127,7 @@ public class TopRatedMoviesPresenter {
             movieResultEntity.setPosterPath(result.getPosterPath());
             movieResultEntity.setReleaseDate(result.getReleaseDate());
             movieResultEntity.setTitle(result.getTitle());
+            movieResultEntity.setVoteAverage(result.getVoteAverage());
             movieResultEntity.setToprated(true);
         }
         return movieResultEntity;

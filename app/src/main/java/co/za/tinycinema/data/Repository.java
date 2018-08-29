@@ -150,6 +150,22 @@ public class Repository implements DataSource {
         }
     }
 
+    @Override
+    public void getMoviesFromLibrary(final LoadInfoCallback callback) {
+        mLocalDataSource.getMoviesFromLibrary(new LoadInfoCallback() {
+            @Override
+            public void onDataLoaded(List<Result> mMovieResultPosters, boolean offlne) {
+                // refreshCache(tasks);
+                callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), true);
+            }
+
+            @Override
+            public void onDataNotAvailable(String noDataAvailable) {
+                callback.onDataNotAvailable(noDataAvailable);
+            }
+        });
+    }
+
 
     private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback) {
         mRemoteDataSource.getAllMoviesInTheatre(new LoadInfoCallback() {
@@ -213,12 +229,25 @@ public class Repository implements DataSource {
 
             }
         });
-
-
 //        if (mCachedEarthInfo == null) {
 //            mCachedEarthInfo = new LinkedHashMap<>();
 //        }
 //        mCachedEarthInfo.clear();
+    }
+
+    public void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback)
+    {
+        mLocalDataSource.deleteMovieFromLibrary(entity, new DeleteInfoCallback() {
+            @Override
+            public void deleteStatusSuccess(List<Result> latestResults, String status) {
+                callback.deleteStatusSuccess(latestResults, status);
+            }
+
+            @Override
+            public void deleteStatusFailed(String status) {
+
+            }
+        });
     }
 
     @Override
