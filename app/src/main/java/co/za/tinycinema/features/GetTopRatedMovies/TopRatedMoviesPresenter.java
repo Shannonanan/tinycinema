@@ -12,6 +12,8 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
 import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
+import co.za.tinycinema.features.common.mvcViews.BasePresenter;
+import co.za.tinycinema.features.common.mvcViews.ObservableViewMvc;
 
 public class TopRatedMoviesPresenter {
 
@@ -132,4 +134,5 @@ public class TopRatedMoviesPresenter {
         }
         return movieResultEntity;
     }
+
 }

@@ -16,6 +16,9 @@
 
 package co.za.tinycinema.features.common.mvcViews;
 
+
+import co.za.tinycinema.features.GetTopRatedMovies.TopRatedContract;
+
 public interface BasePresenter {
 
     void start();

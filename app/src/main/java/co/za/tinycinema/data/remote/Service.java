@@ -11,9 +11,9 @@ import retrofit2.http.Query;
 
 public interface Service {
 
-    @GET("/3/discover/movie?sort_by=popularity.des")
+    @GET("/3/movie/popular")
     Call<MoviesInTheatresModel>  getMoviesInTheatres(@Query("api_key") String api_key);
 
-    @GET("/3/discover/movie?sort_by=vote_average.desc")
+    @GET("/3/movie/top_rated")
     Call<MoviesInTheatresModel>  getTopVotedMoviesInTheatres(@Query("api_key") String api_key);
 }

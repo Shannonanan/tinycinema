@@ -27,6 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import co.za.tinycinema.common.BaseNetworkModule;
 import co.za.tinycinema.data.local.LocalDataSource;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.data.remote.RemoteDataSource;
@@ -43,165 +44,54 @@ import static android.support.v4.util.Preconditions.checkNotNull;
  * obtained from the server, by using the remote data source only if the local database doesn't
  * exist or is empty.
  */
-public class Repository implements DataSource {
+public class Repository extends BaseNetworkModule {
 
     private static Repository INSTANCE = null;
 
-    private final RemoteDataSource mRemoteDataSource;
-
-    private final LocalDataSource mLocalDataSource;
-
-    private Context mContext;
-
-
-    public Repository(RemoteDataSource mRemoteDataSource,
-                      LocalDataSource mLocalDataSource,
-                      Context context
-    ) {
-        this.mRemoteDataSource = mRemoteDataSource;
-        this.mLocalDataSource = mLocalDataSource;
-        this.mContext = context;
+    public Repository(RemoteDataSource mRemoteDataSource, LocalDataSource mLocalDataSource, Context context) {
+        super(mRemoteDataSource, mLocalDataSource, context);
     }
-
-    //TODO make  a delete function and check why it crashes when going to detail when offline
-
 
     //check for internet, if none call to local to see if any saved data in the local repository, if none alert user
     @Override
-    public void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback) {
-        //check internet
-        //if exists call remote
+    public void getAllMoviesInTheatre(Context context, LoadInfoCallback callback) {
+
         if (isThereInternetConnection()) {
             getRemoteMoviesInTheatres(callback, mContext);
         } else {
             // Query the local storage if available.
-            mLocalDataSource.getAllMoviesInTheatre(context, new LoadInfoCallback() {
-                @Override
-                public void onDataLoaded(List<Result> mMovieResultPosters, boolean offlne) {
-                    // refreshCache(tasks);
-                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), true);
-                }
-
-                @Override
-                public void onDataNotAvailable(String noDataAvailable) {
-                    callback.onDataNotAvailable(noDataAvailable);
-                }
-            });
+            getLocalMoviesInTheatres(callback, mContext);
         }
-
     }
 
     @Override
     public void getHighestRatedMovies(Context context, final LoadInfoCallback callback) {
         if (isThereInternetConnection()) {
-            mRemoteDataSource.getHighestRatedMovies(context, new LoadInfoCallback() {
-                @Override
-                public void onDataLoaded(List<Result> results, boolean offline) {
-                    if (results != null) {
-                        callback.onDataLoaded(results, offline);
-                    }
-                }
-
-                @Override
-                public void onDataNotAvailable(String noDataAvailable) {
-                    callback.onDataNotAvailable(noDataAvailable);
-                }
-            });
+            getHighestRatedMoviesRemote(context, callback);
         } else {
             // Query the local storage if available.
-            mLocalDataSource.getHighestRatedMovies(context, new LoadInfoCallback() {
-                @Override
-                public void onDataLoaded(List<Result> mMovieResultPosters, boolean offline) {
-                    // refreshCache(tasks);
-                    callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), offline);
-                }
-
-                @Override
-                public void onDataNotAvailable(String noDataAvailable) {
-                    callback.onDataNotAvailable(noDataAvailable);
-                }
-            });
+            getHighestRatedMoviesLocal(context, callback);
         }
     }
 
     @Override
     public void getMoviesFromLibrary(final LoadInfoCallback callback) {
-        mLocalDataSource.getMoviesFromLibrary(new LoadInfoCallback() {
-            @Override
-            public void onDataLoaded(List<Result> mMovieResultPosters, boolean offlne) {
-                // refreshCache(tasks);
-                callback.onDataLoaded(new ArrayList<>(mMovieResultPosters), true);
-            }
-
-            @Override
-            public void onDataNotAvailable(String noDataAvailable) {
-                callback.onDataNotAvailable(noDataAvailable);
-            }
-        });
-    }
-
-
-    private void getRemoteMoviesInTheatres(@NonNull final LoadInfoCallback callback, Context context) {
-        mRemoteDataSource.getAllMoviesInTheatre(context, new LoadInfoCallback() {
-            @Override
-            public void onDataLoaded(List<Result> movieResults, boolean offline) {
-                //    refreshLocalDataSource(info);
-                callback.onDataLoaded(new ArrayList<>(movieResults), offline);
-            }
-
-            @Override
-            public void onDataNotAvailable(String noDataAvailable) {
-                callback.onDataNotAvailable(noDataAvailable);
-            }
-        });
+        getMoviesFromLibraryLocal(callback);
     }
 
 
     @Override
     public void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback) {
-        //   mRemoteDataSource.deleteAllInfo();
-        mLocalDataSource.deleteMovie(type, entity, new DeleteInfoCallback() {
-            @Override
-            public void deleteStatusSuccess(List<Result> latestResults, String status) {
-                callback.deleteStatusSuccess(latestResults, status);
-            }
-
-            @Override
-            public void deleteStatusFailed(String status) {
-
-            }
-        });
-
+        deleteMovieLocalWithType(type, entity, callback);
     }
 
     public void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback) {
-        mLocalDataSource.deleteMovieFromLibrary(entity, new DeleteInfoCallback() {
-            @Override
-            public void deleteStatusSuccess(List<Result> latestResults, String status) {
-                callback.deleteStatusSuccess(latestResults, status);
-            }
-
-            @Override
-            public void deleteStatusFailed(String status) {
-
-            }
-        });
+        deleteMovieFromLibraryWithoutType(entity, callback);
     }
 
     @Override
     public void saveMovie(MovieResultEntity result, final SaveInfoCallback callback) {
-
-        mLocalDataSource.saveMovie(result, new SaveInfoCallback() {
-            @Override
-            public void savedStatusSuccess(String status) {
-                callback.savedStatusSuccess(status);
-            }
-
-            @Override
-            public void savedStatusFailed(String error) {
-                callback.savedStatusFailed(error);
-            }
-        });
+        saveMovieLocal(result, callback);
     }
 
 

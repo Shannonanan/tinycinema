@@ -96,4 +96,9 @@ public class RemoteDataSource implements DataSource {
 
     }
 
+    @Override
+    public void deleteMovieFromLibrary(MovieResultEntity entity, DeleteInfoCallback callback) {
+
+    }
+
 }

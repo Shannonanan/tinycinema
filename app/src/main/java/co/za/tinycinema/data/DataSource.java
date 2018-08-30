@@ -57,5 +57,7 @@ public interface DataSource {
     void getMoviesFromLibrary(final LoadInfoCallback callback);
     void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
+    void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback);
+
 
 }
