@@ -1,11 +1,15 @@
 package co.za.tinycinema.data.local;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.TypeConverter;
+import android.arch.persistence.room.TypeConverters;
 
+import java.util.Date;
 import java.util.List;
 
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
@@ -16,16 +20,21 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 @Dao
 public interface MoviesDao {
 
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @TypeConverter
+    void bulkInsert(List<MovieResultEntity> list);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertMovie(MovieResultEntity saveMovie);
 
-    @Query("SELECT * from movies WHERE toprated = :type")
-    List<MovieResultEntity> getAllMovies(boolean type);
+    @Query("SELECT * from movie WHERE toprated = :type")
+    LiveData<List<MovieResultEntity>> getAllMovies(boolean type);
 
     @Delete
     void deleteMovie(MovieResultEntity entry);
 
-    @Query("SELECT * from movies")
+    @Query("SELECT * from movie")
     List<MovieResultEntity> getAllMoviesFromLibrary();
 
 

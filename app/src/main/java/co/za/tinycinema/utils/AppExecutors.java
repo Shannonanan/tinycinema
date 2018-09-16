@@ -42,6 +42,10 @@ public class AppExecutors {
 
     private final Executor mainThread;
 
+    // For Singleton instantiation
+    private static final Object LOCK = new Object();
+    private static AppExecutors sInstance;
+
     @Inject
     @VisibleForTesting
     AppExecutors(Executor diskIO, Executor networkIO, Executor mainThread) {
@@ -53,6 +57,17 @@ public class AppExecutors {
     public AppExecutors() {
         this(new DiskIOThreadExecutor(), Executors.newFixedThreadPool(THREAD_COUNT),
                 new MainThreadExecutor());
+    }
+
+    public static AppExecutors getInstance() {
+        if (sInstance == null) {
+            synchronized (LOCK) {
+                sInstance = new AppExecutors(Executors.newSingleThreadExecutor(),
+                        Executors.newFixedThreadPool(3),
+                        new MainThreadExecutor());
+            }
+        }
+        return sInstance;
     }
 
     public Executor diskIO() {

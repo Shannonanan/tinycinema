@@ -19,11 +19,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
 public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatresAdapter.GetMoviesViewHolder> {
 
-    List<Result> getMoviesCollection;
+    List<MovieResultEntity> getMoviesCollection;
     private Context mContext;
     private MoviesInTheatresAdapter.OnMoviePosterClicked onItemClickListener;
     boolean offlineStatus = false;
@@ -56,7 +57,7 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     @Override
     public void onBindViewHolder(@NonNull GetMoviesViewHolder holder, int position) {
-        final Result movieResult = this.getMoviesCollection.get(position);
+        final MovieResultEntity movieResult = this.getMoviesCollection.get(position);
         if(offlineStatus){
             holder.btn_save.setVisibility(View.GONE);
             holder.delete.setVisibility(View.VISIBLE);
@@ -80,32 +81,32 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
                 .into(holder.imageView);}
 
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onMoviePosterClicked(movieResult);
-                }
-            }
-        });
-
-        holder.btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onSaveButtonClicked(movieResult);
-                }
-            }
-        });
-
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onItemClickListener != null) {
-                    onItemClickListener.onDeleteButtonClicked(false, movieResult);
-                }
-            }
-        });
+//        holder.itemView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (onItemClickListener != null) {
+//                    onItemClickListener.onMoviePosterClicked(movieResult);
+//                }
+//            }
+//        });
+//
+//        holder.btn_save.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (onItemClickListener != null) {
+//                    onItemClickListener.onSaveButtonClicked(movieResult);
+//                }
+//            }
+//        });
+//
+//        holder.delete.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (onItemClickListener != null) {
+//                    onItemClickListener.onDeleteButtonClicked(false, movieResult);
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -124,14 +125,14 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
         }
     }
 
-    public void setInfoCollection(Collection<Result> INFO, boolean newtorkStatus) {
+    public void setInfoCollection(Collection<MovieResultEntity> INFO, boolean newtorkStatus) {
         this.validateCollection(INFO);
-        this.getMoviesCollection = (List<Result>) INFO;
+        this.getMoviesCollection = (List<MovieResultEntity>) INFO;
         this.notifyDataSetChanged();
         offlineStatus = newtorkStatus;
     }
 
-    private void validateCollection(Collection<Result> infoCollection) {
+    private void validateCollection(Collection<MovieResultEntity> infoCollection) {
         if (infoCollection == null) {
             throw new IllegalArgumentException("The list cannot be null");
         }

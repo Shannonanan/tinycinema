@@ -2,6 +2,7 @@ package co.za.tinycinema.features.GetMoviesInTheatres;
 
 import java.util.List;
 
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.mvcViews.ObservableViewMvc;
 
@@ -17,7 +18,7 @@ public interface MoviesInTheatresContract extends ObservableViewMvc<MoviesInThea
         void onDeleteButtonClicked(boolean type, Result result);
     }
 
-    void renderInView(List<Result> movieInfo, boolean networkStatus);
+    void renderInView(List<MovieResultEntity> movieInfo, boolean networkStatus);
 
     void setLoadingIndicator(boolean active);
     void renderStatusOfSave(String status);

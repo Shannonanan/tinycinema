@@ -23,6 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.mvcViews.BaseViewMvc;
 
@@ -89,7 +90,7 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
 
 
     @Override
-    public void renderInView(List<Result> movieInfo, boolean networkStatus) {
+    public void renderInView(List<MovieResultEntity> movieInfo, boolean networkStatus) {
         if (movieInfo != null) {
             this.moviesInTheatresAdapter.setInfoCollection(movieInfo, networkStatus);
         }

@@ -1,12 +1,17 @@
 package co.za.tinycinema.data.local;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
+import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.util.Log;
 
-@Database(entities = { MovieResultEntity.class}, version = 1, exportSchema = false)
+@Database(entities = { MovieResultEntity.class, DateSavedEntity.class, MoviesInTheatresModelEntity.class}, version = 4, exportSchema = false)
+@TypeConverters({DateConverter.class, ObjectConverter.class})
 public abstract class MoviesDatabase extends RoomDatabase {
 
     private static final String LOG_TAG = MoviesDatabase.class.getSimpleName();
@@ -20,8 +25,17 @@ public abstract class MoviesDatabase extends RoomDatabase {
         Log.d(LOG_TAG, "Getting the database");
         if (sInstance == null) {
             synchronized (LOCK) {
+
+                 final Migration MIGRATION_3_4 = new Migration(3, 4) {
+                    @Override
+                    public void migrate(SupportSQLiteDatabase database) {
+                    }
+                };
+
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
-                        MoviesDatabase.class, MoviesDatabase.DATABASE_NAME).build();
+                        MoviesDatabase.class, MoviesDatabase.DATABASE_NAME)
+                        .addMigrations(MIGRATION_3_4)
+                        .build();
                 Log.d(LOG_TAG, "Made new database");
             }
         }
@@ -30,6 +44,8 @@ public abstract class MoviesDatabase extends RoomDatabase {
 
     // The associated DAOs for the database
     public abstract MoviesDao moviesDao();
+    public abstract DateDao dateDao();
+
 
 
 }

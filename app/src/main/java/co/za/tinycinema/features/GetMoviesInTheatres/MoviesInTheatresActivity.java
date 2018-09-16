@@ -1,6 +1,8 @@
 package co.za.tinycinema.features.GetMoviesInTheatres;
 
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -8,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,16 +21,18 @@ import java.util.List;
 import javax.inject.Inject;
 
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
-import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
-import co.za.tinycinema.features.Library.LibraryActivity;
+//import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
+//import co.za.tinycinema.features.Library.LibraryActivity;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
+import co.za.tinycinema.utils.InjectorUtils;
 
 public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTheatresContract.Listener {
 
-    @Inject
+ //   @Inject
     MoviesInTheatresPresenter moviesInTheatresPresenter;
     @Inject
     ViewMvcFactory viewMvcFactory;
@@ -43,14 +48,29 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         if(!isThereInternetConnection()){
             Toast.makeText(this, getString(R.string.offline),Toast.LENGTH_LONG).show();
         }
-        this.moviesInTheatresPresenter.setView(mViewMvc);
-        moviesInTheatresPresenter.start();
+     //   this.moviesInTheatresPresenter.setView(mViewMvc);
+      //  moviesInTheatresPresenter.start();
+
+        MoviesInTheatresViewModelFactory moviesInTheatresViewModelFactory =
+                InjectorUtils.provideMainActivityViewModelFactory(this.getApplicationContext());
+        moviesInTheatresPresenter = ViewModelProviders.of
+                (this,moviesInTheatresViewModelFactory).get(MoviesInTheatresPresenter.class);
+
+     //   moviesInTheatresPresenter.getMoviesRemotely();
+        moviesInTheatresPresenter.getmMovieResults().observe(this, new Observer<List<MovieResultEntity>>() {
+            @Override
+            public void onChanged(@Nullable List<MovieResultEntity> movieResultEntities) {
+                mViewMvc.renderInView(movieResultEntities,false);
+            }
+        });
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-      //  this.moviesInTheatresPresenter.setView(mViewMvc);
+        this.moviesInTheatresPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
        // moviesInTheatresPresenter.start();
     }
@@ -84,12 +104,12 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
 
     @Override
     public void onDeleteButtonClicked(boolean type, Result result) {
-        moviesInTheatresPresenter.deleteMovieFromLocal(type, result);
+       // moviesInTheatresPresenter.deleteMovieFromLocal(type, result);
     }
 
     @Override
     public void OnSaveButtonClicked(Result result) {
-        moviesInTheatresPresenter.saveInfoToLocal(result);
+      //  moviesInTheatresPresenter.saveInfoToLocal(result);
     }
 
     @Override
@@ -103,15 +123,15 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
             case R.id.toggle_top_rated:
-                Intent intent = new Intent(this, TopRatedMoviesActivity.class);
-                startActivity(intent);
+              //  Intent intent = new Intent(this, TopRatedMoviesActivity.class);
+             //   startActivity(intent);
                 break;
             case R.id.toggle_most_pop:
-                moviesInTheatresPresenter.start();
+             //   moviesInTheatresPresenter.start();
                 break;
             case R.id.library:
-                Intent goToLibrary = new Intent(this, LibraryActivity.class);
-                startActivity(goToLibrary);
+               // Intent goToLibrary = new Intent(this, LibraryActivity.class);
+              //  startActivity(goToLibrary);
             default:
                 break;
         }

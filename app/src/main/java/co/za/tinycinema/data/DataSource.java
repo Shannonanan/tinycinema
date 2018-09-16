@@ -20,6 +20,7 @@ import android.content.Context;
 
 import java.util.List;
 
+import co.za.tinycinema.data.local.DateSavedEntity;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
@@ -35,9 +36,14 @@ public interface DataSource {
 
     interface LoadInfoCallback {
 
-        void onDataLoaded(List<Result> results, boolean offline);
+        void onDataLoaded(List<MovieResultEntity> results, boolean offline);
 
         void onDataNotAvailable(String noDataAvailable);
+    }
+
+    interface LoadDateCheckCallback{
+        void onDatesCheckedLoaded(List<DateSavedEntity> entities);
+        void onDatesCheckedFailed(String failed);
     }
 
      interface SaveInfoCallback{
@@ -52,7 +58,7 @@ public interface DataSource {
     }
 
 
-    void getAllMoviesInTheatre(Context context,  final LoadInfoCallback callback);
+ //   void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback);
     void getHighestRatedMovies(Context context, final LoadInfoCallback callback);
     void getMoviesFromLibrary(final LoadInfoCallback callback);
     void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);

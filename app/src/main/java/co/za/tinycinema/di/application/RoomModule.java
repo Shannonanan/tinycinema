@@ -6,6 +6,7 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
+import co.za.tinycinema.data.local.DateDao;
 import co.za.tinycinema.data.local.LocalDataSource;
 import co.za.tinycinema.data.local.MoviesDao;
 import co.za.tinycinema.data.local.MoviesDatabase;
@@ -39,8 +40,14 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    LocalDataSource movieLocalDataSource(MoviesDao movieDao, AppExecutors appExecutors){
-        return new LocalDataSource(movieDao, appExecutors);
+    DateDao providesDataDao(MoviesDatabase moviesDatabase){
+        return moviesDatabase.dateDao();
+    }
+
+    @Singleton
+    @Provides
+    LocalDataSource movieLocalDataSource(MoviesDao movieDao,DateDao dateDao, AppExecutors appExecutors){
+        return new LocalDataSource(movieDao, dateDao,appExecutors);
     }
 
 
