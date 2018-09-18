@@ -38,14 +38,8 @@ public class LocalDataSource implements DataSource {
         return moviesDao.getAllMovies(false);
     }
 
-    public void checkDate(final Date date, final LoadDateCheckCallback loadDateCheckCallback){
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                loadDateCheckCallback.onDatesCheckedLoaded(dateDao.checkDate(date));
-            }
-        };
-        mExecutors.diskIO().execute(runnable);
+    public int checkDate(final Date date){
+        return dateDao.checkDate(date);
     }
 
     public void addDateSaved(DateSavedEntity date){

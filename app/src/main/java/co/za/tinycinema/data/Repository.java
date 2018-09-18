@@ -25,9 +25,6 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.airbnb.lottie.L;
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,8 +32,6 @@ import co.za.tinycinema.data.local.DateSavedEntity;
 import co.za.tinycinema.data.local.LocalDataSource;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.data.remote.RemoteDataSource;
-import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
-import co.za.tinycinema.features.common.ImageLoader;
 import co.za.tinycinema.utils.AppExecutors;
 import co.za.tinycinema.utils.MoviesDateUtils;
 
@@ -56,9 +51,10 @@ public class Repository {
     private static Repository INSTANCE = null;
     private RemoteDataSource mRemoteDataSource;
     // if two methods see the same local variable, Java wants you to swear you will not change it ie.final
-    private  LocalDataSource mLocalDataSource;
+    private LocalDataSource mLocalDataSource;
     private Context mContext;
-    private boolean mInitialized = false;
+    private boolean isFetchNeeded = false;
+    int count = 0;
 
     public Repository(RemoteDataSource mRemoteDataSource, final LocalDataSource mLocalDataSource, Context context,
                       AppExecutors executors) {
@@ -78,7 +74,7 @@ public class Repository {
                     @Override
                     public void run() {
                         //trigger a database save.
-                      //  deleteOldData();
+                        //  deleteOldData();
                         //saving todays date so next time you pull data, if it is still the same day you only need to pull
                         //data locally
                         Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
@@ -93,14 +89,13 @@ public class Repository {
     }
 
 
+    public LiveData<List<MovieResultEntity>> getAllMoviesInTheatre() {
+        initializeData();
+        return mLocalDataSource.getAllMoviesInTheatres();
+    }
 
-    public LiveData<List<MovieResultEntity>>  getAllMoviesInTheatre(){
-        if (isThereInternetConnection() && isFetchNeeded()) {
-        return  mRemoteDataSource.getAllMoviesInTheatre();}
-        else{
-            return  mLocalDataSource.getAllMoviesInTheatres();
-        }
-
+    public LiveData<List<MovieResultEntity>> getInfoFromRemote() {
+        return mRemoteDataSource.getAllMoviesInTheatre();
     }
 
     //check for internet, if none call to local to see if any saved data in the local repository, if none alert user
@@ -135,20 +130,21 @@ public class Repository {
 
         // Only perform initialization once per app lifetime. If initialization has already been
         // performed, we have nothing to do in this method.
-        if (mInitialized) return;
-        mInitialized = true;
+//        if (mInitialized) return;
+//        mInitialized = true;
 
         // This method call triggers the app to create its task to synchronize movie data
         // periodically.
-     //   mRemoteDataSource.scheduleRecurringFetchMoviesrSync();
+        //   mRemoteDataSource.scheduleRecurringFetchMoviesrSync();
 
         mExecutors.diskIO().execute(new Runnable() {
             @Override
             public void run() {
-//                if(isFetchNeeded()){
-//                    startFetchMoviesService();}
+                if (isFetchNeeded()) {
+                    startFetchMoviesService();
+                }
             }
-    });
+        });
 
     }
 
@@ -157,36 +153,25 @@ public class Repository {
     }
 
 
-
     /**
      * Checks if there are enough days of future weather for the app to display all the needed data.
      *
      * @return Whether a fetch is needed
      */
-    private void isFetchNeeded(final DataSource.LoadDateCheckCallback loadDateCheckCallback) {
+    private boolean isFetchNeeded() {
         Log.d(LOG_TAG, "counting data");
         //trigger a count to see if data has been pulled for today
         Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
-        mLocalDataSource.checkDate(today, new DataSource.LoadDateCheckCallback() {
-            @Override
-            public void onDatesCheckedLoaded(List<DateSavedEntity> entities) {
-                List<DateSavedEntity> count = new ArrayList<>(entities);
-                loadDateCheckCallback.onDatesCheckedLoaded(count);
-            }
-
-            @Override
-            public void onDatesCheckedFailed(String failed) {
-                loadDateCheckCallback.onDatesCheckedFailed(failed);
-            }
-        });
+        int count = mLocalDataSource.checkDate(today);
+        return (count == 0);
     }
 
     public void getHighestRatedMovies(Context context, final DataSource.LoadInfoCallback callback) {
         if (isThereInternetConnection()) {
-          //  mRemoteDataSource.getHighestRatedMovies(context, callback);
+            //  mRemoteDataSource.getHighestRatedMovies(context, callback);
         } else {
             // Query the local storage if available.
-          //  mLocalDataSource.getHighestRatedMovies(context, callback);
+            //  mLocalDataSource.getHighestRatedMovies(context, callback);
         }
     }
 

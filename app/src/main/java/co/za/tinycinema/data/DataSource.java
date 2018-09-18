@@ -42,7 +42,7 @@ public interface DataSource {
     }
 
     interface LoadDateCheckCallback{
-        void onDatesCheckedLoaded(List<DateSavedEntity> entities);
+        void onDatesCheckedLoaded(int checkDate);
         void onDatesCheckedFailed(String failed);
     }
 

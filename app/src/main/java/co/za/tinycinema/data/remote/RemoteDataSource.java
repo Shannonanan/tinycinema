@@ -237,8 +237,8 @@ public class RemoteDataSource implements DataSource {
     }
 
     public void startFetchMoviesService() {
-      //  Intent intentToFetch = new Intent(mContext, MoviesSyncIntentService.class);
-      //  mContext.startService(intentToFetch);
-      //  Log.d(LOG_TAG, "Service created");
+        Intent intentToFetch = new Intent(mContext, MoviesSyncIntentService.class);
+        mContext.startService(intentToFetch);
+       // Log.d(LOG_TAG, "Service created");
     }
 }

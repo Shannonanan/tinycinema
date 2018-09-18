@@ -14,12 +14,14 @@ import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import co.za.tinycinema.R;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
@@ -39,6 +41,9 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
 
     MoviesInTheatresContract mViewMvc;
 
+    private ProgressBar mLoadingIndicator;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,8 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
      //   this.moviesInTheatresPresenter.setView(mViewMvc);
       //  moviesInTheatresPresenter.start();
 
+        mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
         MoviesInTheatresViewModelFactory moviesInTheatresViewModelFactory =
                 InjectorUtils.provideMainActivityViewModelFactory(this.getApplicationContext());
         moviesInTheatresPresenter = ViewModelProviders.of
@@ -61,10 +68,21 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
             @Override
             public void onChanged(@Nullable List<MovieResultEntity> movieResultEntities) {
                 mViewMvc.renderInView(movieResultEntities,false);
+                if (movieResultEntities.size() != 0)hideLoadingScreen();
+                   else showLoading();
             }
         });
 
 
+    }
+
+    private void hideLoadingScreen() {
+        if(mLoadingIndicator != null)
+            mLoadingIndicator.setVisibility(View.GONE);
+    }
+
+    private void showLoading() {
+        mLoadingIndicator.setVisibility(View.VISIBLE);
     }
 
     @Override

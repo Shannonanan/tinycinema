@@ -15,6 +15,9 @@ public interface DateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     long insertDate(DateSavedEntity saveMovie);
 
-    @Query("SELECT * FROM dateSaved WHERE date >= :date")
-    List<DateSavedEntity> checkDate(Date date);
+//    @Query("SELECT * FROM dateSaved WHERE date >= :date")
+//    List<DateSavedEntity> checkDate(Date date);
+
+    @Query("SELECT COUNT(id) FROM dateSaved WHERE date >= :date")
+    int checkDate(Date date);
 }

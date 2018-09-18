@@ -24,6 +24,11 @@ public class DateSavedEntity {
         this.id = id;
         this.date = date;
     }
+
+    public int getId() {
+        return id;
+    }
+
     @Ignore
     public DateSavedEntity(Date date) {
         this.date = date;
