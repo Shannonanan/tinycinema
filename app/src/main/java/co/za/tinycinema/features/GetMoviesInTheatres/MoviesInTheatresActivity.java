@@ -101,16 +101,6 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         super.onStop();
     }
 
-    @Override
-    public void renderStatusOfSave(String status) {
-        if(status.equals(this.getString(R.string.success))){
-
-            Toast.makeText(this,getString(R.string.saved_successfully),Toast.LENGTH_LONG).show();
-        }
-        else{
-            Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
-        }
-    }
 
     @Override
     public void onDeleteButtonClicked(boolean type, Result result) {
@@ -122,11 +112,6 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         //Go to Detail activity
         startActivity(ShowDetailsActivity.getCallingIntent(this, movieResult));
 
-    }
-
-    @Override
-    public void OnSaveButtonClicked(Result result) {
-      //  moviesInTheatresPresenter.saveInfoToLocal(result);
     }
 
     @Override

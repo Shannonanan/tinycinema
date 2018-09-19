@@ -102,58 +102,9 @@ public class MoviesInTheatresPresenter extends ViewModel {
 //        mContractView.renderInView(moviesResult, networkStatus);
 //    }
 
-//    /**
-//     * deletes entities when coming from topmovies or highest rated movies when offline
-//     *
-//     * @param result
-//     * @param type
-//     */
-//    public void deleteMovieFromLocal(boolean type, Result result) {
-//        mContractView.showLoading();
- //       mContractView.setLoadingIndicator(true);
 
-//        mUseCaseHandler.execute(deleteMoviesInLocalUsecase, new DeleteMoviesInLocal.RequestValues(type, transform(result)),
-//                new UseCase.UseCaseCallback<DeleteMoviesInLocal.ResponseValues>() {
-//                    @Override
-//                    public void onSuccess(DeleteMoviesInLocal.ResponseValues response) {
-//                        mContractView.setLoadingIndicator(false);
-//                        mContractView.hideLoading();
-//
-//                        processResponseOfDelete(response.forCallback(), response.forListRefresh());
-//                    }
-//
-//                    @Override
-//                    public void onError(String error) {
-//
-//                    }
-//                });
-//    }
 
- //   private void processResponseOfDelete(String s, List<Result> refreshList) {
- //       mContractView.renderInView(refreshList, true);
- //   }
 
- //   public void saveInfoToLocal(Result result) {
- //       mContractView.showLoading();
- //       mContractView.setLoadingIndicator(true);
-
-//        mUseCaseHandler.execute(saveMovieToLocalUsecase, new SaveMovieToLocal.RequestValues(transform(result)),
-//                new UseCase.UseCaseCallback<SaveMovieToLocal.ResponseValues>() {
-//                    @Override
-//                    public void onSuccess(SaveMovieToLocal.ResponseValues response) {
-//                        mContractView.setLoadingIndicator(false);
-//                        mContractView.hideLoading();
-//
-//                        processResponseOfSave(response.saveInfoResult());
-//                    }
-//
-//                    @Override
-//                    public void onError(String error) {
-//
-//                    }
-//                });
-
- //   }
 
   //  private void processResponseOfSave(String s) {
   //      mContractView.renderStatusOfSave(s);

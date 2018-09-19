@@ -20,8 +20,8 @@ public class DeleteMoviesInLocal extends UseCase<DeleteMoviesInLocal.RequestValu
     protected void executeUseCase(RequestValues requestValues) {
         this.repository.deleteMovie(requestValues.type, requestValues.movieToDelete, new DataSource.DeleteInfoCallback() {
             @Override
-            public void deleteStatusSuccess(List<Result> latestResults, String status) {
-                getUseCaseCallback().onSuccess(new ResponseValues(status, latestResults));
+            public void deleteStatusSuccess( String status) {
+                getUseCaseCallback().onSuccess(new ResponseValues(status));
             }
 
             @Override
@@ -33,18 +33,15 @@ public class DeleteMoviesInLocal extends UseCase<DeleteMoviesInLocal.RequestValu
 
     public static final class ResponseValues implements UseCase.ResponseValue {
         String callback;
-        List<Result> movieResults;
 
-        public ResponseValues(String callback, List<Result> movieResults) {
+
+        public ResponseValues(String callback) {
             this.callback = callback;
-            this.movieResults = movieResults;
+
         }
 
         public String forCallback() {
             return callback;
-        }
-        public List<Result> forListRefresh(){
-            return movieResults;
         }
     }
 
@@ -52,13 +49,13 @@ public class DeleteMoviesInLocal extends UseCase<DeleteMoviesInLocal.RequestValu
         MovieResultEntity movieToDelete;
         boolean type;
 
-        public RequestValues(boolean type, MovieResultEntity movieToSave) {
+        public RequestValues(MovieResultEntity movieToSave) {
             this.movieToDelete = movieToSave;
             this.type = type;
         }
 
-        public static RequestValues toDeleteMovie(MovieResultEntity movie, boolean type) {
-            return new RequestValues(type, movie);
+        public static RequestValues toDeleteMovie(MovieResultEntity movie) {
+            return new RequestValues(movie);
         }
 
     }

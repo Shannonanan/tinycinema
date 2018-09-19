@@ -9,11 +9,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import co.za.tinycinema.R;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
@@ -28,7 +30,9 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     @BindView(R.id.iv_thumbnail) ImageView thumbnail;
     @BindView(R.id.scrollView) ScrollView scrollView;
     @BindView(R.id.btn_save) ImageButton btn_save;
-    @BindView(R.id.btn_delete) ImageButton delete;
+    @BindView(R.id.btn_delete) ImageButton btn_delete;
+
+    MovieResultEntity entity;
 
     public ShowDetailsViewImpl(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.activity_show_details, container, false);
@@ -48,6 +52,7 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
 //            delete.setVisibility(View.GONE);
 //        }
 
+        entity = result;
         String url = getContext().getString(R.string.image_base_url) + result.getPosterPath();
         Glide.with(getContext())
                 .load(url)
@@ -64,6 +69,44 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
         mReleaseDate.setText(result.getReleaseDate());
     }
 
+    @Override
+    public void setLoadingIndicator(boolean active) {
+
+    }
+
+    @OnClick(R.id.btn_save)
+    public void click(){
+        if(btn_save != null){
+        btn_save.setVisibility(View.GONE);
+        btn_delete.setVisibility(View.VISIBLE);}
+        for (Listener list:getListeners()) {
+            list.onSaveMovieToLocalClicked(entity);
+        }
+    }
+
+    @OnClick(R.id.btn_delete)
+    public void onClick(){
+         if(btn_delete != null){
+            btn_save.setVisibility(View.VISIBLE);
+            btn_delete.setVisibility(View.GONE);
+        }
+        for (Listener list:getListeners()) {
+            list.onRemoveMovieFromLocalClicked(entity);
+        }
+    }
+
+   @Override
+    public void renderStatusOfSave(String status) {
+        for (Listener listener : getListeners()) {
+            listener.renderStatusOfSave(status);
+
+        }
+    }
+
+    @Override
+    public void renderDeleteInView(String success) {
+        Toast.makeText(getContext(), getString(R.string.deleted),Toast.LENGTH_LONG).show();
+    }
 
     @Override
     public void showLoading() {

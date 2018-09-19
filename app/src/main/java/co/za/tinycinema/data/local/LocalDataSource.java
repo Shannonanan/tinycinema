@@ -105,7 +105,7 @@ public class LocalDataSource implements DataSource {
                 moviesDao.deleteMovie(entity);
              //   List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMovies(type);
               //  List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
-              //  callback.deleteStatusSuccess(latestResults,"success");
+                callback.deleteStatusSuccess("success");
             }
         };
 
@@ -119,7 +119,7 @@ public class LocalDataSource implements DataSource {
                 moviesDao.deleteMovie(entity);
                 List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMoviesFromLibrary();
                 List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
-                callback.deleteStatusSuccess(latestResults,"success");
+                callback.deleteStatusSuccess("success");
             }
         };
 

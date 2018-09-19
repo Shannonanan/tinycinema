@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
@@ -39,6 +40,8 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         mViewMvc = viewMvcFactory.newInstance(ShowDetailsContract.class, null);
         setContentView(mViewMvc.getRootView());
         result = (MovieResultEntity) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
+
+        //check if favourited
     }
 
     @Override
@@ -47,6 +50,7 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         this.showDetailsPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
         showDetailsPresenter.setupViews(result);
+        showDetailsPresenter.checkIfInLocal(result);
     }
 
     @Override
@@ -55,4 +59,25 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
     }
 
 
+    @Override
+    public void onSaveMovieToLocalClicked(MovieResultEntity movieResultEntity) {
+            showDetailsPresenter.saveToLocalFavourites(movieResultEntity);
+    }
+
+    @Override
+    public void onRemoveMovieFromLocalClicked(MovieResultEntity movieResultEntity) {
+        showDetailsPresenter.removeFromLocal(movieResultEntity);
+
+    }
+
+    @Override
+    public void renderStatusOfSave(String status) {
+        if(status.equals(this.getString(R.string.success))){
+
+            Toast.makeText(this,getString(R.string.saved_successfully),Toast.LENGTH_LONG).show();
+        }
+        else{
+            Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
+        }
+    }
 }

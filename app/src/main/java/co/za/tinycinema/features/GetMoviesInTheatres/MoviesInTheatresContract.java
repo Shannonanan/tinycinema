@@ -13,8 +13,6 @@ public interface MoviesInTheatresContract extends ObservableViewMvc<MoviesInThea
 
     interface Listener {
         void OnMoviePosterClicked(MovieResultEntity movieResult);
-        void OnSaveButtonClicked(Result result);
-        void renderStatusOfSave(String status);
         void onDeleteButtonClicked(boolean type, Result result);
     }
 

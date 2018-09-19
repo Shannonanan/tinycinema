@@ -1,12 +1,10 @@
 package co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase;
 
-import java.util.List;
-
 import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.data.DataSource;
 import co.za.tinycinema.data.Repository;
 import co.za.tinycinema.data.local.MovieResultEntity;
-import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+
 
 public class SaveMovieToLocal extends UseCase<SaveMovieToLocal.RequestValues, SaveMovieToLocal.ResponseValues>{
 

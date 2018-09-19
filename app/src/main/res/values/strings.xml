@@ -11,10 +11,11 @@
     <string name="save_failed">sorry something went wrong</string>
     <string name="save">save</string>
     <string name="delete">delete</string>
-    <string name="saved_successfully">Saved successfully</string>
+    <string name="saved_successfully">Saved successfully to library</string>
     <string name="nothing">no data available</string>
     <string name="offline">you are offline</string>
     <string name="library">my library</string>
     <string name="no_data_available">no data available</string>
     <string name="success">success</string>
+    <string name="deleted">deleted successfully</string>
 </resources>

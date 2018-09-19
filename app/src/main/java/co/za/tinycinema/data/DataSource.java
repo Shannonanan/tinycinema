@@ -53,7 +53,7 @@ public interface DataSource {
     }
 
     interface DeleteInfoCallback{
-        void deleteStatusSuccess(List<Result> latestResults,String status);
+        void deleteStatusSuccess(String status);
         void deleteStatusFailed(String status);
     }
 

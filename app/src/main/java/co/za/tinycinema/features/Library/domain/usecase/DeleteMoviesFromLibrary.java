@@ -20,8 +20,8 @@ public class DeleteMoviesFromLibrary extends  UseCase<DeleteMoviesFromLibrary.Re
     protected void executeUseCase(RequestValues requestValues) {
         this.repository.deleteMovieFromLibrary(requestValues.entityToDelete, new DataSource.DeleteInfoCallback() {
             @Override
-            public void deleteStatusSuccess(List<Result> latestResults, String status) {
-                getUseCaseCallback().onSuccess(new ResponseValues(status, latestResults));
+            public void deleteStatusSuccess(String status) {
+                getUseCaseCallback().onSuccess(new ResponseValues(status));
             }
 
             @Override
@@ -47,18 +47,18 @@ public class DeleteMoviesFromLibrary extends  UseCase<DeleteMoviesFromLibrary.Re
 
     public static final class ResponseValues implements UseCase.ResponseValue{
         String callback;
-        List<Result> movieResults;
+      //  List<Result> movieResults;
 
-        public ResponseValues(String callback, List<Result> movieResults) {
+        public ResponseValues(String callback) {
             this.callback = callback;
-            this.movieResults = movieResults;
+           // this.movieResults = movieResults;
         }
 
         public String forCallback() {
             return callback;
         }
-        public List<Result> forListRefresh(){
-            return movieResults;
-        }
+      //  public List<Result> forListRefresh(){
+        //    return movieResults;
+       // }
     }
 }

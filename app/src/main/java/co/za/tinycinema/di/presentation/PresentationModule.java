@@ -98,8 +98,10 @@ public class PresentationModule {
 //    }
 
     @Provides
-    ShowDetailsPresenter showDetailsPresenter(){
-        return new ShowDetailsPresenter();
+    ShowDetailsPresenter showDetailsPresenter(SaveMovieToLocal saveMovieToLocalUseCase,
+                                              DeleteMoviesInLocal deleteMoviesInLocalUseCase,
+                                              UseCaseHandler useCaseHandler){
+        return new ShowDetailsPresenter(saveMovieToLocalUseCase, deleteMoviesInLocalUseCase,useCaseHandler);
     }
 
 //    @Provides
