@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.mvcViews.BaseViewMvc;
 
@@ -24,6 +27,8 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     @BindView(R.id.tv_title) TextView mTitle;
     @BindView(R.id.iv_thumbnail) ImageView thumbnail;
     @BindView(R.id.scrollView) ScrollView scrollView;
+    @BindView(R.id.btn_save) ImageButton btn_save;
+    @BindView(R.id.btn_delete) ImageButton delete;
 
     public ShowDetailsViewImpl(LayoutInflater inflater, ViewGroup container) {
         View view = inflater.inflate(R.layout.activity_show_details, container, false);
@@ -33,7 +38,15 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     }
 
     @Override
-    public void setupViews(Result result) {
+    public void setupViews(MovieResultEntity result) {
+//        if(offlineStatus){
+//            btn_save.setVisibility(View.GONE);
+//            delete.setVisibility(View.VISIBLE);
+//        }
+//        else {
+//            btn_save.setVisibility(View.VISIBLE);
+//            delete.setVisibility(View.GONE);
+//        }
 
         String url = getContext().getString(R.string.image_base_url) + result.getPosterPath();
         Glide.with(getContext())

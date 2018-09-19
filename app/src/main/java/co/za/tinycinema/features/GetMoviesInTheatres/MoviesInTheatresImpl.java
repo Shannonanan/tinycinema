@@ -57,7 +57,7 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
 
         MoviesInTheatresAdapter.OnMoviePosterClicked onMoviePosterClicked = new MoviesInTheatresAdapter.OnMoviePosterClicked() {
             @Override
-            public void onMoviePosterClicked(Result result) {
+            public void onMoviePosterClicked(MovieResultEntity result) {
                 for (Listener listener : getListeners()) {
                     listener.OnMoviePosterClicked(result);
                 }

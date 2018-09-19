@@ -102,14 +102,6 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
     }
 
     @Override
-    public void OnMoviePosterClicked(Result movieResult) {
-        //Go to Detail activity
-        startActivity(ShowDetailsActivity.getCallingIntent(this, movieResult));
-    }
-
-
-
-    @Override
     public void renderStatusOfSave(String status) {
         if(status.equals(this.getString(R.string.success))){
 
@@ -123,6 +115,13 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
     @Override
     public void onDeleteButtonClicked(boolean type, Result result) {
        // moviesInTheatresPresenter.deleteMovieFromLocal(type, result);
+    }
+
+    @Override
+    public void OnMoviePosterClicked(MovieResultEntity movieResult) {
+        //Go to Detail activity
+        startActivity(ShowDetailsActivity.getCallingIntent(this, movieResult));
+
     }
 
     @Override

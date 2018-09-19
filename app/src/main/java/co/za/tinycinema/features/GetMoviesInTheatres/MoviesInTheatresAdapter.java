@@ -31,7 +31,7 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     //setup a listener for your posts in the recyclerview
     public interface OnMoviePosterClicked {
-        void onMoviePosterClicked(Result result);
+        void onMoviePosterClicked(MovieResultEntity result);
         void onSaveButtonClicked(Result result);
         void onDeleteButtonClicked(boolean type, Result result);
     }
@@ -58,14 +58,14 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
     @Override
     public void onBindViewHolder(@NonNull GetMoviesViewHolder holder, int position) {
         final MovieResultEntity movieResult = this.getMoviesCollection.get(position);
-        if(offlineStatus){
-            holder.btn_save.setVisibility(View.GONE);
-            holder.delete.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.btn_save.setVisibility(View.VISIBLE);
-            holder.delete.setVisibility(View.GONE);
-        }
+//        if(offlineStatus){
+//            holder.btn_save.setVisibility(View.GONE);
+//            holder.delete.setVisibility(View.VISIBLE);
+//        }
+//        else {
+//            holder.btn_save.setVisibility(View.VISIBLE);
+//            holder.delete.setVisibility(View.GONE);
+//        }
 
 
         String movieCode = movieResult.getPosterPath();
@@ -81,14 +81,14 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
                 .into(holder.imageView);}
 
 
-//        holder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (onItemClickListener != null) {
-//                    onItemClickListener.onMoviePosterClicked(movieResult);
-//                }
-//            }
-//        });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onMoviePosterClicked(movieResult);
+                }
+            }
+        });
 //
 //        holder.btn_save.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -116,8 +116,7 @@ public class MoviesInTheatresAdapter extends RecyclerView.Adapter<MoviesInTheatr
 
     static class GetMoviesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cell_movie) ImageView imageView;
-        @BindView(R.id.btn_save) Button btn_save;
-        @BindView(R.id.btn_delete) Button delete;
+
 
         public GetMoviesViewHolder(View itemView) {
             super(itemView);

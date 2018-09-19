@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.BaseActivity;
@@ -21,11 +22,11 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
 
 
     ShowDetailsContract mViewMvc;
-    Result result;
+    MovieResultEntity result;
 
     private static final String INTENT_EXTRA_MOVIE_RESULT = "INTENT_EXTRA_MOVIE_RESULT";
 
-    public static Intent getCallingIntent(Context context, Result result){
+    public static Intent getCallingIntent(Context context, MovieResultEntity result){
         Intent callingIntent = new Intent(context, ShowDetailsActivity.class);
         callingIntent.putExtra(INTENT_EXTRA_MOVIE_RESULT, result);
         return callingIntent;
@@ -37,7 +38,7 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         getPresentationComponent().inject(this);
         mViewMvc = viewMvcFactory.newInstance(ShowDetailsContract.class, null);
         setContentView(mViewMvc.getRootView());
-        result = (Result) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
+        result = (MovieResultEntity) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
     }
 
     @Override

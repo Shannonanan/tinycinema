@@ -4,10 +4,13 @@ package co.za.tinycinema.data.local;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+
+import java.io.Serializable;
+
 import static co.za.tinycinema.data.local.MovieResultEntity.TABLE_NAME1;
 
 @Entity(tableName = TABLE_NAME1)
-public class MovieResultEntity {
+public class MovieResultEntity implements Serializable{
 
     public static final String TABLE_NAME1 = "movie";
 
