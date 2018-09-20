@@ -37,6 +37,7 @@ public interface MoviesDao {
     @Query("SELECT * from movie")
     List<MovieResultEntity> getAllMoviesFromLibrary();
 
-
+    @Query("SELECT COUNT(id) FROM movie WHERE id == :id")
+    Integer checkMovieWasSaved(Integer id);
 
 }

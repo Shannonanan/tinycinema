@@ -2,26 +2,27 @@ package co.za.tinycinema.features.ShowDetails;
 
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.local.MovieResultEntity;
-import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
-import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
+import co.za.tinycinema.features.ShowDetails.domain.usecase.CheckSavedMovieInLocal;
+import co.za.tinycinema.features.ShowDetails.domain.usecase.DeleteMoviesInLocal;
+import co.za.tinycinema.features.ShowDetails.domain.usecase.SaveMovieToLocal;
 
 public class ShowDetailsPresenter  {
 
     private ShowDetailsContract showDetailsContract;
     private SaveMovieToLocal saveMovieToLocalUseCase;
     private DeleteMoviesInLocal deleteMoviesInLocalUseCase;
+    private CheckSavedMovieInLocal checkSavedMovieInLocal;
     private UseCaseHandler mUseCaseHandler;
 
     public ShowDetailsPresenter(SaveMovieToLocal saveMovieToLocalUseCase,
                                 DeleteMoviesInLocal deleteMoviesInLocalUseCase,
-                                UseCaseHandler useCaseHandler) {
+                                CheckSavedMovieInLocal checkSavedMovieInLocal, UseCaseHandler useCaseHandler) {
         this.saveMovieToLocalUseCase = saveMovieToLocalUseCase;
         this.deleteMoviesInLocalUseCase = deleteMoviesInLocalUseCase;
+        this.checkSavedMovieInLocal = checkSavedMovieInLocal;
         this.mUseCaseHandler = useCaseHandler;
     }
 
@@ -92,6 +93,27 @@ public class ShowDetailsPresenter  {
    }
 
     public void checkIfInLocal(MovieResultEntity result) {
-        //TODO:CHECK IF IN LOCAL
+        showDetailsContract.showLoading();
+        showDetailsContract.setLoadingIndicator(true);
+       mUseCaseHandler.execute(checkSavedMovieInLocal, new CheckSavedMovieInLocal.RequestValues(result.getId()),
+               new UseCase.UseCaseCallback<CheckSavedMovieInLocal.ResponseValues>(){
+                   @Override
+                   public void onSuccess(CheckSavedMovieInLocal.ResponseValues response) {
+                       showDetailsContract.setLoadingIndicator(false);
+                       showDetailsContract.hideLoading();
+
+                       processResponseOfCheck(response.forCallback());
+                   }
+
+                   @Override
+                   public void onError(String error) {
+
+                   }
+
+    });
+    }
+
+    private void processResponseOfCheck(Boolean status) {
+        showDetailsContract.renderCheckMovieSavedInView(status);
     }
 }

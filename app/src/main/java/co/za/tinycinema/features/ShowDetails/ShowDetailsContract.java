@@ -16,4 +16,5 @@ public interface ShowDetailsContract extends ObservableViewMvc<ShowDetailsContra
     void setLoadingIndicator(boolean active);
     void renderStatusOfSave(String status);
     void renderDeleteInView(String success);
+    void renderCheckMovieSavedInView(Boolean status);
 }

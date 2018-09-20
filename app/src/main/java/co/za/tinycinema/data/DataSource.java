@@ -52,6 +52,12 @@ public interface DataSource {
         void savedStatusFailed(String error);
     }
 
+    interface SavedMovieToLibraryCallback{
+        void savedStatusSuccess(Boolean status);
+
+        void savedStatusFailed(String error);
+    }
+
     interface DeleteInfoCallback{
         void deleteStatusSuccess(String status);
         void deleteStatusFailed(String status);

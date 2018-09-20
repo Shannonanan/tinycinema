@@ -1,4 +1,4 @@
-package co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase;
+package co.za.tinycinema.features.ShowDetails.domain.usecase;
 
 import co.za.tinycinema.common.UseCase;
 import co.za.tinycinema.data.DataSource;

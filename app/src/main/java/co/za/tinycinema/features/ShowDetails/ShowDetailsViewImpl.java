@@ -109,6 +109,19 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     }
 
     @Override
+    public void renderCheckMovieSavedInView(Boolean status) {
+        if(status){
+            if(btn_save != null){
+            btn_save.setVisibility(View.GONE);
+            btn_delete.setVisibility(View.VISIBLE);}
+        }else{
+            if(btn_delete != null){
+            btn_save.setVisibility(View.VISIBLE);
+            btn_delete.setVisibility(View.GONE);}
+        }
+    }
+
+    @Override
     public void showLoading() {
 
     }

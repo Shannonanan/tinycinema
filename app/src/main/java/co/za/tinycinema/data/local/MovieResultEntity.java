@@ -14,7 +14,7 @@ public class MovieResultEntity implements Serializable{
 
     public static final String TABLE_NAME1 = "movie";
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private Integer id;
     private Integer voteCount;
     private Boolean video;

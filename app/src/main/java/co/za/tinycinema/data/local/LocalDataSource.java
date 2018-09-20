@@ -42,6 +42,17 @@ public class LocalDataSource implements DataSource {
         return dateDao.checkDate(date);
     }
 
+    public void checkMovieSaved(final Integer entityId, final SavedMovieToLibraryCallback saveInfoCallback){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+               Integer checkCount =  moviesDao.checkMovieWasSaved(entityId);
+                saveInfoCallback.savedStatusSuccess(checkCount == 1);
+            }
+        };
+        mExecutors.diskIO().execute(runnable);
+    }
+
     public void addDateSaved(DateSavedEntity date){
         dateDao.insertDate(date);
     }

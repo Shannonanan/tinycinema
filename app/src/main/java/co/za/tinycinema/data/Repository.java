@@ -94,6 +94,21 @@ public class Repository {
         return mLocalDataSource.getAllMoviesInTheatres();
     }
 
+    public void checkMovieSaved(Integer id, final DataSource.SavedMovieToLibraryCallback savedMovieToLibraryCallback)
+    {
+        mLocalDataSource.checkMovieSaved(id, new DataSource.SavedMovieToLibraryCallback() {
+            @Override
+            public void savedStatusSuccess(Boolean status) {
+                savedMovieToLibraryCallback.savedStatusSuccess(status);
+            }
+
+            @Override
+            public void savedStatusFailed(String error) {
+                savedMovieToLibraryCallback.savedStatusFailed(error);
+            }
+        });
+    }
+
     public LiveData<List<MovieResultEntity>> getInfoFromRemote() {
         return mRemoteDataSource.getAllMoviesInTheatre();
     }
