@@ -29,6 +29,8 @@ import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresViewModelFactory;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.Library.MoviesInLibraryViewModelFactory;
+import co.za.tinycinema.features.Library.domain.usecase.GetMoviesFromLibrary;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -60,7 +62,8 @@ public class InjectorUtils  {
         RemoteDataSource networkDataSource = RemoteDataSource.getInstance(getMoviesApi(getRetrofit()), context.getApplicationContext());
         MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(context.getApplicationContext());
         LocalDataSource localDataSource = LocalDataSource.getInstance(moviesDatabase.moviesDao(),
-                moviesDatabase.dateDao(), executors);
+                moviesDatabase.dateDao(),
+                executors);
         return Repository.getInstance(networkDataSource, localDataSource, context.getApplicationContext(), executors);
     }
 
@@ -83,6 +86,12 @@ public class InjectorUtils  {
         Repository repository = provideRepository(context.getApplicationContext());
         GetMoviesInTheatres getMoviesInTheatres = GetMoviesInTheatres.getInstance(repository,context.getApplicationContext());
         return new MoviesInTheatresViewModelFactory(getMoviesInTheatres);
+    }
+
+    public static MoviesInLibraryViewModelFactory provideMoviesInLibraryViewModelFactory(Context context){
+        Repository repository = provideRepository(context.getApplicationContext());
+        GetMoviesFromLibrary getMoviesFromLibrary  = GetMoviesFromLibrary.getInstance(repository);
+        return new MoviesInLibraryViewModelFactory(getMoviesFromLibrary);
     }
 
 }

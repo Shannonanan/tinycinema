@@ -25,6 +25,7 @@ import android.net.NetworkInfo;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -53,8 +54,7 @@ public class Repository {
     // if two methods see the same local variable, Java wants you to swear you will not change it ie.final
     private LocalDataSource mLocalDataSource;
     private Context mContext;
-    private boolean isFetchNeeded = false;
-    int count = 0;
+
 
     public Repository(RemoteDataSource mRemoteDataSource, final LocalDataSource mLocalDataSource, Context context,
                       AppExecutors executors) {
@@ -63,13 +63,55 @@ public class Repository {
         this.mContext = context;
         this.mExecutors = executors;
 
-        LiveData<List<MovieResultEntity>> networkData = mRemoteDataSource.getCurrenrMoviesInTheatres();
+        final LiveData<List<MovieResultEntity>> networkData = mRemoteDataSource.getCurrenrMoviesInTheatres();
         //use the observeForever method to observe mResults
         networkData.observeForever(new Observer<List<MovieResultEntity>>() {
             @Override
             public void onChanged(@Nullable final List<MovieResultEntity> movieResultEntities) {
                 //Note that database operations must be done off of the main thread.
                 // Use your AppExecutor's disk I/O executor to provide the appropriate thread:
+//                mExecutors.diskIO().execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//
+//                       final List<MovieResultEntity> list = new ArrayList<>(mLocalDataSource.getAllMovies());
+//                        if(!list.isEmpty()){
+//                        List<MovieResultEntity> toRemove = new ArrayList<>();
+//                        for(MovieResultEntity entity: list){
+//                            if(entity.isFavourite() || entity.isToWatch()){
+//                                toRemove.add(entity);
+//                            }
+//                        }
+//                            movieResultEntities.removeAll(toRemove);
+//                                //trigger a database save.
+//                                //  deleteOldData();
+//                                //saving todays date so next time you pull data, if it is still the same day you only need to pull
+//                                //data locally
+//                                Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
+//                                DateSavedEntity entity = new DateSavedEntity(today);
+//                                mLocalDataSource.addDateSaved(entity);
+//                          //      mLocalDataSource.bulkInsert(movieResultEntities);
+//                                Log.d(LOG_TAG, "New values inserted");
+//                            }
+//                        else {
+//                            mExecutors.diskIO().execute(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    //trigger a database save.
+//                                    //  deleteOldData();
+//                                    //saving todays date so next time you pull data, if it is still the same day you only need to pull
+//                                    //data locally
+//                                    Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
+//                                    DateSavedEntity entity = new DateSavedEntity(today);
+//                                    mLocalDataSource.addDateSaved(entity);
+//                                    mLocalDataSource.bulkInsert(movieResultEntities);
+//                                    Log.d(LOG_TAG, "New values inserted");
+//                                }
+//                            });
+//                        }
+//                    }
+//                });
+//
                 mExecutors.diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -84,9 +126,11 @@ public class Repository {
                         Log.d(LOG_TAG, "New values inserted");
                     }
                 });
-            }
-        });
-    }
+//            }
+        }
+    });}
+
+
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatre() {
@@ -191,8 +235,12 @@ public class Repository {
     }
 
 
-    public void getMoviesFromLibrary(final DataSource.LoadInfoCallback callback) {
-        mLocalDataSource.getMoviesFromLibrary(callback);
+    public LiveData<List<MovieResultEntity>> getMoviesFromLibrary(boolean fav) {
+       return mLocalDataSource.getAllMoviesFromLibrary(fav);
+    }
+
+    public List<MovieResultEntity> getAllMoviesNow() {
+        return mLocalDataSource.getAllMoviesNow();
     }
 
 
@@ -206,7 +254,17 @@ public class Repository {
 
 
     public void saveMovie(MovieResultEntity result, final DataSource.SaveInfoCallback callback) {
-        mLocalDataSource.saveMovie(result, callback);
+        mLocalDataSource.saveMovie(result, new DataSource.SaveInfoCallback() {
+            @Override
+            public void savedStatusSuccess(String status) {
+                callback.savedStatusSuccess(status);
+            }
+
+            @Override
+            public void savedStatusFailed(String error) {
+
+            }
+        });
     }
 
 

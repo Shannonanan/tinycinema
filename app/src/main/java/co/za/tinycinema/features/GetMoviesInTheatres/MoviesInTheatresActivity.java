@@ -27,6 +27,7 @@ import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 //import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
 //import co.za.tinycinema.features.Library.LibraryActivity;
+import co.za.tinycinema.features.Library.LibraryActivity;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
@@ -88,7 +89,7 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
     @Override
     protected void onStart() {
         super.onStart();
-        this.moviesInTheatresPresenter.setView(mViewMvc);
+     //   this.moviesInTheatresPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
        // moviesInTheatresPresenter.start();
     }
@@ -132,8 +133,8 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
              //   moviesInTheatresPresenter.start();
                 break;
             case R.id.library:
-               // Intent goToLibrary = new Intent(this, LibraryActivity.class);
-              //  startActivity(goToLibrary);
+                Intent goToLibrary = new Intent(this, LibraryActivity.class);
+                startActivity(goToLibrary);
             default:
                 break;
         }

@@ -34,7 +34,8 @@ public class SaveMovieToLocal extends UseCase<SaveMovieToLocal.RequestValues, Sa
 
         MovieResultEntity movieToSave;
 
-        public RequestValues(MovieResultEntity movieToSave) {
+        public RequestValues(MovieResultEntity movieToSave)
+        {
             this.movieToSave = movieToSave;
         }
 

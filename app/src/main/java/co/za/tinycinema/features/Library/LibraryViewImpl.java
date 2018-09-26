@@ -7,17 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
-import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresAdapter;
-import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
-import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.common.mvcViews.BaseViewMvc;
 
 public class LibraryViewImpl  extends BaseViewMvc<LibraryContract.Listener>
@@ -48,14 +49,14 @@ public class LibraryViewImpl  extends BaseViewMvc<LibraryContract.Listener>
 
         LibraryAdapter.OnMoviePosterClicked onMoviePosterClicked = new LibraryAdapter.OnMoviePosterClicked() {
             @Override
-            public void onMoviePosterClicked(Result result) {
+            public void onMoviePosterClicked(MovieResultEntity result) {
                 for (Listener listener : getListeners()) {
                     listener.OnMoviePosterClicked(result);
                 }
             }
 
             @Override
-            public void onDeleteButtonClicked(Result result) {
+            public void onDeleteButtonClicked(MovieResultEntity result) {
                 for (Listener list : getListeners()) {
                     list.onDeleteButtonClicked(result);
 
@@ -76,7 +77,15 @@ public class LibraryViewImpl  extends BaseViewMvc<LibraryContract.Listener>
 
 
     @Override
-    public void renderInView(List<Result> movieInfo, boolean networkStatus) {
+    public void showCount(List<Integer> checkCount) {
+        List<Integer> intLIst = new ArrayList<>();
+        intLIst.addAll(checkCount);
+        String check = intLIst.toString();
+      //  Toast.makeText(getContext(), check, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void renderInView(List<MovieResultEntity> movieInfo, boolean networkStatus) {
         if (movieInfo != null) {
             this.libraryAdapter.setInfoCollection(movieInfo, networkStatus);
         }

@@ -46,7 +46,7 @@ public class RemoteDataSource implements DataSource {
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatre() {
-        mCall = service.getMoviesInTheatres("");
+        mCall = service.getMoviesInTheatres("ebd9bd948c125dc0dc39debe224efd9f");
         mCall.enqueue(new Callback<MoviesInTheatresModel>() {
             @Override
             public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
@@ -119,6 +119,8 @@ public class RemoteDataSource implements DataSource {
             movieResultEntity.setTitle(result.getTitle());
             movieResultEntity.setVoteAverage(result.getVoteAverage());
             movieResultEntity.setToprated(false);
+            movieResultEntity.setFavourite(false);
+            movieResultEntity.setToWatch(false);
         }
         return movieResultEntity;
     }
@@ -196,7 +198,7 @@ public class RemoteDataSource implements DataSource {
     @Override
     public void getHighestRatedMovies(final Context context, final LoadInfoCallback callback) {
         final List<Result> results = new ArrayList<>();
-        mCall = service.getTopVotedMoviesInTheatres("");
+        mCall = service.getTopVotedMoviesInTheatres("ebd9bd948c125dc0dc39debe224efd9f");
         mCall.enqueue(new Callback<MoviesInTheatresModel>() {
             @Override
             public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
@@ -215,10 +217,7 @@ public class RemoteDataSource implements DataSource {
         });
     }
 
-    @Override
-    public void getMoviesFromLibrary(LoadInfoCallback callback) {
 
-    }
 
     @Override
     public void deleteMovie(boolean type,MovieResultEntity entity, DeleteInfoCallback callback) {

@@ -29,6 +29,10 @@ public class MovieResultEntity implements Serializable{
     private Boolean adult;
     private String overview;
     private String releaseDate;
+    private boolean toprated;
+    private boolean favourite;
+    private boolean toWatch;
+
 
     @Ignore
     public MovieResultEntity() {
@@ -38,7 +42,7 @@ public class MovieResultEntity implements Serializable{
     public MovieResultEntity(Integer voteCount, Boolean video, Double voteAverage, String title,
                              Double popularity, String posterPath, String originalLanguage,
                              String originalTitle, String backdropPath, Boolean adult, String overview,
-                             String releaseDate, boolean toprated) {
+                             String releaseDate, boolean toprated, boolean favourite, boolean toWatch) {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
@@ -52,15 +56,17 @@ public class MovieResultEntity implements Serializable{
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.toprated = toprated;
+        this.favourite = favourite;
+        this.toWatch = toWatch;
     }
 
-    private boolean toprated;
+
 
     public MovieResultEntity(Integer id, Integer voteCount, Boolean video,
                              Double voteAverage, String title, Double popularity,
                              String posterPath, String originalLanguage, String originalTitle,
                              String backdropPath, Boolean adult, String overview, String releaseDate,
-                             boolean toprated) {
+                             boolean toprated, boolean favourite, boolean toWatch) {
         this.id = id;
         this.voteCount = voteCount;
         this.video = video;
@@ -75,6 +81,8 @@ public class MovieResultEntity implements Serializable{
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.toprated = toprated;
+        this.favourite = favourite;
+        this.toWatch = toWatch;
     }
 
     public boolean isToprated() {
@@ -198,5 +206,20 @@ public class MovieResultEntity implements Serializable{
         this.releaseDate = releaseDate;
     }
 
+    public boolean isFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        this.favourite = favourite;
+    }
+
+    public boolean isToWatch() {
+        return toWatch;
+    }
+
+    public void setToWatch(boolean toWatch) {
+        this.toWatch = toWatch;
+    }
 }
 

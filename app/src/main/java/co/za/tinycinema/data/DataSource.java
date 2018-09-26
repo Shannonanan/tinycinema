@@ -41,9 +41,9 @@ public interface DataSource {
         void onDataNotAvailable(String noDataAvailable);
     }
 
-    interface LoadDateCheckCallback{
-        void onDatesCheckedLoaded(int checkDate);
-        void onDatesCheckedFailed(String failed);
+    interface LoadCountCheckCallback{
+        void onCountCheckedLoaded(List<Integer> checkCount);
+        void onCountCheckedFailed(String failed);
     }
 
      interface SaveInfoCallback{
@@ -66,7 +66,6 @@ public interface DataSource {
 
  //   void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback);
     void getHighestRatedMovies(Context context, final LoadInfoCallback callback);
-    void getMoviesFromLibrary(final LoadInfoCallback callback);
     void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
     void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback);

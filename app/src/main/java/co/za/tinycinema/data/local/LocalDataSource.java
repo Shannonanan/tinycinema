@@ -14,17 +14,22 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.utils.AppExecutors;
 
 public class LocalDataSource implements DataSource {
-    MoviesDao moviesDao;
-    DateDao dateDao;
+    private MoviesDao moviesDao;
+    private DateDao dateDao;
+
+    private final List<Integer> listOfmOVIES;
+
     private final AppExecutors mExecutors;
     Context context;
     private static LocalDataSource sInstance = null;
     private static final Object LOCK = new Object();
 
-    public LocalDataSource(MoviesDao moviesDao,DateDao dateDao, AppExecutors mExecutors) {
+    public LocalDataSource(MoviesDao moviesDao,DateDao dateDao,
+                           AppExecutors mExecutors) {
         this.moviesDao = moviesDao;
         this.mExecutors = mExecutors;
         this.dateDao = dateDao;
+        listOfmOVIES = new ArrayList<>();
     }
 
 
@@ -32,10 +37,14 @@ public class LocalDataSource implements DataSource {
         moviesDao.bulkInsert(movieResultEntities);
     }
 
+    public List<MovieResultEntity> getAllMoviesNow(){
+        return moviesDao.getAllMoviesNow();
+    }
+
 
     //Livedata makes it asynchronous, before I created a new runnable to pass to an Executor method
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatres() {
-        return moviesDao.getAllMovies(false);
+        return moviesDao.getAllMovies(false, false, false);
     }
 
     public int checkDate(final Date date){
@@ -104,11 +113,6 @@ public class LocalDataSource implements DataSource {
     }
 
     @Override
-    public void getMoviesFromLibrary(LoadInfoCallback callback) {
-
-    }
-
-    @Override
     public void deleteMovie(final boolean type, final MovieResultEntity entity, final DeleteInfoCallback callback) {
         Runnable deleteRunnable = new Runnable() {
             @Override
@@ -128,8 +132,8 @@ public class LocalDataSource implements DataSource {
             @Override
             public void run() {
                 moviesDao.deleteMovie(entity);
-                List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMoviesFromLibrary();
-                List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
+              //  List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMoviesFromLibrary();
+               // List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
                 callback.deleteStatusSuccess("success");
             }
         };
@@ -143,7 +147,10 @@ public class LocalDataSource implements DataSource {
         Runnable saveRunnable = new Runnable() {
             @Override
             public void run() {
-             long getResponse = moviesDao.insertMovie(result);
+                result.setFavourite(true);
+                result.setToWatch(false);
+                result.setToprated(false);
+             long rownumber =  moviesDao.insertMovie(result);
             callback.savedStatusSuccess("success");
             }
         };
@@ -151,10 +158,58 @@ public class LocalDataSource implements DataSource {
     }
 
 
+
+
+//    private MovieLibraryEntity transform(MovieResultEntity result) {
+//        MovieLibraryEntity movieLibraryEntity = null;
+//        if(result != null){
+//            movieLibraryEntity = new MovieLibraryEntity();
+//            movieLibraryEntity.setId(result.getId());
+//            movieLibraryEntity.setAdult(result.getAdult());
+//            movieLibraryEntity.setBackdropPath(result.getBackdropPath());
+//            movieLibraryEntity.setOriginalLanguage(result.getOriginalLanguage());
+//            movieLibraryEntity.setOriginalTitle(result.getOriginalTitle());
+//            movieLibraryEntity.setOverview(result.getOverview());
+//            movieLibraryEntity.setPopularity(result.getPopularity());
+//            movieLibraryEntity.setPosterPath(result.getPosterPath());
+//            movieLibraryEntity.setReleaseDate(result.getReleaseDate());
+//            movieLibraryEntity.setTitle(result.getTitle());
+//            movieLibraryEntity.setVoteAverage(result.getVoteAverage());
+//            movieLibraryEntity.setToprated(false);
+//        }
+//        return movieLibraryEntity;
+//    }
+
+//    private List<MovieResultEntity> transformList(List<MovieLibraryEntity> result) {
+//        List<MovieResultEntity> movieResultEntity =new ArrayList<>();
+//        if(result != null){
+//            for (MovieLibraryEntity entity: result) {
+//                MovieResultEntity movieResultEntity1 = new MovieResultEntity();
+//                movieResultEntity1.setId(entity.getId());
+//                movieResultEntity1.setAdult(entity.getAdult());
+//                movieResultEntity1.setBackdropPath(entity.getBackdropPath());
+//                movieResultEntity1.setOriginalLanguage(entity.getOriginalLanguage());
+//                movieResultEntity1.setOriginalTitle(entity.getOriginalTitle());
+//                movieResultEntity1.setOverview(entity.getOverview());
+//                movieResultEntity1.setPopularity(entity.getPopularity());
+//                movieResultEntity1.setPosterPath(entity.getPosterPath());
+//                movieResultEntity1.setReleaseDate(entity.getReleaseDate());
+//                movieResultEntity1.setTitle(entity.getTitle());
+//                movieResultEntity1.setVoteAverage(entity.getVoteAverage());
+//                movieResultEntity1.setToprated(false);
+//                movieResultEntity.add(movieResultEntity1);
+//            }
+//
+//        }
+//        return movieResultEntity;
+//    }
+
+
     /**
      * Get the singleton for this class
      */
-    public static LocalDataSource getInstance(MoviesDao moviesDao,DateDao dateDao, AppExecutors mExecutors) {
+    public static LocalDataSource getInstance(MoviesDao moviesDao,DateDao dateDao,
+                                              AppExecutors mExecutors) {
       //  Log.d(LOG_TAG, "Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
@@ -163,6 +218,11 @@ public class LocalDataSource implements DataSource {
             }
         }
         return sInstance;
+    }
+
+
+    public LiveData<List<MovieResultEntity>> getAllMoviesFromLibrary(Boolean fav) {
+        return moviesDao.getAllMoviesLibrary();
     }
 
 

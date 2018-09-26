@@ -44,10 +44,15 @@ public class RoomModule {
         return moviesDatabase.dateDao();
     }
 
+//    @Singleton
+//    @Provides
+//    LibraryDao providesLibraryDao(MoviesDatabase moviesDatabase){ return moviesDatabase.libraryDao();
+//    }
+
     @Singleton
     @Provides
-    LocalDataSource movieLocalDataSource(MoviesDao movieDao,DateDao dateDao, AppExecutors appExecutors){
-        return new LocalDataSource(movieDao, dateDao,appExecutors);
+    LocalDataSource movieLocalDataSource(MoviesDao movieDao, DateDao dateDao, AppExecutors appExecutors){
+        return new LocalDataSource(movieDao, dateDao, appExecutors);
     }
 
 
