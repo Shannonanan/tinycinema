@@ -27,6 +27,7 @@ import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 //import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
 //import co.za.tinycinema.features.Library.LibraryActivity;
+import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
 import co.za.tinycinema.features.Library.LibraryActivity;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
@@ -35,7 +36,6 @@ import co.za.tinycinema.utils.InjectorUtils;
 
 public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTheatresContract.Listener {
 
- //   @Inject
     MoviesInTheatresPresenter moviesInTheatresPresenter;
     @Inject
     ViewMvcFactory viewMvcFactory;
@@ -54,8 +54,6 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         if(!isThereInternetConnection()){
             Toast.makeText(this, getString(R.string.offline),Toast.LENGTH_LONG).show();
         }
-     //   this.moviesInTheatresPresenter.setView(mViewMvc);
-      //  moviesInTheatresPresenter.start();
 
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
@@ -64,7 +62,6 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         moviesInTheatresPresenter = ViewModelProviders.of
                 (this,moviesInTheatresViewModelFactory).get(MoviesInTheatresPresenter.class);
 
-     //   moviesInTheatresPresenter.getMoviesRemotely();
         moviesInTheatresPresenter.getmMovieResults().observe(this, new Observer<List<MovieResultEntity>>() {
             @Override
             public void onChanged(@Nullable List<MovieResultEntity> movieResultEntities) {
@@ -89,9 +86,7 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
     @Override
     protected void onStart() {
         super.onStart();
-     //   this.moviesInTheatresPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
-       // moviesInTheatresPresenter.start();
     }
 
 
@@ -126,8 +121,8 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
             case R.id.toggle_top_rated:
-              //  Intent intent = new Intent(this, TopRatedMoviesActivity.class);
-             //   startActivity(intent);
+                Intent intent = new Intent(this, TopRatedMoviesActivity.class);
+                startActivity(intent);
                 break;
             case R.id.toggle_most_pop:
              //   moviesInTheatresPresenter.start();

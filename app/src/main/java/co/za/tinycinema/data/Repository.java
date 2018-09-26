@@ -33,6 +33,7 @@ import co.za.tinycinema.data.local.DateSavedEntity;
 import co.za.tinycinema.data.local.LocalDataSource;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.data.remote.RemoteDataSource;
+import co.za.tinycinema.features.GetReviews.Domain.model.Result;
 import co.za.tinycinema.utils.AppExecutors;
 import co.za.tinycinema.utils.MoviesDateUtils;
 
@@ -122,6 +123,10 @@ public class Repository {
                         Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
                         DateSavedEntity entity = new DateSavedEntity(today);
                         mLocalDataSource.addDateSaved(entity);
+
+//                        for (MovieResultEntity entityy: movieResultEntities) {
+//                            mLocalDataSource.saveMovieNoCallBack(entityy);
+//                        }
                         mLocalDataSource.bulkInsert(movieResultEntities);
                         Log.d(LOG_TAG, "New values inserted");
                     }
@@ -225,13 +230,16 @@ public class Repository {
         return (count == 0);
     }
 
-    public void getHighestRatedMovies(Context context, final DataSource.LoadInfoCallback callback) {
+    public LiveData<List<MovieResultEntity>> getTopRatedMovies() {
         if (isThereInternetConnection()) {
-            //  mRemoteDataSource.getHighestRatedMovies(context, callback);
-        } else {
+           return  mRemoteDataSource.getTopRatedMovies();
+        } else{
+            return null;
+        }
+            // else {
             // Query the local storage if available.
             //  mLocalDataSource.getHighestRatedMovies(context, callback);
-        }
+       // }
     }
 
 
@@ -265,6 +273,10 @@ public class Repository {
 
             }
         });
+    }
+
+    public void saveMovieIndividual(MovieResultEntity result) {
+        mLocalDataSource.saveMovieNoCallBack(result);
     }
 
 
@@ -307,4 +319,7 @@ public class Repository {
     }
 
 
+    public LiveData<List<Result>> getReviews(int movieId) {
+        return mRemoteDataSource.getReviews(movieId);
+    }
 }

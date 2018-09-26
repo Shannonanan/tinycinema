@@ -99,7 +99,7 @@ public class LocalDataSource implements DataSource {
 //
 //    }
 
-    @Override
+
     public void getHighestRatedMovies(Context context, final LoadInfoCallback callback) {
         Runnable runnable = new Runnable() {
             @Override
@@ -150,7 +150,8 @@ public class LocalDataSource implements DataSource {
                 result.setFavourite(true);
                 result.setToWatch(false);
                 result.setToprated(false);
-             long rownumber =  moviesDao.insertMovie(result);
+                saveMovieNoCallBack(result);
+           //  long rownumber =  moviesDao.insertMovie(result);
             callback.savedStatusSuccess("success");
             }
         };
@@ -222,8 +223,11 @@ public class LocalDataSource implements DataSource {
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesFromLibrary(Boolean fav) {
-        return moviesDao.getAllMoviesLibrary();
+        return moviesDao.getAllMovies(false,false,false);
     }
 
 
+    public void saveMovieNoCallBack(MovieResultEntity result) {
+        moviesDao.insertMovie(result);
+    }
 }

@@ -31,6 +31,7 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     @BindView(R.id.scrollView) ScrollView scrollView;
     @BindView(R.id.btn_save) ImageButton btn_save;
     @BindView(R.id.btn_delete) ImageButton btn_delete;
+    @BindView(R.id.btn_review) ImageButton btn_review;
 
     MovieResultEntity entity;
 
@@ -92,6 +93,13 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
         }
         for (Listener list:getListeners()) {
             list.onRemoveMovieFromLocalClicked(entity);
+        }
+    }
+
+    @OnClick(R.id.btn_review)
+    public void clickReviews(){
+        for (Listener list:getListeners()) {
+            list.onReviewClicked(entity.getId());
         }
     }
 

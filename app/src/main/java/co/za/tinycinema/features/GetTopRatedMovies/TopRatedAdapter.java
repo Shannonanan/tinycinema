@@ -18,20 +18,19 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 
 public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRatedViewHolder> {
 
-    private List<Result> listOfTopeRated;
+    private List<MovieResultEntity> listOfTopeRated;
     Context mContext;
     boolean offlineStatus = false;
 
     private TopRatedAdapter.OnMovieClickedListener onMovieClickedListener;
 
     public interface OnMovieClickedListener {
-        void onMovieClicked(Result result);
-        void onSaveButtonClicked(Result result);
-        void onDeleteButtonClicked(boolean type, Result result);
+        void onMovieClicked(MovieResultEntity result);
     }
 
     public TopRatedAdapter(Context mContext) {
@@ -55,15 +54,7 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
 
     @Override
     public void onBindViewHolder(@NonNull TopRatedViewHolder holder, int position) {
-        final Result result = this.listOfTopeRated.get(position);
-        if(offlineStatus){
-            holder.btn_save.setVisibility(View.GONE);
-            holder.delete.setVisibility(View.VISIBLE);
-        }
-        else {
-            holder.btn_save.setVisibility(View.VISIBLE);
-            holder.delete.setVisibility(View.GONE);
-        }
+        final MovieResultEntity result = this.listOfTopeRated.get(position);
 
         String movieCode = result.getPosterPath();
         if(movieCode == null || movieCode.isEmpty()){
@@ -84,23 +75,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
              }
          });
 
-        holder.btn_save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onMovieClickedListener != null) {
-                    onMovieClickedListener.onSaveButtonClicked(result);
-                }
-            }
-        });
-
-        holder.delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onMovieClickedListener != null) {
-                    onMovieClickedListener.onDeleteButtonClicked(true, result);
-                }
-            }
-        });
     }
 
     @Override
@@ -110,8 +84,6 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
 
     public class TopRatedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.cell_movie) ImageView imageView;
-        @BindView(R.id.btn_save) Button btn_save;
-        @BindView(R.id.btn_delete) Button delete;
 
         public TopRatedViewHolder(View itemView) {
             super(itemView);
@@ -119,14 +91,14 @@ public class TopRatedAdapter extends RecyclerView.Adapter<TopRatedAdapter.TopRat
         }
     }
 
-    public void setInfoCollection(Collection<Result> INFO, boolean networkStatus) {
+    public void setInfoCollection(Collection<MovieResultEntity> INFO, boolean networkStatus) {
         this.validateCollection(INFO);
-        this.listOfTopeRated = (List<Result>) INFO;
+        this.listOfTopeRated = (List<MovieResultEntity>) INFO;
         this.notifyDataSetChanged();
         offlineStatus = networkStatus;
     }
 
-    private void validateCollection(Collection<Result> infoCollection) {
+    private void validateCollection(Collection<MovieResultEntity> infoCollection) {
         if (infoCollection == null) {
             throw new IllegalArgumentException("The list cannot be null");
         }

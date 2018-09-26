@@ -26,17 +26,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".features.GetMoviesInTheatres.MoviesInTheatresActivity" />
         <activity android:name=".features.ShowDetails.ShowDetailsActivity" />
-        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity"></activity>
+        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity" />
         <activity android:name=".features.Library.LibraryActivity" />
 
-
-        <!--This is required for immediate syncs -->
+        <!-- This is required for immediate syncs -->
         <service
-            android:name="co.za.tinycinema.data.remote.MoviesSyncIntentService"
+            android:name=".data.remote.MoviesSyncIntentService"
             android:exported="false" />
+
+        <activity android:name=".features.GetReviews.GetReviewsActivity"></activity>
     </application>
 
 </manifest>

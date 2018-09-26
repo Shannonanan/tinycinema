@@ -7,14 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import co.za.tinycinema.R;
 import co.za.tinycinema.data.DataSource;
 import co.za.tinycinema.data.Repository;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.MoviesInTheatresModel;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetReviews.Domain.model.ReviewResponseModel;
 import co.za.tinycinema.utils.AppExecutors;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -24,19 +27,27 @@ public class RemoteDataSource implements DataSource {
 
     private final Service service;
     private MutableLiveData<List<MovieResultEntity>> results;
+    private MutableLiveData<List<MovieResultEntity>> resultsTopRated;
+    private MutableLiveData<List<co.za.tinycinema.features.GetReviews.Domain.model.Result>> resultsOfReviews;
     private List<MovieResultEntity> rawResults;
+    private List<co.za.tinycinema.features.GetReviews.Domain.model.Result> rawResultsReviews;
     private final Context mContext;
- //   private static final String LOG_TAG = MoviesSyncIntentService.class.getSimpleName();
+    //   private static final String LOG_TAG = MoviesSyncIntentService.class.getSimpleName();
     private static RemoteDataSource sInstance = null;
     private static final Object LOCK = new Object();
 
     @Nullable
     private Call<MoviesInTheatresModel> mCall;
 
-    public RemoteDataSource(Service service,Context context) {
+    private Call<ReviewResponseModel> mCallReviews;
+
+    public RemoteDataSource(Service service, Context context) {
         this.service = service;
         results = new MutableLiveData<>();
+        resultsOfReviews = new MutableLiveData<>();
+        resultsTopRated = new MutableLiveData<>();
         rawResults = new ArrayList<>();
+        rawResultsReviews = new ArrayList<>();
         this.mContext = context;
     }
 
@@ -46,7 +57,7 @@ public class RemoteDataSource implements DataSource {
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatre() {
-        mCall = service.getMoviesInTheatres("ebd9bd948c125dc0dc39debe224efd9f");
+        mCall = service.getMoviesInTheatres("");
         mCall.enqueue(new Callback<MoviesInTheatresModel>() {
             @Override
             public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
@@ -54,26 +65,21 @@ public class RemoteDataSource implements DataSource {
                     if (response.isSuccessful()) {
                         // update the value held in results with the new data.
                         // do this using postValue() since the call will be done off of the main thread.
-                        for (Result result:response.body().getResults()) {
+                        for (Result result : response.body().getResults()) {
                             rawResults.add(transform(result));
                         }
-
-
-                   //     callback.onDataLoaded(rawResults,false);
-                           results.postValue(rawResults);
-
+                        results.postValue(rawResults);
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
                 // callback.onDataNotAvailable(context.getString(R.string.no_data_available));
             }
         });
-
         return results;
     }
-
 
 
 //    public void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback) {
@@ -130,11 +136,11 @@ public class RemoteDataSource implements DataSource {
      * Get the singleton for this class
      */
     public static RemoteDataSource getInstance(Service service, Context context) {
-      //  Log.d(LOG_TAG, "Getting the network data source");
+        //  Log.d(LOG_TAG, "Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = new RemoteDataSource(service, context.getApplicationContext());
-        //        Log.d(LOG_TAG, "Made new network data source");
+                //        Log.d(LOG_TAG, "Made new network data source");
             }
         }
         return sInstance;
@@ -194,33 +200,34 @@ public class RemoteDataSource implements DataSource {
     }
 
 
-
-    @Override
-    public void getHighestRatedMovies(final Context context, final LoadInfoCallback callback) {
-        final List<Result> results = new ArrayList<>();
-        mCall = service.getTopVotedMoviesInTheatres("ebd9bd948c125dc0dc39debe224efd9f");
+    public LiveData<List<MovieResultEntity>> getTopRatedMovies() {
+        rawResults.clear();
+        mCall = service.getTopVotedMoviesInTheatres("");
         mCall.enqueue(new Callback<MoviesInTheatresModel>() {
             @Override
             public void onResponse(Call<MoviesInTheatresModel> call, Response<MoviesInTheatresModel> response) {
-                if(response.body()!=null){
-                    if(response.isSuccessful()){
+                if (response.body() != null) {
+                    if (response.isSuccessful()) {
+                        for (Result result : response.body().getResults()) {
+                            rawResults.add(transform(result));
+                        }
 
-                        results.addAll(response.body().getResults());
-                       // callback.onDataLoaded(results, false);
+                        resultsTopRated.postValue(rawResults);
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<MoviesInTheatresModel> call, Throwable t) {
-                    callback.onDataNotAvailable(context.getString(R.string.no_data_available));
+                // callback.onDataNotAvailable(context.getString(R.string.no_data_available));
             }
         });
+        return resultsTopRated;
     }
 
 
-
     @Override
-    public void deleteMovie(boolean type,MovieResultEntity entity, DeleteInfoCallback callback) {
+    public void deleteMovie(boolean type, MovieResultEntity entity, DeleteInfoCallback callback) {
 
     }
 
@@ -238,6 +245,29 @@ public class RemoteDataSource implements DataSource {
     public void startFetchMoviesService() {
         Intent intentToFetch = new Intent(mContext, MoviesSyncIntentService.class);
         mContext.startService(intentToFetch);
-       // Log.d(LOG_TAG, "Service created");
+        // Log.d(LOG_TAG, "Service created");
+    }
+
+    public LiveData<List<co.za.tinycinema.features.GetReviews.Domain.model.Result>> getReviews(int movieId) {
+        rawResultsReviews.clear();
+        mCallReviews = service.getReviews(movieId, "");
+        mCallReviews.enqueue(new Callback<ReviewResponseModel>() {
+            @Override
+            public void onResponse(Call<ReviewResponseModel> call, Response<ReviewResponseModel> response) {
+                if(response.body() != null) {
+                    if (response.isSuccessful()) {
+                        rawResultsReviews.addAll(response.body().getResults());
+                    }
+                        resultsOfReviews.postValue(rawResultsReviews);
+                    }
+
+            }
+
+            @Override
+            public void onFailure(Call<ReviewResponseModel> call, Throwable t) {
+
+            }
+        });
+        return resultsOfReviews;
     }
 }

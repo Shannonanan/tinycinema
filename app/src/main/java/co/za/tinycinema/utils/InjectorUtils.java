@@ -29,6 +29,10 @@ import co.za.tinycinema.data.remote.RemoteDataSource;
 import co.za.tinycinema.data.remote.Service;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresViewModelFactory;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.GetReviews.Domain.usecase.GetReviews;
+import co.za.tinycinema.features.GetReviews.GetReviewsViewModelFactory;
+import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesViewModelFactory;
+import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
 import co.za.tinycinema.features.Library.MoviesInLibraryViewModelFactory;
 import co.za.tinycinema.features.Library.domain.usecase.GetMoviesFromLibrary;
 import retrofit2.Retrofit;
@@ -82,16 +86,28 @@ public class InjectorUtils  {
 //        return new DetailViewModelFactory(repository, date);
 //    }
 //
-    public static MoviesInTheatresViewModelFactory provideMainActivityViewModelFactory(Context context) {
+    public static TopRatedMoviesViewModelFactory provideToRatedViewModelFactory(Context context) {
         Repository repository = provideRepository(context.getApplicationContext());
-        GetMoviesInTheatres getMoviesInTheatres = GetMoviesInTheatres.getInstance(repository,context.getApplicationContext());
-        return new MoviesInTheatresViewModelFactory(getMoviesInTheatres);
+        GetTopRatedMovies getTopRatedMovies = GetTopRatedMovies.getInstance(repository,context.getApplicationContext());
+        return new TopRatedMoviesViewModelFactory(getTopRatedMovies);
     }
 
     public static MoviesInLibraryViewModelFactory provideMoviesInLibraryViewModelFactory(Context context){
         Repository repository = provideRepository(context.getApplicationContext());
         GetMoviesFromLibrary getMoviesFromLibrary  = GetMoviesFromLibrary.getInstance(repository);
         return new MoviesInLibraryViewModelFactory(getMoviesFromLibrary);
+    }
+
+    public static MoviesInTheatresViewModelFactory provideMainActivityViewModelFactory(Context context) {
+        Repository repository = provideRepository(context.getApplicationContext());
+        GetMoviesInTheatres getMoviesInTheatres = GetMoviesInTheatres.getInstance(repository,context.getApplicationContext());
+        return new MoviesInTheatresViewModelFactory(getMoviesInTheatres);
+    }
+
+    public static GetReviewsViewModelFactory provideGetReviewsViewModelFactory(Context context) {
+        Repository repository = provideRepository(context.getApplicationContext());
+        GetReviews getReviews = GetReviews.getInstance(repository);
+        return new GetReviewsViewModelFactory(getReviews);
     }
 
 }

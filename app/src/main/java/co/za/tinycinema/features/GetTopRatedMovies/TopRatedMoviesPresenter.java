@@ -1,40 +1,42 @@
-//package co.za.tinycinema.features.GetTopRatedMovies;
-//
-//import android.support.annotation.NonNull;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import co.za.tinycinema.common.UseCase;
-//import co.za.tinycinema.common.UseCaseHandler;
-//import co.za.tinycinema.data.local.MovieResultEntity;
-//import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
-//import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.DeleteMoviesInLocal;
-//import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.SaveMovieToLocal;
-//import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
-//import co.za.tinycinema.features.common.mvcViews.BasePresenter;
-//import co.za.tinycinema.features.common.mvcViews.ObservableViewMvc;
-//
-//public class TopRatedMoviesPresenter {
-//
-//    private GetTopRatedMovies getTopRatedMoviesUsecase;
-//    private final UseCaseHandler useCaseHandler;
-//    private TopRatedContract topRatedContract;
-//    private SaveMovieToLocal saveMovieToLocal;
-//    private DeleteMoviesInLocal deleteMoviesInLocalUsecase;
-//
-//    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase, UseCaseHandler useCaseHandler,
-//                                   SaveMovieToLocal saveMovieToLocal,DeleteMoviesInLocal deleteMoviesInLocalUsecase) {
-//        this.getTopRatedMoviesUsecase = getTopRatedMoviesUsecase;
-//        this.useCaseHandler = useCaseHandler;
-//        this.saveMovieToLocal = saveMovieToLocal;
-//        this.deleteMoviesInLocalUsecase = deleteMoviesInLocalUsecase;
-//    }
-//
-//    public void setView(@NonNull TopRatedContract topRatedContract){
-//        this.topRatedContract = topRatedContract;
-//    }
-//
+package co.za.tinycinema.features.GetTopRatedMovies;
+
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModel;
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import co.za.tinycinema.common.UseCase;
+import co.za.tinycinema.common.UseCaseHandler;
+import co.za.tinycinema.data.local.MovieResultEntity;
+import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
+
+
+public class TopRatedMoviesPresenter extends ViewModel {
+
+    private GetTopRatedMovies getTopRatedMoviesUsecase;
+ //   private final UseCaseHandler useCaseHandler;
+    private TopRatedContract topRatedContract;
+    LiveData<List<MovieResultEntity>> topRatedMovies;
+
+
+    public TopRatedMoviesPresenter(GetTopRatedMovies getTopRatedMoviesUsecase
+                                //   UseCaseHandler useCaseHandler
+    ) {
+        this.getTopRatedMoviesUsecase = getTopRatedMoviesUsecase;
+      topRatedMovies = getTopRatedMoviesUsecase.executeUseCasegetTopRatedMovies();
+    }
+
+    public void setView(@NonNull TopRatedContract topRatedContract){
+        this.topRatedContract = topRatedContract;
+    }
+
+    LiveData<List<MovieResultEntity>> getTopRatedMovies(){
+        return topRatedMovies;
+    }
+
 //    public void loadTopRatedMovies(final boolean showLoadingUI){
 //
 //        if (showLoadingUI) {
@@ -62,11 +64,11 @@
 //        });
 //
 //    }
-//
-//    private void processInfo(List<Result> moviesResult, boolean networkStatus) {
-//        topRatedContract.renderInView(moviesResult, networkStatus);
-//    }
-//
+
+    private void processInfo(List<MovieResultEntity> moviesResult, boolean networkStatus) {
+        topRatedContract.renderInView(moviesResult, networkStatus);
+    }
+
 //    public void saveInfoToLocal(Result result) {
 //        topRatedContract.showLoading();
 //        topRatedContract.setLoadingIndicator(true);
@@ -88,7 +90,7 @@
 //                });
 //
 //    }
-//
+
 //    public void deleteMovieFromLocal(boolean type, Result result){
 //        topRatedContract.showLoading();
 //        topRatedContract.setLoadingIndicator(true);
@@ -109,30 +111,30 @@
 //                    }
 //                });
 //    }
-//
-//    private void processResponseOfSave(String s) {
-//        topRatedContract.renderStatusOfSave(s);
-//    }
-//
-//
-//    public MovieResultEntity transform(Result result){
-//        MovieResultEntity movieResultEntity = null;
-//        if(result != null){
-//            movieResultEntity = new MovieResultEntity();
-//            movieResultEntity.setId(result.getId());
-//            movieResultEntity.setAdult(result.getAdult());
-//            movieResultEntity.setBackdropPath(result.getBackdropPath());
-//            movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
-//            movieResultEntity.setOriginalTitle(result.getOriginalTitle());
-//            movieResultEntity.setOverview(result.getOverview());
-//            movieResultEntity.setPopularity(result.getPopularity());
-//            movieResultEntity.setPosterPath(result.getPosterPath());
-//            movieResultEntity.setReleaseDate(result.getReleaseDate());
-//            movieResultEntity.setTitle(result.getTitle());
-//            movieResultEntity.setVoteAverage(result.getVoteAverage());
-//            movieResultEntity.setToprated(true);
-//        }
-//        return movieResultEntity;
-//    }
-//
-//}
+
+    private void processResponseOfSave(String s) {
+        topRatedContract.renderStatusOfSave(s);
+    }
+
+
+    public MovieResultEntity transform(Result result){
+        MovieResultEntity movieResultEntity = null;
+        if(result != null){
+            movieResultEntity = new MovieResultEntity();
+            movieResultEntity.setId(result.getId());
+            movieResultEntity.setAdult(result.getAdult());
+            movieResultEntity.setBackdropPath(result.getBackdropPath());
+            movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
+            movieResultEntity.setOriginalTitle(result.getOriginalTitle());
+            movieResultEntity.setOverview(result.getOverview());
+            movieResultEntity.setPopularity(result.getPopularity());
+            movieResultEntity.setPosterPath(result.getPosterPath());
+            movieResultEntity.setReleaseDate(result.getReleaseDate());
+            movieResultEntity.setTitle(result.getTitle());
+            movieResultEntity.setVoteAverage(result.getVoteAverage());
+            movieResultEntity.setToprated(true);
+        }
+        return movieResultEntity;
+    }
+
+}

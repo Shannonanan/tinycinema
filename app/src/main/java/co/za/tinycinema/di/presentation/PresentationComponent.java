@@ -5,6 +5,8 @@ import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity;
 //mport co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
 //import co.za.tinycinema.features.Library.LibraryActivity;
 //import co.za.tinycinema.features.Library.LibraryContract;
+import co.za.tinycinema.features.GetReviews.GetReviewsActivity;
+import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesActivity;
 import co.za.tinycinema.features.Library.LibraryActivity;
 import co.za.tinycinema.features.ShowDetails.ShowDetailsActivity;
 import dagger.Subcomponent;
@@ -13,7 +15,8 @@ import dagger.Subcomponent;
 public interface PresentationComponent {
     void inject(MoviesInTheatresActivity moviesInTheatresActivity);
     void inject(ShowDetailsActivity showDetailsActivity);
- //   void inject(TopRatedMoviesActivity topRatedMoviesActivity);
+    void inject(TopRatedMoviesActivity topRatedMoviesActivity);
     void inject(LibraryActivity libraryActivity);
     void inject(LocalDataSource localDataSource);
+    void inject(GetReviewsActivity getReviewsActivity);
 }

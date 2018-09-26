@@ -8,6 +8,8 @@ import javax.inject.Inject;
 
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresImpl;
+import co.za.tinycinema.features.GetReviews.GetReviewsContract;
+import co.za.tinycinema.features.GetReviews.GetReviewsViewImpl;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedContract;
 import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesViewImpl;
 import co.za.tinycinema.features.Library.LibraryContract;
@@ -49,6 +51,9 @@ public class ViewMvcFactory {
         }
         else if(mvcViewClass == LibraryContract.class){
             viewMvc = new LibraryViewImpl(mLayoutInflater, container);
+        }
+        else if(mvcViewClass == GetReviewsContract.class){
+            viewMvc = new GetReviewsViewImpl(mLayoutInflater, container);
         }
         else {
             throw new IllegalArgumentException("unsupported MVC view class " + mvcViewClass);

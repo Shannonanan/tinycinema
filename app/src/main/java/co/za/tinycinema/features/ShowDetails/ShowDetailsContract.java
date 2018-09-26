@@ -9,6 +9,7 @@ public interface ShowDetailsContract extends ObservableViewMvc<ShowDetailsContra
         void onSaveMovieToLocalClicked(MovieResultEntity movieResultEntity);
         void onRemoveMovieFromLocalClicked(MovieResultEntity movieResultEntity);
         void renderStatusOfSave(String status);
+        void onReviewClicked(Integer movieId);
 
     }
 

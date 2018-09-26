@@ -13,6 +13,7 @@ import co.za.tinycinema.R;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
+import co.za.tinycinema.features.GetReviews.GetReviewsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
 
@@ -41,7 +42,11 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         setContentView(mViewMvc.getRootView());
         result = (MovieResultEntity) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
 
-        //check if favourited
+//        this.result = new MovieResultEntity(1, 2, true,
+//                1.11, "", 1.11, "1",
+//                "1", "1","1", false,
+//                "1", "1", false, false, false);
+
     }
 
     @Override
@@ -79,5 +84,12 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         else{
             Toast.makeText(this,getString(R.string.save_failed),Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onReviewClicked(Integer movieId) {
+        Intent intent = new Intent(this, GetReviewsActivity.class);
+        intent.putExtra("MOVIE_ID",movieId);
+        startActivity(intent);
     }
 }

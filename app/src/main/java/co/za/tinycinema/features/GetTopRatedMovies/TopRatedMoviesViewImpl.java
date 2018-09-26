@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.common.mvcViews.BaseViewMvc;
 
@@ -49,23 +50,9 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
 
         TopRatedAdapter.OnMovieClickedListener onMovieClickedListener = new TopRatedAdapter.OnMovieClickedListener() {
             @Override
-            public void onMovieClicked(Result result) {
+            public void onMovieClicked(MovieResultEntity result) {
                 for (Listener listener : getListeners()) {
                     listener.OnMoviePosterClicked(result);
-                }
-            }
-
-            @Override
-            public void onSaveButtonClicked(Result result) {
-                for (Listener listener : getListeners()) {
-                    listener.OnSaveMovieClciked(result);
-                }
-            }
-
-            @Override
-            public void onDeleteButtonClicked(boolean type, Result result) {
-                for (Listener listener : getListeners()) {
-                    listener.OnDeleteMovieClicked(type, result);
                 }
             }
         };
@@ -75,7 +62,7 @@ public class TopRatedMoviesViewImpl extends BaseViewMvc<TopRatedContract.Listene
 
 
     @Override
-    public void renderInView(List<Result> movieInfo, boolean networkStatus) {
+    public void renderInView(List<MovieResultEntity> movieInfo, boolean networkStatus) {
         if (movieInfo != null) {
             this.topRatedAdapter.setInfoCollection(movieInfo, networkStatus);
         }

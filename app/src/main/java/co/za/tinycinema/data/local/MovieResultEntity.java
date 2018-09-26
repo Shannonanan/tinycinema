@@ -14,7 +14,9 @@ public class MovieResultEntity implements Serializable{
 
     public static final String TABLE_NAME1 = "movie";
 
-    @PrimaryKey
+
+    @PrimaryKey (autoGenerate = true)
+    private int idd;
     private Integer id;
     private Integer voteCount;
     private Boolean video;
@@ -39,10 +41,11 @@ public class MovieResultEntity implements Serializable{
     }
 
     @Ignore
-    public MovieResultEntity(Integer voteCount, Boolean video, Double voteAverage, String title,
+    public MovieResultEntity(Integer id, Integer voteCount, Boolean video, Double voteAverage, String title,
                              Double popularity, String posterPath, String originalLanguage,
                              String originalTitle, String backdropPath, Boolean adult, String overview,
                              String releaseDate, boolean toprated, boolean favourite, boolean toWatch) {
+        this.id = id;
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
@@ -62,11 +65,12 @@ public class MovieResultEntity implements Serializable{
 
 
 
-    public MovieResultEntity(Integer id, Integer voteCount, Boolean video,
+    public MovieResultEntity(int idd,Integer id, Integer voteCount, Boolean video,
                              Double voteAverage, String title, Double popularity,
                              String posterPath, String originalLanguage, String originalTitle,
                              String backdropPath, Boolean adult, String overview, String releaseDate,
                              boolean toprated, boolean favourite, boolean toWatch) {
+        this.idd = idd;
         this.id = id;
         this.voteCount = voteCount;
         this.video = video;
@@ -83,6 +87,15 @@ public class MovieResultEntity implements Serializable{
         this.toprated = toprated;
         this.favourite = favourite;
         this.toWatch = toWatch;
+    }
+
+
+    public int getIdd() {
+        return idd;
+    }
+
+    public void setIdd(int idd) {
+        this.idd = idd;
     }
 
     public boolean isToprated() {
