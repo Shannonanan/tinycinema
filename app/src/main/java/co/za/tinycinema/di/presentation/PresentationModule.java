@@ -16,6 +16,7 @@ import co.za.tinycinema.features.ShowDetails.domain.usecase.DeleteMoviesInLocal;
 import co.za.tinycinema.features.Library.domain.usecase.DeleteMoviesFromLibrary;
 //import co.za.tinycinema.features.Library.domain.usecase.GetMoviesFromLibrary;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInTheatres;
+import co.za.tinycinema.features.ShowDetails.domain.usecase.GetVideoId;
 import co.za.tinycinema.features.ShowDetails.domain.usecase.SaveMovieToLocal;
 //import co.za.tinycinema.features.GetTopRatedMovies.TopRatedMoviesPresenter;
 //import co.za.tinycinema.features.GetTopRatedMovies.domain.usecase.GetTopRatedMovies;
@@ -102,8 +103,14 @@ public class PresentationModule {
     ShowDetailsPresenter showDetailsPresenter(SaveMovieToLocal saveMovieToLocalUseCase,
                                               DeleteMoviesInLocal deleteMoviesInLocalUseCase,
                                               CheckSavedMovieInLocal checkSavedMovieInLocal,
+                                              GetVideoId getVideoIdUsecase,
                                               UseCaseHandler useCaseHandler){
-        return new ShowDetailsPresenter(saveMovieToLocalUseCase, deleteMoviesInLocalUseCase, checkSavedMovieInLocal, useCaseHandler);
+        return new ShowDetailsPresenter(saveMovieToLocalUseCase, deleteMoviesInLocalUseCase, checkSavedMovieInLocal, getVideoIdUsecase, useCaseHandler);
+    }
+
+    @Provides
+    GetVideoId getVideoId(Repository repository){
+        return new GetVideoId(repository);
     }
 
     @Provides

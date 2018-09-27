@@ -10,7 +10,7 @@ import android.arch.persistence.room.migration.Migration;
 import android.content.Context;
 import android.util.Log;
 
-@Database(entities = { MovieResultEntity.class, DateSavedEntity.class, MoviesInTheatresModelEntity.class}, version = 1, exportSchema = false)
+@Database(entities = { MovieResultEntity.class, DateSavedEntity.class, MoviesInTheatresModelEntity.class}, version = 2, exportSchema = false)
 @TypeConverters({DateConverter.class, ObjectConverter.class})
 public abstract class MoviesDatabase extends RoomDatabase {
 
@@ -34,7 +34,6 @@ public abstract class MoviesDatabase extends RoomDatabase {
 
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         MoviesDatabase.class, MoviesDatabase.DATABASE_NAME)
-                     //   .addMigrations(MIGRATION_4_5)
                         .fallbackToDestructiveMigration()
                         .build();
                 Log.d(LOG_TAG, "Made new database");

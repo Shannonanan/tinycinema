@@ -10,6 +10,8 @@ public interface ShowDetailsContract extends ObservableViewMvc<ShowDetailsContra
         void onRemoveMovieFromLocalClicked(MovieResultEntity movieResultEntity);
         void renderStatusOfSave(String status);
         void onReviewClicked(Integer movieId);
+        void onTrailerBtnClicked(Integer movieId);
+        void watchVideo(String id);
 
     }
 
@@ -17,5 +19,6 @@ public interface ShowDetailsContract extends ObservableViewMvc<ShowDetailsContra
     void setLoadingIndicator(boolean active);
     void renderStatusOfSave(String status);
     void renderDeleteInView(String success);
+    void renderGetVideoId(String id);
     void renderCheckMovieSavedInView(Boolean status);
 }

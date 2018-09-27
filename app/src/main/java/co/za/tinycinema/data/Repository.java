@@ -322,4 +322,18 @@ public class Repository {
     public LiveData<List<Result>> getReviews(int movieId) {
         return mRemoteDataSource.getReviews(movieId);
     }
+
+    public void getVideoId(Integer id, final DataSource.GetVideoIdCallback callback) {
+         mRemoteDataSource.getVideoId(id, new DataSource.GetVideoIdCallback() {
+             @Override
+             public void getIdSuccess(String id) {
+                 callback.getIdSuccess(id);
+             }
+
+             @Override
+             public void getIdFailed(String failed) {
+                callback.getIdFailed(failed);
+             }
+         });
+    }
 }

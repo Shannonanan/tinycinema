@@ -37,7 +37,6 @@ public interface DataSource {
     interface LoadInfoCallback {
 
         void onDataLoaded(List<MovieResultEntity> results, boolean offline);
-
         void onDataNotAvailable(String noDataAvailable);
     }
 
@@ -48,19 +47,22 @@ public interface DataSource {
 
      interface SaveInfoCallback{
         void savedStatusSuccess(String status);
-
         void savedStatusFailed(String error);
     }
 
     interface SavedMovieToLibraryCallback{
         void savedStatusSuccess(Boolean status);
-
         void savedStatusFailed(String error);
     }
 
     interface DeleteInfoCallback{
         void deleteStatusSuccess(String status);
         void deleteStatusFailed(String status);
+    }
+
+    interface GetVideoIdCallback{
+        void getIdSuccess(String id);
+        void getIdFailed(String failed);
     }
 
 

@@ -1,7 +1,9 @@
 package co.za.tinycinema.features.ShowDetails;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -16,6 +18,7 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.GetReviews.GetReviewsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
+import co.za.tinycinema.utils.WatchVideos;
 
 public class ShowDetailsActivity extends BaseActivity implements ShowDetailsContract.Listener {
 
@@ -42,11 +45,6 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         setContentView(mViewMvc.getRootView());
         result = (MovieResultEntity) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
 
-//        this.result = new MovieResultEntity(1, 2, true,
-//                1.11, "", 1.11, "1",
-//                "1", "1","1", false,
-//                "1", "1", false, false, false);
-
     }
 
     @Override
@@ -55,7 +53,7 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         this.showDetailsPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
         showDetailsPresenter.setupViews(result);
-        showDetailsPresenter.checkIfInLocal(result);
+      //  showDetailsPresenter.checkIfInLocal(result);
     }
 
     @Override
@@ -92,4 +90,16 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         intent.putExtra("MOVIE_ID",movieId);
         startActivity(intent);
     }
+
+    @Override
+    public void onTrailerBtnClicked(Integer movieId) {
+        showDetailsPresenter.getVideoId(movieId);
+    }
+
+    @Override
+    public void watchVideo(String getVideoId) {
+        WatchVideos.watchYoutubeVideo(this, getVideoId);
+    }
+
+
 }

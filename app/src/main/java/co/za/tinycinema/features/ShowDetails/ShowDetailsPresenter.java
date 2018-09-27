@@ -7,22 +7,25 @@ import co.za.tinycinema.common.UseCaseHandler;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.ShowDetails.domain.usecase.CheckSavedMovieInLocal;
 import co.za.tinycinema.features.ShowDetails.domain.usecase.DeleteMoviesInLocal;
+import co.za.tinycinema.features.ShowDetails.domain.usecase.GetVideoId;
 import co.za.tinycinema.features.ShowDetails.domain.usecase.SaveMovieToLocal;
 
-public class ShowDetailsPresenter  {
+public class ShowDetailsPresenter {
 
     private ShowDetailsContract showDetailsContract;
     private SaveMovieToLocal saveMovieToLocalUseCase;
     private DeleteMoviesInLocal deleteMoviesInLocalUseCase;
     private CheckSavedMovieInLocal checkSavedMovieInLocal;
+    private GetVideoId getVideoIdUsecase;
     private UseCaseHandler mUseCaseHandler;
 
     public ShowDetailsPresenter(SaveMovieToLocal saveMovieToLocalUseCase,
                                 DeleteMoviesInLocal deleteMoviesInLocalUseCase,
-                                CheckSavedMovieInLocal checkSavedMovieInLocal, UseCaseHandler useCaseHandler) {
+                                CheckSavedMovieInLocal checkSavedMovieInLocal, GetVideoId getVideoIdUsecase, UseCaseHandler useCaseHandler) {
         this.saveMovieToLocalUseCase = saveMovieToLocalUseCase;
         this.deleteMoviesInLocalUseCase = deleteMoviesInLocalUseCase;
         this.checkSavedMovieInLocal = checkSavedMovieInLocal;
+        this.getVideoIdUsecase = getVideoIdUsecase;
         this.mUseCaseHandler = useCaseHandler;
     }
 
@@ -31,12 +34,11 @@ public class ShowDetailsPresenter  {
         this.showDetailsContract = view;
     }
 
-    public void setupViews(MovieResultEntity result)
-    {
+    public void setupViews(MovieResultEntity result) {
         showDetailsContract.setupViews(result);
     }
 
-    public void saveToLocalFavourites(MovieResultEntity entity){
+    public void saveToLocalFavourites(MovieResultEntity entity) {
 
         showDetailsContract.showLoading();
         showDetailsContract.setLoadingIndicator(true);
@@ -64,7 +66,7 @@ public class ShowDetailsPresenter  {
         showDetailsContract.renderStatusOfSave(s);
     }
 
-        /**
+    /**
      * deletes entities from favourites
      */
     public void removeFromLocal(MovieResultEntity movieResultEntity) {
@@ -88,32 +90,57 @@ public class ShowDetailsPresenter  {
                 });
     }
 
-   private void processResponseOfDelete(String s) {
-       showDetailsContract.renderDeleteInView(s);
-   }
+    private void processResponseOfDelete(String s) {
+        showDetailsContract.renderDeleteInView(s);
+    }
 
     public void checkIfInLocal(MovieResultEntity result) {
         showDetailsContract.showLoading();
         showDetailsContract.setLoadingIndicator(true);
-       mUseCaseHandler.execute(checkSavedMovieInLocal, new CheckSavedMovieInLocal.RequestValues(result.getId()),
-               new UseCase.UseCaseCallback<CheckSavedMovieInLocal.ResponseValues>(){
-                   @Override
-                   public void onSuccess(CheckSavedMovieInLocal.ResponseValues response) {
-                       showDetailsContract.setLoadingIndicator(false);
-                       showDetailsContract.hideLoading();
+        mUseCaseHandler.execute(checkSavedMovieInLocal, new CheckSavedMovieInLocal.RequestValues(result.getId()),
+                new UseCase.UseCaseCallback<CheckSavedMovieInLocal.ResponseValues>() {
+                    @Override
+                    public void onSuccess(CheckSavedMovieInLocal.ResponseValues response) {
+                        showDetailsContract.setLoadingIndicator(false);
+                        showDetailsContract.hideLoading();
 
-                       processResponseOfCheck(response.forCallback());
-                   }
+                        processResponseOfCheck(response.forCallback());
+                    }
 
-                   @Override
-                   public void onError(String error) {
+                    @Override
+                    public void onError(String error) {
 
-                   }
+                    }
 
-    });
+                });
     }
 
     private void processResponseOfCheck(Boolean status) {
         showDetailsContract.renderCheckMovieSavedInView(status);
+    }
+
+    public void getVideoId(Integer movieId) {
+        showDetailsContract.showLoading();
+        showDetailsContract.setLoadingIndicator(true);
+
+        mUseCaseHandler.execute(getVideoIdUsecase, new GetVideoId.RequestValues(movieId),
+                new UseCase.UseCaseCallback<GetVideoId.ResponseValues>() {
+                    @Override
+                    public void onSuccess(GetVideoId.ResponseValues response) {
+                        showDetailsContract.setLoadingIndicator(false);
+                        showDetailsContract.hideLoading();
+
+                        processResponseOfVideoId(response.saveVideoIdResult());
+                    }
+
+                    @Override
+                    public void onError(String error) {
+
+                    }
+                });
+    }
+
+    private void processResponseOfVideoId(String s) {
+        showDetailsContract.renderGetVideoId(s);
     }
 }

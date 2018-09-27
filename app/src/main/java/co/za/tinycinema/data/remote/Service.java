@@ -5,6 +5,7 @@ import java.util.List;
 
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.MoviesInTheatresModel;
 import co.za.tinycinema.features.GetReviews.Domain.model.ReviewResponseModel;
+import co.za.tinycinema.features.ShowDetails.domain.model.Videos;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -21,6 +22,7 @@ public interface Service {
     @GET("/3/movie/{id}/reviews")
     Call<ReviewResponseModel> getReviews(@Path("id") int movie_id, @Query("api_key") String api_key);
 
-    ///movie/{id}/videos
+    @GET("/3/movie/{id}/videos")
+    Call<Videos> getVideos(@Path("id") int movie_id, @Query("api_key") String api_key);
 
 }

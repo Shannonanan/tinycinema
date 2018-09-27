@@ -18,6 +18,7 @@ import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.MoviesInTheatresModel;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.GetReviews.Domain.model.ReviewResponseModel;
+import co.za.tinycinema.features.ShowDetails.domain.model.Videos;
 import co.za.tinycinema.utils.AppExecutors;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,15 +32,18 @@ public class RemoteDataSource implements DataSource {
     private MutableLiveData<List<co.za.tinycinema.features.GetReviews.Domain.model.Result>> resultsOfReviews;
     private List<MovieResultEntity> rawResults;
     private List<co.za.tinycinema.features.GetReviews.Domain.model.Result> rawResultsReviews;
+    private List<co.za.tinycinema.features.ShowDetails.domain.model.Result> rawResultsVideos;
     private final Context mContext;
     //   private static final String LOG_TAG = MoviesSyncIntentService.class.getSimpleName();
     private static RemoteDataSource sInstance = null;
     private static final Object LOCK = new Object();
+    String videoId;
 
     @Nullable
     private Call<MoviesInTheatresModel> mCall;
 
     private Call<ReviewResponseModel> mCallReviews;
+    private Call<Videos> mCallVideos;
 
     public RemoteDataSource(Service service, Context context) {
         this.service = service;
@@ -48,6 +52,7 @@ public class RemoteDataSource implements DataSource {
         resultsTopRated = new MutableLiveData<>();
         rawResults = new ArrayList<>();
         rawResultsReviews = new ArrayList<>();
+        rawResultsVideos = new ArrayList<>();
         this.mContext = context;
     }
 
@@ -269,5 +274,31 @@ public class RemoteDataSource implements DataSource {
             }
         });
         return resultsOfReviews;
+    }
+
+    public String getVideoId(Integer id, final GetVideoIdCallback callback) {
+        rawResultsVideos.clear();
+        mCallVideos = service.getVideos(id, "");
+        mCallVideos.enqueue(new Callback<Videos>() {
+            @Override
+            public void onResponse(Call<Videos> call, Response<Videos> response) {
+                if(response.body() != null) {
+                    if (response.isSuccessful()) {
+                        rawResultsVideos.addAll(response.body().getResults());
+                        if(!rawResultsVideos.get(0).getKey().isEmpty())
+                            callback.getIdSuccess(videoId = rawResultsVideos.get(0).getKey());
+                    }
+                    else{
+                        callback.getIdFailed("nothing to see");
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Videos> call, Throwable t) {
+                callback.getIdFailed("nothing to see");
+            }
+        });
+        return videoId;
     }
 }

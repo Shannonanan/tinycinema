@@ -32,6 +32,7 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     @BindView(R.id.btn_save) ImageButton btn_save;
     @BindView(R.id.btn_delete) ImageButton btn_delete;
     @BindView(R.id.btn_review) ImageButton btn_review;
+    @BindView(R.id.btn_trailer) ImageButton btn_trailer;
 
     MovieResultEntity entity;
 
@@ -85,6 +86,13 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
         }
     }
 
+    @OnClick(R.id.btn_trailer)
+    public void onClickTrailer(){
+        for (Listener list:getListeners()) {
+            list.onTrailerBtnClicked(entity.getId());
+        }
+    }
+
     @OnClick(R.id.btn_delete)
     public void onClick(){
          if(btn_delete != null){
@@ -114,6 +122,13 @@ public class ShowDetailsViewImpl extends BaseViewMvc<ShowDetailsContract.Listene
     @Override
     public void renderDeleteInView(String success) {
         Toast.makeText(getContext(), getString(R.string.deleted),Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void renderGetVideoId(String id) {
+        for (Listener listener : getListeners()) {
+            listener.watchVideo(id);
+        }
     }
 
     @Override
