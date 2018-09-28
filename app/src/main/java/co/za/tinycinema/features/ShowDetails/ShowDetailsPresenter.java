@@ -69,7 +69,7 @@ public class ShowDetailsPresenter {
     /**
      * deletes entities from favourites
      */
-    public void removeFromLocal(MovieResultEntity movieResultEntity) {
+    public void removeFromLocal( MovieResultEntity movieResultEntity) {
         showDetailsContract.showLoading();
         showDetailsContract.setLoadingIndicator(true);
 
@@ -94,10 +94,10 @@ public class ShowDetailsPresenter {
         showDetailsContract.renderDeleteInView(s);
     }
 
-    public void checkIfInLocal(MovieResultEntity result) {
+    public void checkIfInLocal(Integer id) {
         showDetailsContract.showLoading();
         showDetailsContract.setLoadingIndicator(true);
-        mUseCaseHandler.execute(checkSavedMovieInLocal, new CheckSavedMovieInLocal.RequestValues(result.getId()),
+        mUseCaseHandler.execute(checkSavedMovieInLocal, new CheckSavedMovieInLocal.RequestValues(id),
                 new UseCase.UseCaseCallback<CheckSavedMovieInLocal.ResponseValues>() {
                     @Override
                     public void onSuccess(CheckSavedMovieInLocal.ResponseValues response) {

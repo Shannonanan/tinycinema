@@ -19,15 +19,16 @@ public class LocalDataSource implements DataSource {
 
     private final List<Integer> listOfmOVIES;
 
-    private final AppExecutors mExecutors;
+  //  private final AppExecutors mExecutors;
     Context context;
     private static LocalDataSource sInstance = null;
     private static final Object LOCK = new Object();
 
-    public LocalDataSource(MoviesDao moviesDao,DateDao dateDao,
-                           AppExecutors mExecutors) {
+    public LocalDataSource(MoviesDao moviesDao,DateDao dateDao
+                          // AppExecutors mExecutors
+    ) {
         this.moviesDao = moviesDao;
-        this.mExecutors = mExecutors;
+      //  this.mExecutors = mExecutors;
         this.dateDao = dateDao;
         listOfmOVIES = new ArrayList<>();
     }
@@ -44,22 +45,21 @@ public class LocalDataSource implements DataSource {
 
     //Livedata makes it asynchronous, before I created a new runnable to pass to an Executor method
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatres() {
-        return moviesDao.getAllMovies(false, false, false);
+        return moviesDao.getAllMovies("0", "0", "0");
     }
 
     public int checkDate(final Date date){
         return dateDao.checkDate(date);
     }
 
-    public void checkMovieSaved(final Integer entityId, final SavedMovieToLibraryCallback saveInfoCallback){
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-               Integer checkCount =  moviesDao.checkMovieWasSaved(entityId);
+    public void checkMovieSaved(Integer entityId, final SavedMovieToLibraryCallback saveInfoCallback){
+                Integer checkCount =  moviesDao.checkMovieWasSaved(entityId);
                 saveInfoCallback.savedStatusSuccess(checkCount == 1);
-            }
-        };
-        mExecutors.diskIO().execute(runnable);
+    }
+
+    public void test(Integer entityId, SavedMovieToLibraryCallback saveInfoCallback){
+        Integer checkCount =  moviesDao.checkMovieWasSaved(entityId);
+        saveInfoCallback.savedStatusSuccess(checkCount == 1);
     }
 
     public void addDateSaved(DateSavedEntity date){
@@ -78,26 +78,7 @@ public class LocalDataSource implements DataSource {
 //        mExecutors.diskIO().execute(runnable);
 //    }
 
-    private List<Result> transformToSchema(List<MovieResultEntity> movieResultEntities) {
-        List<Result> transfromedFromLocal = null;
-        if(movieResultEntities != null){
-            transfromedFromLocal = new ArrayList<>();
-            for (MovieResultEntity entity: movieResultEntities) {
-                transfromedFromLocal.add(new Result(entity.getVoteCount(), entity.getId(), entity.getVideo(), entity.getVoteAverage(),
-                        entity.getTitle(), entity.getPopularity(), entity.getPosterPath(),entity.getOriginalLanguage(),
-                        entity.getOriginalTitle(), entity.getBackdropPath(), entity.getAdult(),
-                        entity.getOverview(), entity.getReleaseDate(), true));
-            }
-        }
 
-        return transfromedFromLocal;
-    }
-
-
-//    @Override
-//    public void getAllMoviesInTheatre(Context context, LoadInfoCallback callback) {
-//
-//    }
 
 
     public void getHighestRatedMovies(Context context, final LoadInfoCallback callback) {
@@ -109,112 +90,59 @@ public class LocalDataSource implements DataSource {
             //    callback.onDataLoaded(transformedFromLocal, true);
             }
         };
-        mExecutors.diskIO().execute(runnable);
+      //  mExecutors.diskIO().execute(runnable);
     }
 
-    @Override
-    public void deleteMovie(final boolean type, final MovieResultEntity entity, final DeleteInfoCallback callback) {
-        Runnable deleteRunnable = new Runnable() {
-            @Override
-            public void run() {
-                moviesDao.deleteMovie(entity);
-             //   List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMovies(type);
-              //  List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
-                callback.deleteStatusSuccess("success");
-            }
-        };
 
-        mExecutors.diskIO().execute(deleteRunnable);
-    }
 
     public void deleteMovieFromLibrary(final MovieResultEntity entity, final DeleteInfoCallback callback){
         Runnable deleteRunnable = new Runnable() {
             @Override
             public void run() {
-                moviesDao.deleteMovie(entity);
+                moviesDao.deleteMovie(entity.getId());
               //  List<MovieResultEntity> moviesInTheatresModelEntity = moviesDao.getAllMoviesFromLibrary();
                // List<Result> latestResults = new ArrayList<>(transformToSchema(moviesInTheatresModelEntity));
                 callback.deleteStatusSuccess("success");
             }
         };
 
-        mExecutors.diskIO().execute(deleteRunnable);
+       // mExecutors.diskIO().execute(deleteRunnable);
     }
 
 
     @Override
     public void saveMovie(final MovieResultEntity result, final SaveInfoCallback callback) {
-        Runnable saveRunnable = new Runnable() {
-            @Override
-            public void run() {
-                result.setFavourite(true);
-                result.setToWatch(false);
-                result.setToprated(false);
-                saveMovieNoCallBack(result);
-           //  long rownumber =  moviesDao.insertMovie(result);
-            callback.savedStatusSuccess("success");
-            }
-        };
-        mExecutors.diskIO().execute(saveRunnable);
-    }
-
-
-
-
-//    private MovieLibraryEntity transform(MovieResultEntity result) {
-//        MovieLibraryEntity movieLibraryEntity = null;
-//        if(result != null){
-//            movieLibraryEntity = new MovieLibraryEntity();
-//            movieLibraryEntity.setId(result.getId());
-//            movieLibraryEntity.setAdult(result.getAdult());
-//            movieLibraryEntity.setBackdropPath(result.getBackdropPath());
-//            movieLibraryEntity.setOriginalLanguage(result.getOriginalLanguage());
-//            movieLibraryEntity.setOriginalTitle(result.getOriginalTitle());
-//            movieLibraryEntity.setOverview(result.getOverview());
-//            movieLibraryEntity.setPopularity(result.getPopularity());
-//            movieLibraryEntity.setPosterPath(result.getPosterPath());
-//            movieLibraryEntity.setReleaseDate(result.getReleaseDate());
-//            movieLibraryEntity.setTitle(result.getTitle());
-//            movieLibraryEntity.setVoteAverage(result.getVoteAverage());
-//            movieLibraryEntity.setToprated(false);
-//        }
-//        return movieLibraryEntity;
-//    }
-
-//    private List<MovieResultEntity> transformList(List<MovieLibraryEntity> result) {
-//        List<MovieResultEntity> movieResultEntity =new ArrayList<>();
-//        if(result != null){
-//            for (MovieLibraryEntity entity: result) {
-//                MovieResultEntity movieResultEntity1 = new MovieResultEntity();
-//                movieResultEntity1.setId(entity.getId());
-//                movieResultEntity1.setAdult(entity.getAdult());
-//                movieResultEntity1.setBackdropPath(entity.getBackdropPath());
-//                movieResultEntity1.setOriginalLanguage(entity.getOriginalLanguage());
-//                movieResultEntity1.setOriginalTitle(entity.getOriginalTitle());
-//                movieResultEntity1.setOverview(entity.getOverview());
-//                movieResultEntity1.setPopularity(entity.getPopularity());
-//                movieResultEntity1.setPosterPath(entity.getPosterPath());
-//                movieResultEntity1.setReleaseDate(entity.getReleaseDate());
-//                movieResultEntity1.setTitle(entity.getTitle());
-//                movieResultEntity1.setVoteAverage(entity.getVoteAverage());
-//                movieResultEntity1.setToprated(false);
-//                movieResultEntity.add(movieResultEntity1);
+//        Runnable saveRunnable = new Runnable() {
+//            @Override
+//            public void run() {
+//                result.setFavourite("1");
+//                saveMovieNoCallBackInsert(result);
+//           //  long rownumber =  moviesDao.insertMovie(result);
+//            callback.savedStatusSuccess("success");
 //            }
-//
-//        }
-//        return movieResultEntity;
-//    }
+//        };
+//        mExecutors.diskIO().execute(saveRunnable);
+
+     //   mExecutors.diskIO().execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                moviesDao.insertMovie(result);
+//              //  saveMovieNoCallBackInsert(result);
+//            }
+//        });
+    }
 
 
     /**
      * Get the singleton for this class
      */
-    public static LocalDataSource getInstance(MoviesDao moviesDao,DateDao dateDao,
-                                              AppExecutors mExecutors) {
+    public static LocalDataSource getInstance(MoviesDao moviesDao,DateDao dateDao
+                                            //  AppExecutors mExecutors
+    ) {
       //  Log.d(LOG_TAG, "Getting the network data source");
         if (sInstance == null) {
             synchronized (LOCK) {
-                sInstance = new LocalDataSource(moviesDao,dateDao,mExecutors);
+                sInstance = new LocalDataSource(moviesDao,dateDao);
                // Log.d(LOG_TAG, "Made new network data source");
             }
         }
@@ -223,11 +151,22 @@ public class LocalDataSource implements DataSource {
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesFromLibrary(Boolean fav) {
-        return moviesDao.getAllMovies(false,false,false);
+        return moviesDao.getAllMoviesInLibrary("1");
     }
 
 
     public void saveMovieNoCallBack(MovieResultEntity result) {
+        moviesDao.update(result);
+    }
+
+
+    public void saveMovieNoCallBackInsert(MovieResultEntity result) {
         moviesDao.insertMovie(result);
+    }
+
+    @Override
+    public void deleteMovie(Integer entity) {
+        int deleted = moviesDao.deleteMovie(entity);
+        String test = ";";
     }
 }

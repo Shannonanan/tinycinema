@@ -121,11 +121,18 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         int menuItemThatWasSelected = item.getItemId();
         switch (menuItemThatWasSelected) {
             case R.id.toggle_top_rated:
+                if(isThereInternetConnection()){
                 Intent intent = new Intent(this, TopRatedMoviesActivity.class);
-                startActivity(intent);
+                startActivity(intent);}
+                else{
+                    Toast.makeText(this, getString(R.string.offline), Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.toggle_most_pop:
-             //   moviesInTheatresPresenter.start();
+                if(isThereInternetConnection()){
+                moviesInTheatresPresenter.getmMovieResults();}else{
+                    Toast.makeText(this, getString(R.string.offline), Toast.LENGTH_LONG).show();
+                }
                 break;
             case R.id.library:
                 Intent goToLibrary = new Intent(this, LibraryActivity.class);

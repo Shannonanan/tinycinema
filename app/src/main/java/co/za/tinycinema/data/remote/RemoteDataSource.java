@@ -119,7 +119,7 @@ public class RemoteDataSource implements DataSource {
         if (result != null) {
             movieResultEntity = new MovieResultEntity();
             movieResultEntity.setId(result.getId());
-            movieResultEntity.setAdult(result.getAdult());
+          //  movieResultEntity.setAdult(result.getAdult());
             movieResultEntity.setBackdropPath(result.getBackdropPath());
             movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
             movieResultEntity.setOriginalTitle(result.getOriginalTitle());
@@ -129,9 +129,9 @@ public class RemoteDataSource implements DataSource {
             movieResultEntity.setReleaseDate(result.getReleaseDate());
             movieResultEntity.setTitle(result.getTitle());
             movieResultEntity.setVoteAverage(result.getVoteAverage());
-            movieResultEntity.setToprated(false);
-            movieResultEntity.setFavourite(false);
-            movieResultEntity.setToWatch(false);
+            movieResultEntity.setToprated("0");
+            movieResultEntity.setFavourite("0");
+            movieResultEntity.setToWatch("0");
         }
         return movieResultEntity;
     }
@@ -232,10 +232,9 @@ public class RemoteDataSource implements DataSource {
 
 
     @Override
-    public void deleteMovie(boolean type, MovieResultEntity entity, DeleteInfoCallback callback) {
+    public void deleteMovie(Integer entity) {
 
     }
-
 
     @Override
     public void saveMovie(MovieResultEntity result, SaveInfoCallback callback) {
@@ -290,6 +289,7 @@ public class RemoteDataSource implements DataSource {
                     }
                     else{
                         callback.getIdFailed("nothing to see");
+
                     }
                 }
             }

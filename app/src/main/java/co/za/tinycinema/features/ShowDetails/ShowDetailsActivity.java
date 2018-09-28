@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -12,22 +13,30 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import co.za.tinycinema.R;
+import co.za.tinycinema.data.DataSource;
+import co.za.tinycinema.data.Repository;
+import co.za.tinycinema.data.local.LocalDataSource;
 import co.za.tinycinema.data.local.MovieResultEntity;
+import co.za.tinycinema.data.local.MoviesDatabase;
 import co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresContract;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
 import co.za.tinycinema.features.GetReviews.GetReviewsActivity;
 import co.za.tinycinema.features.common.BaseActivity;
 import co.za.tinycinema.features.common.mvcViews.ViewMvcFactory;
+import co.za.tinycinema.utils.AppExecutors;
+import co.za.tinycinema.utils.InjectorUtils;
 import co.za.tinycinema.utils.WatchVideos;
 
 public class ShowDetailsActivity extends BaseActivity implements ShowDetailsContract.Listener {
 
     @Inject ShowDetailsPresenter showDetailsPresenter;
     @Inject ViewMvcFactory viewMvcFactory;
-
+    Repository repository;
 
     ShowDetailsContract mViewMvc;
     MovieResultEntity result;
+
+    @Inject AppExecutors mExecutors;
 
     private static final String INTENT_EXTRA_MOVIE_RESULT = "INTENT_EXTRA_MOVIE_RESULT";
 
@@ -44,6 +53,7 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         mViewMvc = viewMvcFactory.newInstance(ShowDetailsContract.class, null);
         setContentView(mViewMvc.getRootView());
         result = (MovieResultEntity) getIntent().getSerializableExtra(INTENT_EXTRA_MOVIE_RESULT);
+        repository =InjectorUtils.provideRepository(getApplicationContext());
 
     }
 
@@ -53,7 +63,30 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
         this.showDetailsPresenter.setView(mViewMvc);
         mViewMvc.registerListener(this);
         showDetailsPresenter.setupViews(result);
-      //  showDetailsPresenter.checkIfInLocal(result);
+      //  showDetailsPresenter.checkIfInLocal(result.getId());
+
+       checkIfInlocal(result.getId());
+    }
+
+    private void checkIfInlocal(final Integer id) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                repository.checkMovieSaveTest(id, new DataSource.SavedMovieToLibraryCallback() {
+                    @Override
+                    public void savedStatusSuccess(Boolean status) {
+                        mViewMvc.renderCheckMovieSavedInView(status);
+                    }
+
+                    @Override
+                    public void savedStatusFailed(String error) {
+
+                    }
+                });
+
+            }
+        };
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override
@@ -63,14 +96,27 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
 
 
     @Override
-    public void onSaveMovieToLocalClicked(MovieResultEntity movieResultEntity) {
-            showDetailsPresenter.saveToLocalFavourites(movieResultEntity);
+    public void onSaveMovieToLocalClicked(final MovieResultEntity movieResultEntity) {
+          //  showDetailsPresenter.saveToLocalFavourites(movieResultEntity);
+       Runnable runnable = new Runnable() {
+           @Override
+           public void run() {
+               movieResultEntity.setFavourite("1");
+               repository.saveMovieIndividual(movieResultEntity);
+           }
+       };
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override
-    public void onRemoveMovieFromLocalClicked(MovieResultEntity movieResultEntity) {
-        showDetailsPresenter.removeFromLocal(movieResultEntity);
-
+    public void onRemoveMovieFromLocalClicked(final MovieResultEntity movieResultEntity) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                repository.deleteMovie(movieResultEntity.getId());
+            }
+        };
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override

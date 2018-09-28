@@ -66,8 +66,7 @@ public class InjectorUtils  {
         RemoteDataSource networkDataSource = RemoteDataSource.getInstance(getMoviesApi(getRetrofit()), context.getApplicationContext());
         MoviesDatabase moviesDatabase = MoviesDatabase.getInstance(context.getApplicationContext());
         LocalDataSource localDataSource = LocalDataSource.getInstance(moviesDatabase.moviesDao(),
-                moviesDatabase.dateDao(),
-                executors);
+                moviesDatabase.dateDao());
         return Repository.getInstance(networkDataSource, localDataSource, context.getApplicationContext(), executors);
     }
 

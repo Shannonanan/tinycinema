@@ -68,7 +68,7 @@ public interface DataSource {
 
  //   void getAllMoviesInTheatre(Context context, final LoadInfoCallback callback);
   //  void getHighestRatedMovies(Context context, final LoadInfoCallback callback);
-    void deleteMovie(boolean type, MovieResultEntity entity, final DeleteInfoCallback callback);
+    void deleteMovie(Integer entity);
     void saveMovie(MovieResultEntity result, final SaveInfoCallback callback);
     void deleteMovieFromLibrary(MovieResultEntity entity, final DeleteInfoCallback callback);
 

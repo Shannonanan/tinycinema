@@ -16,17 +16,16 @@ import co.za.tinycinema.features.GetMoviesInTheatres.domain.usecase.GetMoviesInT
 public class MoviesInTheatresPresenter extends ViewModel {
 
     private GetMoviesInTheatres getMoviesInTheatresUseCase;
-    private final LiveData<List<MovieResultEntity>> mMovieResults;
+    private LiveData<List<MovieResultEntity>> mMovieResults;
 
     public MoviesInTheatresPresenter(GetMoviesInTheatres getMoviesInTheatresUseCase) {
         this.getMoviesInTheatresUseCase = getMoviesInTheatresUseCase;
-        mMovieResults = getMoviesInTheatresUseCase.executeGetMoviesUseCase();
+
     }
 
 
     public LiveData<List<MovieResultEntity>> getmMovieResults() {
-        return mMovieResults;
+        return mMovieResults = getMoviesInTheatresUseCase.executeGetMoviesUseCase();
     }
-
 
 }

@@ -122,7 +122,7 @@ public class TopRatedMoviesPresenter extends ViewModel {
         if(result != null){
             movieResultEntity = new MovieResultEntity();
             movieResultEntity.setId(result.getId());
-            movieResultEntity.setAdult(result.getAdult());
+        //    movieResultEntity.setAdult(result.getAdult());
             movieResultEntity.setBackdropPath(result.getBackdropPath());
             movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
             movieResultEntity.setOriginalTitle(result.getOriginalTitle());
@@ -132,7 +132,7 @@ public class TopRatedMoviesPresenter extends ViewModel {
             movieResultEntity.setReleaseDate(result.getReleaseDate());
             movieResultEntity.setTitle(result.getTitle());
             movieResultEntity.setVoteAverage(result.getVoteAverage());
-            movieResultEntity.setToprated(true);
+            movieResultEntity.setToprated("1");
         }
         return movieResultEntity;
     }

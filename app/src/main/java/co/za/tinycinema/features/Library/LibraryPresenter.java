@@ -29,23 +29,4 @@ public class LibraryPresenter extends ViewModel{
     }
 
 
-    public MovieResultEntity transform(Result result){
-        MovieResultEntity movieResultEntity = null;
-        if(result != null){
-            movieResultEntity = new MovieResultEntity();
-            movieResultEntity.setId(result.getId());
-            movieResultEntity.setAdult(result.getAdult());
-            movieResultEntity.setBackdropPath(result.getBackdropPath());
-            movieResultEntity.setOriginalLanguage(result.getOriginalLanguage());
-            movieResultEntity.setOriginalTitle(result.getOriginalTitle());
-            movieResultEntity.setOverview(result.getOverview());
-            movieResultEntity.setPopularity(result.getPopularity());
-            movieResultEntity.setPosterPath(result.getPosterPath());
-            movieResultEntity.setReleaseDate(result.getReleaseDate());
-            movieResultEntity.setTitle(result.getTitle());
-            movieResultEntity.setToprated(false);
-        }
-        return movieResultEntity;
-    }
-
 }

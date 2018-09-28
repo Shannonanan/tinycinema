@@ -51,8 +51,8 @@ public class RoomModule {
 
     @Singleton
     @Provides
-    LocalDataSource movieLocalDataSource(MoviesDao movieDao, DateDao dateDao, AppExecutors appExecutors){
-        return new LocalDataSource(movieDao, dateDao, appExecutors);
+    LocalDataSource movieLocalDataSource(MoviesDao movieDao, DateDao dateDao){
+        return new LocalDataSource(movieDao, dateDao);
     }
 
 

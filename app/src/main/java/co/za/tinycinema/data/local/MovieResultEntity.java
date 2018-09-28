@@ -15,11 +15,11 @@ public class MovieResultEntity implements Serializable{
     public static final String TABLE_NAME1 = "movie";
 
 
-    @PrimaryKey (autoGenerate = true)
+    @PrimaryKey(autoGenerate = true)
     private int idd;
     private Integer id;
     private Integer voteCount;
-    private Boolean video;
+//    private Boolean video;
     private Double voteAverage;
     private String title;
     private Double popularity;
@@ -28,12 +28,12 @@ public class MovieResultEntity implements Serializable{
     private String originalTitle;
     //  private List<Integer> genreIds = null;
     private String backdropPath;
-    private Boolean adult;
+ //   private Boolean adult;
     private String overview;
     private String releaseDate;
-    private boolean toprated;
-    private boolean favourite;
-    private boolean toWatch;
+    private String toprated;
+    private String favourite;
+    private String toWatch;
 
 
     @Ignore
@@ -41,13 +41,17 @@ public class MovieResultEntity implements Serializable{
     }
 
     @Ignore
-    public MovieResultEntity(Integer id, Integer voteCount, Boolean video, Double voteAverage, String title,
+    public MovieResultEntity(Integer id, Integer voteCount,
+                          //   Boolean video,
+                             Double voteAverage, String title,
                              Double popularity, String posterPath, String originalLanguage,
-                             String originalTitle, String backdropPath, Boolean adult, String overview,
-                             String releaseDate, boolean toprated, boolean favourite, boolean toWatch) {
+                             String originalTitle, String backdropPath,
+                             //Boolean adult,
+                             String overview,
+                             String releaseDate, String toprated, String favourite, String toWatch) {
         this.id = id;
         this.voteCount = voteCount;
-        this.video = video;
+   //     this.video = video;
         this.voteAverage = voteAverage;
         this.title = title;
         this.popularity = popularity;
@@ -55,7 +59,7 @@ public class MovieResultEntity implements Serializable{
         this.originalLanguage = originalLanguage;
         this.originalTitle = originalTitle;
         this.backdropPath = backdropPath;
-        this.adult = adult;
+   //     this.adult = adult;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.toprated = toprated;
@@ -65,15 +69,18 @@ public class MovieResultEntity implements Serializable{
 
 
 
-    public MovieResultEntity(int idd,Integer id, Integer voteCount, Boolean video,
+    public MovieResultEntity(int idd,Integer id, Integer voteCount,
+                             //Boolean video,
                              Double voteAverage, String title, Double popularity,
                              String posterPath, String originalLanguage, String originalTitle,
-                             String backdropPath, Boolean adult, String overview, String releaseDate,
-                             boolean toprated, boolean favourite, boolean toWatch) {
+                             String backdropPath,
+                          //   Boolean adult,
+                             String overview, String releaseDate,
+                             String toprated, String favourite, String toWatch) {
         this.idd = idd;
         this.id = id;
         this.voteCount = voteCount;
-        this.video = video;
+     //   this.video = video;
         this.voteAverage = voteAverage;
         this.title = title;
         this.popularity = popularity;
@@ -81,7 +88,7 @@ public class MovieResultEntity implements Serializable{
         this.originalLanguage = originalLanguage;
         this.originalTitle = originalTitle;
         this.backdropPath = backdropPath;
-        this.adult = adult;
+    //    this.adult = adult;
         this.overview = overview;
         this.releaseDate = releaseDate;
         this.toprated = toprated;
@@ -96,14 +103,6 @@ public class MovieResultEntity implements Serializable{
 
     public void setIdd(int idd) {
         this.idd = idd;
-    }
-
-    public boolean isToprated() {
-        return toprated;
-    }
-
-    public void setToprated(boolean toprated) {
-        this.toprated = toprated;
     }
 
 
@@ -123,13 +122,13 @@ public class MovieResultEntity implements Serializable{
         this.id = id;
     }
 
-    public Boolean getVideo() {
-        return video;
-    }
+  //  public Boolean getVideo() {
+  //      return video;
+  //  }
 
-    public void setVideo(Boolean video) {
-        this.video = video;
-    }
+  //  public void setVideo(Boolean video) {
+  //      this.video = video;
+  //  }
 
     public Double getVoteAverage() {
         return voteAverage;
@@ -195,13 +194,13 @@ public class MovieResultEntity implements Serializable{
         this.backdropPath = backdropPath;
     }
 
-    public Boolean getAdult() {
-        return adult;
-    }
-
-    public void setAdult(Boolean adult) {
-        this.adult = adult;
-    }
+//    public Boolean getAdult() {
+//        return adult;
+//    }
+//
+//    public void setAdult(Boolean adult) {
+//        this.adult = adult;
+//    }
 
     public String getOverview() {
         return overview;
@@ -219,20 +218,30 @@ public class MovieResultEntity implements Serializable{
         this.releaseDate = releaseDate;
     }
 
-    public boolean isFavourite() {
+    public String getToprated() {
+        return toprated;
+    }
+
+    public void setToprated(String toprated) {
+        this.toprated = toprated;
+    }
+
+    public String getFavourite() {
         return favourite;
     }
 
-    public void setFavourite(boolean favourite) {
+    public void setFavourite(String favourite) {
         this.favourite = favourite;
     }
 
-    public boolean isToWatch() {
+    public String getToWatch() {
         return toWatch;
     }
 
-    public void setToWatch(boolean toWatch) {
+    public void setToWatch(String toWatch) {
         this.toWatch = toWatch;
     }
+
+
 }
 

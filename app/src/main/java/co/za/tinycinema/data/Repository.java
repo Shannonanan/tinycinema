@@ -71,48 +71,6 @@ public class Repository {
             public void onChanged(@Nullable final List<MovieResultEntity> movieResultEntities) {
                 //Note that database operations must be done off of the main thread.
                 // Use your AppExecutor's disk I/O executor to provide the appropriate thread:
-//                mExecutors.diskIO().execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//                       final List<MovieResultEntity> list = new ArrayList<>(mLocalDataSource.getAllMovies());
-//                        if(!list.isEmpty()){
-//                        List<MovieResultEntity> toRemove = new ArrayList<>();
-//                        for(MovieResultEntity entity: list){
-//                            if(entity.isFavourite() || entity.isToWatch()){
-//                                toRemove.add(entity);
-//                            }
-//                        }
-//                            movieResultEntities.removeAll(toRemove);
-//                                //trigger a database save.
-//                                //  deleteOldData();
-//                                //saving todays date so next time you pull data, if it is still the same day you only need to pull
-//                                //data locally
-//                                Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
-//                                DateSavedEntity entity = new DateSavedEntity(today);
-//                                mLocalDataSource.addDateSaved(entity);
-//                          //      mLocalDataSource.bulkInsert(movieResultEntities);
-//                                Log.d(LOG_TAG, "New values inserted");
-//                            }
-//                        else {
-//                            mExecutors.diskIO().execute(new Runnable() {
-//                                @Override
-//                                public void run() {
-//                                    //trigger a database save.
-//                                    //  deleteOldData();
-//                                    //saving todays date so next time you pull data, if it is still the same day you only need to pull
-//                                    //data locally
-//                                    Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
-//                                    DateSavedEntity entity = new DateSavedEntity(today);
-//                                    mLocalDataSource.addDateSaved(entity);
-//                                    mLocalDataSource.bulkInsert(movieResultEntities);
-//                                    Log.d(LOG_TAG, "New values inserted");
-//                                }
-//                            });
-//                        }
-//                    }
-//                });
-//
                 mExecutors.diskIO().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -122,12 +80,13 @@ public class Repository {
                         //data locally
                         Date today = MoviesDateUtils.getNormalizedUtcDateForToday();
                         DateSavedEntity entity = new DateSavedEntity(today);
-                        mLocalDataSource.addDateSaved(entity);
+                 //       mLocalDataSource.addDateSaved(entity);
 
-//                        for (MovieResultEntity entityy: movieResultEntities) {
-//                            mLocalDataSource.saveMovieNoCallBack(entityy);
-//                        }
-                        mLocalDataSource.bulkInsert(movieResultEntities);
+                 //       if(!movieResultEntities.isEmpty()){
+                 //       for (MovieResultEntity entityy: movieResultEntities) {
+                      //      mLocalDataSource.saveMovieNoCallBackInsert(movieResultEntities);
+                  //      }}
+                  //      mLocalDataSource.bulkInsert(movieResultEntities);
                         Log.d(LOG_TAG, "New values inserted");
                     }
                 });
@@ -139,13 +98,30 @@ public class Repository {
 
 
     public LiveData<List<MovieResultEntity>> getAllMoviesInTheatre() {
-        initializeData();
-        return mLocalDataSource.getAllMoviesInTheatres();
+      //  initializeData();
+        return mRemoteDataSource.getAllMoviesInTheatre();
     }
 
-    public void checkMovieSaved(Integer id, final DataSource.SavedMovieToLibraryCallback savedMovieToLibraryCallback)
+    public void checkMovieSaveTest(Integer id, final DataSource.SavedMovieToLibraryCallback saveInfoCallback){
+        mLocalDataSource.test(id, new DataSource.SavedMovieToLibraryCallback() {
+            @Override
+            public void savedStatusSuccess(Boolean status) {
+                saveInfoCallback.savedStatusSuccess(status);
+            }
+
+            @Override
+            public void savedStatusFailed(String error) {
+
+            }
+        });
+    }
+
+    public void checkMovieSaved(final Integer id, final DataSource.SavedMovieToLibraryCallback savedMovieToLibraryCallback)
     {
-        mLocalDataSource.checkMovieSaved(id, new DataSource.SavedMovieToLibraryCallback() {
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                mLocalDataSource.checkMovieSaved(id, new DataSource.SavedMovieToLibraryCallback() {
             @Override
             public void savedStatusSuccess(Boolean status) {
                 savedMovieToLibraryCallback.savedStatusSuccess(status);
@@ -156,6 +132,10 @@ public class Repository {
                 savedMovieToLibraryCallback.savedStatusFailed(error);
             }
         });
+            }
+        });
+
+
     }
 
     public LiveData<List<MovieResultEntity>> getInfoFromRemote() {
@@ -252,8 +232,8 @@ public class Repository {
     }
 
 
-    public void deleteMovie(boolean type, MovieResultEntity entity, final DataSource.DeleteInfoCallback callback) {
-        mLocalDataSource.deleteMovie(type, entity, callback);
+    public void deleteMovie(Integer entity) {
+        mLocalDataSource.deleteMovie(entity);
     }
 
     public void deleteMovieFromLibrary(MovieResultEntity entity, final DataSource.DeleteInfoCallback callback) {
@@ -276,7 +256,7 @@ public class Repository {
     }
 
     public void saveMovieIndividual(MovieResultEntity result) {
-        mLocalDataSource.saveMovieNoCallBack(result);
+        mLocalDataSource.saveMovieNoCallBackInsert(result);
     }
 
 

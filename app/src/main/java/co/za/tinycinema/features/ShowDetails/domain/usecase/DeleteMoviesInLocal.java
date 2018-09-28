@@ -15,17 +15,7 @@ public class DeleteMoviesInLocal extends UseCase<DeleteMoviesInLocal.RequestValu
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        this.repository.deleteMovie(requestValues.type, requestValues.movieToDelete, new DataSource.DeleteInfoCallback() {
-            @Override
-            public void deleteStatusSuccess( String status) {
-                getUseCaseCallback().onSuccess(new ResponseValues(status));
-            }
-
-            @Override
-            public void deleteStatusFailed(String status) {
-                getUseCaseCallback().onError(status);
-            }
-        });
+        this.repository.deleteMovie(requestValues.movieToDelete.getId());
     }
 
     public static final class ResponseValues implements UseCase.ResponseValue {
