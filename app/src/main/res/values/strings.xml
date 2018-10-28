@@ -18,4 +18,5 @@
     <string name="no_data_available">no data available</string>
     <string name="success">success</string>
     <string name="deleted">deleted successfully</string>
+    <string name="added">added successfully</string>
 </resources>

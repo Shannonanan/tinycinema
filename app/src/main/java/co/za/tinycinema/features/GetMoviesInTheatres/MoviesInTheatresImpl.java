@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -41,6 +42,7 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
     RelativeLayout nothing_view;
 
 
+
     private MoviesInTheatresAdapter moviesInTheatresAdapter;
 
 
@@ -50,6 +52,7 @@ public class MoviesInTheatresImpl extends BaseViewMvc<MoviesInTheatresContract.L
         ButterKnife.bind(this, view);
         setupAdapter();
         setupRecyclerView();
+
     }
 
     private void setupAdapter() {

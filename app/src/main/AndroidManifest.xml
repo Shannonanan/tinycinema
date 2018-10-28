@@ -27,8 +27,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".features.GetMoviesInTheatres.MoviesInTheatresActivity" />
-        <activity android:name=".features.ShowDetails.ShowDetailsActivity" />
-        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity" />
+        <!-- A child of the main activity -->
+        <activity android:name=".features.ShowDetails.ShowDetailsActivity"
+            android:parentActivityName=".features.GetMoviesInTheatres.MoviesInTheatresActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity" />
+        </activity>
+
+        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity"
+            android:parentActivityName=".features.GetMoviesInTheatres.MoviesInTheatresActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity" />
+        </activity>
+
         <activity android:name=".features.Library.LibraryActivity" />
 
         <!-- This is required for immediate syncs -->
@@ -37,6 +50,9 @@
             android:exported="false" />
 
         <activity android:name=".features.GetReviews.GetReviewsActivity"></activity>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

@@ -5,8 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorBlack"
-    android:minHeight="?attr/actionBarSize"
-    app:subtitleTextColor="@android:color/white"
-    app:titleTextColor="@android:color/white">
+    >
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Tiny Cinema"
+        android:textColor="@color/colorWhite"
+        android:textSize="28sp"
+        android:gravity="center"/>
 
 </android.support.v7.widget.Toolbar>

@@ -5,6 +5,8 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -41,6 +43,16 @@ public class TopRatedMoviesActivity extends BaseActivity implements TopRatedCont
         setContentView(mViewMvc.getRootView());
 
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Get a support ActionBar corresponding to this toolbar
+        ActionBar ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setTitle("");
+        ab.setDisplayHomeAsUpEnabled(true);
 
         TopRatedMoviesViewModelFactory topRatedMoviesViewModelFactory =
                 InjectorUtils.provideToRatedViewModelFactory(this.getApplicationContext());
