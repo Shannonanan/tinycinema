@@ -94,8 +94,16 @@ public class ShowDetailsActivity extends BaseActivity implements ShowDetailsCont
             public void run() {
                 repository.checkMovieSaveTest(id, new DataSource.SavedMovieToLibraryCallback() {
                     @Override
-                    public void savedStatusSuccess(Boolean status) {
-                        mViewMvc.renderCheckMovieSavedInView(status);
+                    public void savedStatusSuccess(final Boolean status) {
+
+                        runOnUiThread(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                mViewMvc.renderCheckMovieSavedInView(status);
+                            }
+                        });
+
                     }
 
                     @Override

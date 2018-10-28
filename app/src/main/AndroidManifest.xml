@@ -35,7 +35,13 @@
                 android:value="co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity" />
         </activity>
 
-        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity" />
+        <activity android:name=".features.GetTopRatedMovies.TopRatedMoviesActivity"
+            android:parentActivityName=".features.GetMoviesInTheatres.MoviesInTheatresActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.za.tinycinema.features.GetMoviesInTheatres.MoviesInTheatresActivity" />
+        </activity>
+
         <activity android:name=".features.Library.LibraryActivity" />
 
         <!-- This is required for immediate syncs -->

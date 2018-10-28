@@ -13,4 +13,9 @@
         <item name="colorControlNormal">@color/colorBlack</item>
     </style>
 
+    <style name="ToolbarTheme2" parent="@style/ThemeOverlay.AppCompat.Light">
+        <!-- Customize color of navigation drawer icon and back arrow -->
+        <item name="colorControlNormal">@color/colorWhite</item>
+    </style>
+
 </resources>
