@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+
 import co.za.tinycinema.R;
 import co.za.tinycinema.data.local.MovieResultEntity;
 import co.za.tinycinema.features.GetMoviesInTheatres.domain.model.Result;
@@ -54,6 +56,10 @@ public class MoviesInTheatresActivity extends BaseActivity implements MoviesInTh
         if(!isThereInternetConnection()){
             Toast.makeText(this, getString(R.string.offline),Toast.LENGTH_LONG).show();
         }
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
 
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 

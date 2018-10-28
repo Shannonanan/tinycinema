@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_watched"
+        android:icon="@drawable/seen"
+        android:title="watched"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/action_trailer"
+        android:icon="@drawable/clapperboard"
+        android:title="@string/save"
+        app:showAsAction="always"
+        />
+    <item
+        android:id="@+id/action_reviews"
+        android:icon="@drawable/review_blk"
+        android:title="@string/save_failed"
+        app:showAsAction="always"
+        />
+
+</menu>
